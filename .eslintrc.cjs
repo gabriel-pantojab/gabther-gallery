@@ -29,7 +29,11 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: 'latest',
 		sourceType: 'module',
-		project: ['./tsconfig.json', './tsconfig.node.json'],
+		project: [
+			'./tsconfig.json',
+			'./tsconfig.node.json',
+			'./tailwind.config.js',
+		],
 	},
 	plugins: ['react'],
 	rules: {},
