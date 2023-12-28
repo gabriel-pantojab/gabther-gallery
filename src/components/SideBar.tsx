@@ -27,7 +27,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 		>
 			<div className='h-full overflow-y-auto bg-gray-50 px-3 py-4 dark:bg-gray-800'>
 				<ul className='flex w-full flex-col gap-4'>
-					<SideBarItem>
+					<SideBarItem path='/photos' close={close}>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
 							width='24'
@@ -46,10 +46,10 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 							<path d='M18 22l3.35 -3.284a2.143 2.143 0 0 0 .005 -3.071a2.242 2.242 0 0 0 -3.129 -.006l-.224 .22l-.223 -.22a2.242 2.242 0 0 0 -3.128 -.006a2.143 2.143 0 0 0 -.006 3.071l3.355 3.296z' />
 						</svg>
 
-						<span>Fotos</span>
+						<span>Photos</span>
 					</SideBarItem>
 
-					<SideBarItem>
+					<SideBarItem close={close} path='/videos'>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
 							width='24'
@@ -69,7 +69,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 						<span>Videos</span>
 					</SideBarItem>
 
-					<SideBarItem>
+					<SideBarItem close={close} path='/albums'>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
 							width='24'
@@ -86,10 +86,10 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 							<path d='M18 22l3.35 -3.284a2.143 2.143 0 0 0 .005 -3.071a2.242 2.242 0 0 0 -3.129 -.006l-.224 .22l-.223 -.22a2.242 2.242 0 0 0 -3.128 -.006a2.143 2.143 0 0 0 -.006 3.071l3.355 3.296z' />
 						</svg>
 
-						<span>Álbumes</span>
+						<span>Albums</span>
 					</SideBarItem>
 
-					<SideBarItem>
+					<SideBarItem close={close} path='/favorites'>
 						<svg
 							xmlns='http://www.w3.org/2000/svg'
 							width='24'
@@ -105,7 +105,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 							<path d='M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z' />
 						</svg>
 
-						<span>Favoritos</span>
+						<span>Favorites</span>
 					</SideBarItem>
 				</ul>
 			</div>
