@@ -5,6 +5,7 @@ import App from '../App';
 import Videos from '../components/Videos';
 import Albums from '../components/Albums';
 import Favorites from '../components/Favorites';
+import PhotoPage from '../components/PhotoPage';
 
 export const router = createBrowserRouter([
 	{
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
 			{
 				path: '/favorites',
 				element: <Favorites />,
+			},
+			{
+				path: '/photos/photo/:photoId',
+				element: <PhotoPage />,
 			},
 		],
 		errorElement: <div>404</div>,
