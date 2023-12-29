@@ -70,8 +70,6 @@ export default function useUploadFile(): TypeReturnHook {
 			await Promise.all(promisesInsert);
 
 			return results;
-		} catch (error) {
-			return error;
 		} finally {
 			setUploading(false);
 		}

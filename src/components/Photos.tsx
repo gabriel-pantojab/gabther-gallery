@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
 
 import usePhotos from '../hooks/usePhotos';
 import PhotoList from './PhotoList';
@@ -12,12 +13,29 @@ export default function Photos(): JSX.Element {
 	const { uploadFiles, uploading } = useUploadFile();
 
 	const handleUploadFiles = (files: File[]): void => {
+		const id = toast.loading('Uploading...');
 		uploadFiles(files)
-			.then(() => {
-				console.log('files uploaded');
+			.then(_ => {
+				toast.update(id, {
+					render: 'Photo uploaded successfully!',
+					type: 'success',
+					isLoading: false,
+				});
 			})
 			.catch(error => {
-				console.log(error);
+				toast.update(id, {
+					render: 'Error, ' + error.message,
+					type: 'error',
+					isLoading: false,
+					position: 'top-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
 			});
 	};
 
@@ -59,14 +77,14 @@ export default function Photos(): JSX.Element {
 				onClick={e => {
 					e.stopPropagation();
 				}}
-				className={`relative grid w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4`}
+				className={`relative grid h-full min-h-screen w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4`}
 			>
 				<input {...getInputProps()} />
 
 				<div
 					className={`
 					fixed
-					left-0 top-0 z-[999] h-screen w-full
+					left-0 top-0 z-[999] h-full w-full
 						${isDragActive ? 'flex' : 'hidden'}
 						items-center
 						justify-center bg-gray-200 bg-opacity-60
@@ -78,7 +96,7 @@ export default function Photos(): JSX.Element {
 					</p>
 				</div>
 
-				{photos !== null ? (
+				{photos !== null && photos.length > 0 ? (
 					<PhotoList photos={photos} />
 				) : photos === null ? (
 					<div>loading...</div>
@@ -87,7 +105,7 @@ export default function Photos(): JSX.Element {
 				)}
 
 				{uploading && (
-					<div className='fixed left-0 top-0 z-[999] flex h-screen w-full items-center justify-center bg-gray-200 bg-opacity-60'>
+					<div className='fixed bottom-0 left-0 top-0 z-[999] flex h-screen w-full items-center justify-center bg-gray-200 bg-opacity-60'>
 						<p className='flex flex-col items-center justify-center text-xl font-bold italic text-gray-600'>
 							Uploading...
 						</p>

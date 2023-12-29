@@ -18,7 +18,7 @@ export default function usePhotos(): TypeReturnHook {
 			})
 			.catch(error => {
 				console.log(error);
-				setPhotos(null);
+				setPhotos([]);
 			});
 	}, []);
 
