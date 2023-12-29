@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css';
 import SideBar from './components/SideBar';
 
 function App(): JSX.Element {
 	const [open, setOpen] = useState(false);
+
 	return (
 		<>
 			<header className='flex w-full gap-4 border-b-2 p-4'>
@@ -42,6 +45,19 @@ function App(): JSX.Element {
 
 				<Outlet />
 			</main>
+
+			<ToastContainer
+				position='top-right'
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme='light'
+			/>
 		</>
 	);
 }
