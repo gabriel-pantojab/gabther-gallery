@@ -20,6 +20,8 @@ export default function Photos(): JSX.Element {
 					render: 'Photo uploaded successfully!',
 					type: 'success',
 					isLoading: false,
+					autoClose: 5000,
+					closeOnClick: true,
 				});
 			})
 			.catch(error => {

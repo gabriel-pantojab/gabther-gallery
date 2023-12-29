@@ -31,7 +31,7 @@ export default function usePhotos(): TypeReturnHook {
 				(payload: any) => {
 					setPhotos(prev => {
 						if (prev !== null) {
-							return [...prev, payload.new];
+							return [payload.new, ...prev];
 						}
 						return null;
 					});

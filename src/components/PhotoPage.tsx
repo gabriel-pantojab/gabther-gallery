@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 import usePhoto from '../hooks/usePhoto';
 import StarIcon from './icons/StarIcon';
@@ -8,9 +9,30 @@ import { dateFormat } from '../utils/utils';
 
 export default function PhotoPage(): JSX.Element {
 	const { photoId } = useParams();
-	const { photo, favorite, toggleFavorite } = usePhoto({
+	const navigation = useNavigate();
+	const { photo, favorite, toggleFavorite, deletePhoto } = usePhoto({
 		photoId: Number(photoId),
 	});
+
+	const handleDeletePhoto = (): void => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: 'You will not be able to recover this photo!',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, delete it!',
+			cancelButtonText: 'No, keep it',
+		})
+			.then(async result => {
+				if (result.isConfirmed) {
+					await deletePhoto();
+					navigation(-1);
+				}
+			})
+			.catch(error => {
+				console.log(error);
+			});
+	};
 
 	return (
 		<section className='flex w-full flex-col items-center gap-4 p-4'>
@@ -31,7 +53,10 @@ export default function PhotoPage(): JSX.Element {
 						{favorite ? <StarIcon fill /> : <StarIcon />}
 					</span>
 
-					<span className='cursor-pointer transition duration-300 ease-in-out active:scale-95'>
+					<span
+						className='cursor-pointer transition duration-300 ease-in-out active:scale-95'
+						onClick={handleDeletePhoto}
+					>
 						<TrashIcon />
 					</span>
 

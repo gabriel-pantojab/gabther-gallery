@@ -3,11 +3,19 @@ import { toast } from 'react-toastify';
 
 import { SupabaseContext } from '../context/supabaseContext';
 import { type PhotoDB } from '../models/photo.interface';
+import {
+	getPhoto,
+	updateFavorite,
+	deletePhoto as deletePhotoDB,
+	deletePhotoStorage,
+} from '../utils/supabase';
 
 interface TypeReturnHook {
 	photo: PhotoDB | null;
-	toggleFavorite: () => void;
 	favorite: boolean;
+	deleting: boolean;
+	toggleFavorite: () => void;
+	deletePhoto: () => Promise<void>;
 }
 
 export default function usePhoto({
@@ -19,60 +27,61 @@ export default function usePhoto({
 
 	const [photo, setPhoto] = useState<PhotoDB | null>(null);
 	const [favorite, setFavorite] = useState<boolean>(false);
+	const [deleting, setDeleting] = useState<boolean>(false);
 
 	useEffect(() => {
-		getPhoto(photoId)
+		getPhoto(photoId, supabase)
 			.then(data => {
 				setPhoto(data);
 				setFavorite(data?.favorite ?? false);
 			})
-			.catch(error => {
-				console.log(error);
+			.catch(_ => {
 				setPhoto(null);
 			});
 	}, []);
 
-	const getPhoto = async (id: number): Promise<PhotoDB | null> => {
-		const { data, error } = await supabase
-			.from('photo')
-			.select('*')
-			.eq('id', id)
-			.single();
-
-		if (error !== null) {
-			throw error;
-		}
-
-		return data;
-	};
-
-	const updateFavorite = async ({
-		favorite,
-	}: {
-		favorite: boolean;
-	}): Promise<PhotoDB | null> => {
-		const { data, error } = await supabase
-			.from('photo')
-			.update({ favorite })
-			.eq('id', photoId)
-			.select()
-			.single();
-
-		if (error !== null) {
-			throw error;
-		}
-
-		return data;
-	};
-
 	const toggleFavorite = (): void => {
 		const oldFavorite = favorite;
 		setFavorite(!oldFavorite);
-		updateFavorite({ favorite: !favorite }).catch((error: any) => {
-			setFavorite(oldFavorite);
-			toast.error('Error, ' + error.message);
-		});
+		updateFavorite({ photoId, favorite: !favorite, supabase }).catch(
+			(error: any) => {
+				setFavorite(oldFavorite);
+				toast.error('Error, ' + error.message);
+			},
+		);
 	};
 
-	return { photo, toggleFavorite, favorite };
+	const deletePhoto = async (): Promise<void> => {
+		const id = toast.loading('Deleting...');
+		try {
+			setDeleting(true);
+			await deletePhotoStorage(photo?.name ?? '', supabase);
+			await deletePhotoDB(photoId, supabase);
+			toast.update(id, {
+				render: 'Photo deleted successfully!',
+				type: 'success',
+				isLoading: false,
+				autoClose: 5000,
+				closeOnClick: true,
+			});
+		} catch (error: any) {
+			toast.update(id, {
+				render: 'Error, ' + error.message,
+				type: 'error',
+				isLoading: false,
+				position: 'top-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'light',
+			});
+		} finally {
+			setDeleting(false);
+		}
+	};
+
+	return { photo, favorite, deleting, toggleFavorite, deletePhoto };
 }
