@@ -1,8 +1,7 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import Photos from '../components/Photos';
 import App from '../App';
-import Gallery from '../components/Gallery';
 import Videos from '../components/Videos';
 import Albums from '../components/Albums';
 import Favorites from '../components/Favorites';
@@ -14,7 +13,7 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				path: '/',
-				element: <Gallery />,
+				element: <Navigate to='/photos' replace />,
 			},
 			{
 				path: '/photos',

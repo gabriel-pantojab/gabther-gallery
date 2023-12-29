@@ -6,6 +6,7 @@ import SideBar from './components/SideBar';
 
 function App(): JSX.Element {
 	const [open, setOpen] = useState(false);
+
 	return (
 		<>
 			<header className='flex w-full gap-4 border-b-2 p-4'>
