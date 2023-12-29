@@ -13,8 +13,8 @@ export default function PhotoPage(): JSX.Element {
 	});
 
 	return (
-		<section className='flex w-full flex-col gap-4 p-4'>
-			<header className='flex w-full flex-col gap-4'>
+		<section className='flex w-full flex-col items-center gap-4 p-4'>
+			<header className='flex w-full flex-col gap-4 lg:flex-row lg:justify-between'>
 				<div className='flex flex-col gap-1'>
 					<h2 className='font-bold'>{photo?.name}</h2>
 
@@ -24,18 +24,29 @@ export default function PhotoPage(): JSX.Element {
 				</div>
 
 				<div className='flex justify-end gap-2 text-gray-600'>
-					<span className='text-[#B57EDC]' onClick={toggleFavorite}>
+					<span
+						className='cursor-pointer text-[#B57EDC] transition duration-300 ease-in-out active:scale-95'
+						onClick={toggleFavorite}
+					>
 						{favorite ? <StarIcon fill /> : <StarIcon />}
 					</span>
 
-					<TrashIcon />
+					<span className='cursor-pointer transition duration-300 ease-in-out active:scale-95'>
+						<TrashIcon />
+					</span>
 
-					<DotsVerticalIcon />
+					<span className='cursor-pointer transition duration-300 ease-in-out active:scale-95'>
+						<DotsVerticalIcon />
+					</span>
 				</div>
 			</header>
 
-			<figure className='overflow-hidden rounded-md'>
-				<img src={photo?.url_image} alt={photo?.name} />
+			<figure className='max-h-screen max-w-fit overflow-hidden rounded-md'>
+				<img
+					className='h-full w-full'
+					src={photo?.url_image}
+					alt={photo?.name}
+				/>
 			</figure>
 		</section>
 	);
