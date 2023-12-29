@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import usePhotos from '../hooks/usePhotos';
 import PhotoList from './PhotoList';
 import useUploadFile from '../hooks/useUploadFile';
+import UploadIcon from './icons/UploadIcon';
 
 export default function Photos(): JSX.Element {
 	const { photos } = usePhotos();
@@ -35,25 +36,7 @@ export default function Photos(): JSX.Element {
 					htmlFor='file'
 					className='flex cursor-pointer items-center justify-center gap-1 rounded-md p-1 px-2 text-gray-500 hover:bg-gray-200'
 				>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						strokeWidth='2'
-						stroke='currentColor'
-						fill='none'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-					>
-						<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-
-						<path d='M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1' />
-
-						<path d='M9 15l3 -3l3 3' />
-
-						<path d='M12 12l0 9' />
-					</svg>
+					<UploadIcon />
 
 					<span>upload</span>
 
@@ -82,14 +65,17 @@ export default function Photos(): JSX.Element {
 
 				<div
 					className={`
-					absolute
+					fixed
 					left-0 top-0 z-[999] h-screen w-full
 						${isDragActive ? 'flex' : 'hidden'}
 						items-center
 						justify-center bg-gray-200 bg-opacity-60
 					`}
 				>
-					<p>Drop the files here ...</p>
+					<p className='flex flex-col items-center justify-center text-xl font-bold italic text-gray-600'>
+						<UploadIcon width={40} height={40} className='animate-pulsar' />
+						Upload
+					</p>
 				</div>
 
 				{photos !== null ? (
@@ -101,8 +87,10 @@ export default function Photos(): JSX.Element {
 				)}
 
 				{uploading && (
-					<div className='absolute left-0 top-0 z-[999] flex h-screen w-full items-center justify-center bg-gray-200 bg-opacity-60'>
-						<p>Uploading...</p>
+					<div className='fixed left-0 top-0 z-[999] flex h-screen w-full items-center justify-center bg-gray-200 bg-opacity-60'>
+						<p className='flex flex-col items-center justify-center text-xl font-bold italic text-gray-600'>
+							Uploading...
+						</p>
 					</div>
 				)}
 			</div>
