@@ -3,4 +3,5 @@ export interface UploadIconProps {
 	width?: number;
 	height?: number;
 	color?: string;
+	fill?: boolean;
 }

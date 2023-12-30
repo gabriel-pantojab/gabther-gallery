@@ -20,6 +20,8 @@ export default function Photos(): JSX.Element {
 					render: 'Photo uploaded successfully!',
 					type: 'success',
 					isLoading: false,
+					autoClose: 5000,
+					closeOnClick: true,
 				});
 			})
 			.catch(error => {
@@ -46,8 +48,8 @@ export default function Photos(): JSX.Element {
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
 	return (
-		<section className='w-full p-4'>
-			<header className='flex w-full items-center justify-between pb-4'>
+		<section className='w-full'>
+			<header className='flex w-full items-center justify-between p-4 pb-4'>
 				<h2 className='text-2xl font-bold'>Photos</h2>
 
 				<label
@@ -77,7 +79,7 @@ export default function Photos(): JSX.Element {
 				onClick={e => {
 					e.stopPropagation();
 				}}
-				className={`relative grid h-full min-h-screen w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4`}
+				className='relative flex'
 			>
 				<input {...getInputProps()} />
 
