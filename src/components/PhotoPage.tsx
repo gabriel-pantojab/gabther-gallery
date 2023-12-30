@@ -1,11 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 import usePhoto from '../hooks/usePhoto';
 import StarIcon from './icons/StarIcon';
 import TrashIcon from './icons/TrashIcon';
 import DotsVerticalIcon from './icons/DotsVertical';
 import { dateFormat } from '../utils/utils';
+import BackIcon from './icons/BackIcon';
 
 export default function PhotoPage(): JSX.Element {
 	const { photoId } = useParams();
@@ -29,20 +31,32 @@ export default function PhotoPage(): JSX.Element {
 					navigation(-1);
 				}
 			})
-			.catch(error => {
-				console.log(error);
+			.catch((error: any) => {
+				toast.error('Error, ' + error.message, {
+					position: 'top-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
 			});
 	};
 
 	return (
 		<section className='flex w-full flex-col items-center gap-4 p-4'>
-			<header className='flex w-full flex-col gap-4 lg:flex-row lg:justify-between'>
-				<div className='flex flex-col gap-1'>
-					<h2 className='font-bold'>{photo?.name}</h2>
-
-					<p>
-						Date: {photo?.created_at != null && dateFormat(photo?.created_at)}
-					</p>
+			<header className='flex w-full flex-col gap-4 md:flex-row md:justify-between'>
+				<div className='flex gap-1'>
+					<span
+						onClick={() => {
+							navigation(-1);
+						}}
+						className='cursor-pointer transition duration-300 ease-in-out active:scale-95'
+					>
+						<BackIcon />
+					</span>
 				</div>
 
 				<div className='flex justify-end gap-2 text-gray-600'>
@@ -73,6 +87,12 @@ export default function PhotoPage(): JSX.Element {
 					alt={photo?.name}
 				/>
 			</figure>
+
+			<div className='flex w-full'>
+				<p>
+					Date: {photo?.created_at != null && dateFormat(photo?.created_at)}
+				</p>
+			</div>
 		</section>
 	);
 }

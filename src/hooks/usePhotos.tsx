@@ -23,7 +23,7 @@ export default function usePhotos(): TypeReturnHook {
 	}, []);
 
 	useEffect(() => {
-		supabase
+		const channel = supabase
 			.channel('room1')
 			.on(
 				'postgres_changes',
@@ -40,7 +40,7 @@ export default function usePhotos(): TypeReturnHook {
 			.subscribe();
 
 		return () => {
-			supabase.removeChannel('room1');
+			channel.unsubscribe();
 		};
 	}, []);
 
