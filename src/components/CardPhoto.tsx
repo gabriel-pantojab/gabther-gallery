@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { type PhotoDB } from '../models/photo.interface';
 import CheckIcon from './icons/CheckIcon';
+import { UserContext } from '../context/userContext';
 
 interface CardPhotoProps {
 	photo: PhotoDB;
@@ -19,6 +20,7 @@ export default function CardPhoto({
 	removeIdSelected,
 	isSelected,
 }: CardPhotoProps): JSX.Element {
+	const { currentUser } = useContext(UserContext);
 	const [isHover, setIsHover] = useState(false);
 
 	const CoverElement = ({
@@ -52,9 +54,11 @@ export default function CardPhoto({
 			}}
 			className='relative animate-reveal transition duration-300 ease-in-out'
 			onMouseEnter={() => {
+				if (currentUser === null) return;
 				setIsHover(true);
 			}}
 			onMouseLeave={() => {
+				if (currentUser === null) return;
 				setIsHover(false);
 			}}
 		>
@@ -65,6 +69,7 @@ export default function CardPhoto({
 					${!isSelected && 'hover:text-white'}
 				`}
 				onClick={() => {
+					if (currentUser === null) return;
 					if (isSelected) {
 						removeIdSelected !== undefined && removeIdSelected(photo.id);
 					} else {

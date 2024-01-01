@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -8,8 +9,10 @@ import TrashIcon from './icons/TrashIcon';
 import DotsVerticalIcon from './icons/DotsVertical';
 import { dateFormat } from '../utils/utils';
 import BackIcon from './icons/BackIcon';
+import { UserContext } from '../context/userContext';
 
 export default function PhotoPage(): JSX.Element {
+	const { currentUser } = useContext(UserContext);
 	const { photoId } = useParams();
 	const navigation = useNavigate();
 	const { photo, favorite, toggleFavorite, deletePhoto } = usePhoto({
@@ -17,6 +20,7 @@ export default function PhotoPage(): JSX.Element {
 	});
 
 	const handleDeletePhoto = (): void => {
+		if (currentUser === null) return;
 		Swal.fire({
 			title: 'Are you sure?',
 			text: 'You will not be able to recover this photo!',
@@ -62,21 +66,31 @@ export default function PhotoPage(): JSX.Element {
 				<div className='flex justify-end gap-2 text-gray-600'>
 					<span
 						className='cursor-pointer text-[#B57EDC] transition duration-300 ease-in-out active:scale-95'
-						onClick={toggleFavorite}
+						onClick={
+							currentUser !== null
+								? () => {
+										toggleFavorite();
+									}
+								: () => {}
+						}
 					>
 						{favorite ? <StarIcon fill /> : <StarIcon />}
 					</span>
 
-					<span
-						className='cursor-pointer transition duration-300 ease-in-out active:scale-95'
-						onClick={handleDeletePhoto}
-					>
-						<TrashIcon />
-					</span>
+					{currentUser !== null && (
+						<>
+							<span
+								className='cursor-pointer transition duration-300 ease-in-out active:scale-95'
+								onClick={handleDeletePhoto}
+							>
+								<TrashIcon />
+							</span>
 
-					<span className='cursor-pointer transition duration-300 ease-in-out active:scale-95'>
-						<DotsVerticalIcon />
-					</span>
+							<span className='cursor-pointer transition duration-300 ease-in-out active:scale-95'>
+								<DotsVerticalIcon />
+							</span>
+						</>
+					)}
 				</div>
 			</header>
 

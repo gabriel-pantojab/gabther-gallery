@@ -7,6 +7,10 @@ interface UserContextProps {
 	currentUser: User | null;
 	setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
 	signInWithGoogle: () => Promise<void>;
+	signInWithEmailAndPassword: (
+		email: string,
+		password: string,
+	) => Promise<void>;
 	signOut: () => Promise<void>;
 }
 
@@ -14,6 +18,7 @@ const UserContext = createContext<UserContextProps>({
 	currentUser: null,
 	setCurrentUser: () => {},
 	signInWithGoogle: async () => {},
+	signInWithEmailAndPassword: async () => {},
 	signOut: async () => {},
 });
 
@@ -33,6 +38,20 @@ function UserProvider({ children }: any): JSX.Element {
 		} catch (error) {}
 	};
 
+	const signInWithEmailAndPassword = async (
+		email: string,
+		password: string,
+	): Promise<void> => {
+		const { error } = await supabase.auth.signInWithPassword({
+			email,
+			password,
+		});
+
+		if (error !== null) {
+			throw error;
+		}
+	};
+
 	const signOut = async (): Promise<void> => {
 		try {
 			await supabase.auth.signOut();
@@ -49,6 +68,7 @@ function UserProvider({ children }: any): JSX.Element {
 					// eslint-disable-next-line @typescript-eslint/naming-convention
 					user: { email, id, created_at, user_metadata },
 				} = session;
+
 				setCurrentUser({
 					email,
 					created_at,
@@ -68,7 +88,13 @@ function UserProvider({ children }: any): JSX.Element {
 
 	return (
 		<UserContext.Provider
-			value={{ currentUser, setCurrentUser, signInWithGoogle, signOut }}
+			value={{
+				currentUser,
+				setCurrentUser,
+				signInWithGoogle,
+				signOut,
+				signInWithEmailAndPassword,
+			}}
 		>
 			{children}
 		</UserContext.Provider>
