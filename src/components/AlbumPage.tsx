@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import BackIcon from './icons/BackIcon';
@@ -6,8 +6,10 @@ import PhotoPlusIcon from './icons/PhotoPlusIcon';
 import PhotoList from './PhotoList';
 import usePhotosAlbum from '../hooks/usePhotosAlbum';
 import SelectPhoto from './SelectPhoto';
+import { UserContext } from '../context/userContext';
 
 export default function AlbumPage(): JSX.Element {
+	const { currentUser } = useContext(UserContext);
 	const { album } = useParams();
 	const navigation = useNavigate();
 	const name = album?.split('-')[0];
@@ -22,14 +24,16 @@ export default function AlbumPage(): JSX.Element {
 				<h2 className='text-xl font-bold'>{name}</h2>
 
 				<div className='flex w-full justify-end gap-2'>
-					<button
-						onClick={() => {
-							setOpenSelectPhoto(true);
-						}}
-						className='cursor-pointer transition duration-300 ease-in-out active:scale-95'
-					>
-						<PhotoPlusIcon />
-					</button>
+					{currentUser !== null && (
+						<button
+							onClick={() => {
+								setOpenSelectPhoto(true);
+							}}
+							className='cursor-pointer transition duration-300 ease-in-out active:scale-95'
+						>
+							<PhotoPlusIcon />
+						</button>
+					)}
 
 					<button
 						onClick={() => {

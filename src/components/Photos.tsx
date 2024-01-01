@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
 
@@ -6,8 +6,10 @@ import usePhotos from '../hooks/usePhotos';
 import PhotoList from './PhotoList';
 import useUploadFile from '../hooks/useUploadFile';
 import UploadIcon from './icons/UploadIcon';
+import { UserContext } from '../context/userContext';
 
 export default function Photos(): JSX.Element {
+	const { currentUser } = useContext(UserContext);
 	const { photos } = usePhotos();
 
 	const { uploadFiles, uploading } = useUploadFile();
@@ -42,6 +44,7 @@ export default function Photos(): JSX.Element {
 	};
 
 	const onDrop = useCallback((acceptedFiles: File[]) => {
+		if (currentUser === null) return;
 		handleUploadFiles(acceptedFiles);
 	}, []);
 
@@ -52,26 +55,28 @@ export default function Photos(): JSX.Element {
 			<header className='flex w-full items-center justify-between p-4 pb-4'>
 				<h2 className='text-2xl font-bold'>Photos</h2>
 
-				<label
-					htmlFor='file'
-					className='flex cursor-pointer items-center justify-center gap-1 rounded-md p-1 px-2 text-gray-500 hover:bg-gray-200'
-				>
-					<UploadIcon />
+				{currentUser !== null && (
+					<label
+						htmlFor='file'
+						className='flex cursor-pointer items-center justify-center gap-1 rounded-md p-1 px-2 text-gray-500 hover:bg-gray-200'
+					>
+						<UploadIcon />
 
-					<span>upload</span>
+						<span>upload</span>
 
-					<input
-						type='file'
-						name='file'
-						id='file'
-						className='hidden'
-						onChange={e => {
-							if (e.target.files !== null) {
-								handleUploadFiles(Array.from(e.target.files));
-							}
-						}}
-					/>
-				</label>
+						<input
+							type='file'
+							name='file'
+							id='file'
+							className='hidden'
+							onChange={e => {
+								if (e.target.files !== null) {
+									handleUploadFiles(Array.from(e.target.files));
+								}
+							}}
+						/>
+					</label>
+				)}
 			</header>
 
 			<div
@@ -79,31 +84,28 @@ export default function Photos(): JSX.Element {
 				onClick={e => {
 					e.stopPropagation();
 				}}
+				onFocus={e => {
+					e.stopPropagation();
+				}}
 				className='relative flex'
 			>
-				<input {...getInputProps()} />
+				{currentUser !== null && <input {...getInputProps()} />}
 
-				<div
-					className={`
+				{currentUser !== null && (
+					<div
+						className={`
 					fixed
 					left-0 top-0 z-[999] h-full w-full
 						${isDragActive ? 'flex' : 'hidden'}
 						items-center
 						justify-center bg-gray-200 bg-opacity-60
 					`}
-				>
-					<p className='flex flex-col items-center justify-center text-xl font-bold italic text-gray-600'>
-						<UploadIcon width={40} height={40} className='animate-pulsar' />
-						Upload
-					</p>
-				</div>
-
-				{photos !== null && photos.length > 0 ? (
-					<PhotoList photos={photos} />
-				) : photos === null ? (
-					<div>loading...</div>
-				) : (
-					<div>no files</div>
+					>
+						<p className='flex flex-col items-center justify-center text-xl font-bold italic text-gray-600'>
+							<UploadIcon width={40} height={40} className='animate-pulsar' />
+							Upload
+						</p>
+					</div>
 				)}
 
 				{uploading && (
@@ -112,6 +114,14 @@ export default function Photos(): JSX.Element {
 							Uploading...
 						</p>
 					</div>
+				)}
+
+				{photos !== null && photos.length > 0 ? (
+					<PhotoList photos={photos} />
+				) : photos === null ? (
+					<div>loading...</div>
+				) : (
+					<div>no files</div>
 				)}
 			</div>
 		</section>
