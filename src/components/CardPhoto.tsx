@@ -6,17 +6,43 @@ import CheckIcon from './icons/CheckIcon';
 
 interface CardPhotoProps {
 	photo: PhotoDB;
+	navigate?: boolean;
+	isSelected: boolean;
 	addIdSelected?: (id: number) => void;
 	removeIdSelected?: (id: number) => void;
 }
 
 export default function CardPhoto({
 	photo,
+	navigate = true,
 	addIdSelected,
 	removeIdSelected,
+	isSelected,
 }: CardPhotoProps): JSX.Element {
 	const [isHover, setIsHover] = useState(false);
-	const [isSelected, setIsSelected] = useState(false);
+
+	const CoverElement = ({
+		children,
+	}: {
+		children: JSX.Element | JSX.Element[];
+	}): JSX.Element => {
+		if (navigate) {
+			return (
+				<Link
+					to={`/photos/photo/${photo.id}`}
+					className={`${isSelected && 'bg-blue-100'} block h-full w-full`}
+				>
+					{children}
+				</Link>
+			);
+		} else {
+			return (
+				<div className={`${isSelected && 'bg-blue-100'} block h-full w-full`}>
+					{children}
+				</div>
+			);
+		}
+	};
 
 	return (
 		<div
@@ -39,7 +65,6 @@ export default function CardPhoto({
 					${!isSelected && 'hover:text-white'}
 				`}
 				onClick={() => {
-					setIsSelected(prev => !prev);
 					if (isSelected) {
 						removeIdSelected !== undefined && removeIdSelected(photo.id);
 					} else {
@@ -50,10 +75,7 @@ export default function CardPhoto({
 				<CheckIcon />
 			</div>
 
-			<Link
-				to={`/photos/photo/${photo.id}`}
-				className={`${isSelected && 'bg-blue-100'} block h-full w-full`}
-			>
+			<CoverElement>
 				<div
 					className={`${
 						isSelected && 'scale-75'
@@ -67,7 +89,7 @@ export default function CardPhoto({
 						height={100}
 					/>
 				</div>
-			</Link>
+			</CoverElement>
 		</div>
 	);
 }

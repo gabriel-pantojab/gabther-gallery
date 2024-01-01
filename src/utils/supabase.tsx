@@ -1,3 +1,4 @@
+import { type AlbumDB } from '../models/album.interface';
 import { type PhotoDB } from '../models/photo.interface';
 
 // DATABASE
@@ -91,6 +92,76 @@ export async function deletePhoto(id: number, supabase: any): Promise<void> {
 	}
 }
 
+export async function getAlbums(supabase: any): Promise<AlbumDB[]> {
+	const { data, error } = await supabase
+		.from('album')
+		.select('*')
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function updatePhotoToAlbum({
+	idPhoto,
+	idAlbum,
+	supabase,
+}: {
+	idPhoto: number;
+	idAlbum: number | null;
+	supabase: any;
+}): Promise<void> {
+	console.log(idPhoto, idAlbum);
+	const { error } = await supabase
+		.from('photo')
+		.update({ id_album: idAlbum })
+		.eq('id', idPhoto);
+	if (error !== null) {
+		throw error;
+	}
+}
+
+export async function insertAlbum({
+	name,
+	urlAlbumCover = '',
+	supabase,
+}: {
+	name: string;
+	urlAlbumCover?: string;
+	supabase: any;
+}): Promise<void> {
+	const album: {
+		name: string;
+		url_album_cover: string;
+	} = { name, url_album_cover: urlAlbumCover };
+
+	const { error } = await supabase.from('album').insert(album);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
+export async function getPhotosByAlbum(
+	id: number,
+	supabase: any,
+): Promise<PhotoDB[]> {
+	const { data, error } = await supabase
+		.from('photo')
+		.select('*')
+		.eq('id_album', id)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
 // STORAGE
 
 export async function uploadFile(file: File, supabase: any): Promise<any> {
@@ -115,11 +186,31 @@ export async function deletePhotoStorage(
 		.from('photos')
 		.remove([`${name}`]);
 
-	console.log(error);
-
 	if (error !== null) {
 		throw error;
 	}
 
 	return data;
+}
+
+export async function uploadAlbumCover(
+	file: File,
+	name: string,
+	supabase: any,
+): Promise<any> {
+	const { data: data1, error } = await supabase.storage
+		.from('albums')
+		.upload(`${name}/${file.name}`, file, {
+			cacheControl: '3600',
+			upsert: false,
+		});
+
+	const { data: data2 } = supabase.storage
+		.from('albums')
+		.getPublicUrl(data1.path);
+
+	if (error !== null) {
+		throw error;
+	}
+	return { url: data2.publicUrl };
 }
