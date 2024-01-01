@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import usePhotos from '../hooks/usePhotos';
 import CardPhoto from './CardPhoto';
 import { updatePhotoToAlbum } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
-import { toast } from 'react-toastify';
 
 interface TypeProps {
 	setOpen: (value: boolean) => void;
@@ -89,6 +89,7 @@ export default function SelectPhoto({
 					?.filter(photo => photo.id_album !== idAlbum)
 					.map(photo => (
 						<CardPhoto
+							isSelected={idsSelected.includes(photo.id)}
 							navigate={false}
 							addIdSelected={addIdSelected}
 							removeIdSelected={removeIdSelected}

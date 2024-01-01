@@ -1,10 +1,10 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import BackIcon from './icons/BackIcon';
 import PhotoPlusIcon from './icons/PhotoPlusIcon';
 import PhotoList from './PhotoList';
 import usePhotosAlbum from '../hooks/usePhotosAlbum';
-import { useState } from 'react';
 import SelectPhoto from './SelectPhoto';
 
 export default function AlbumPage(): JSX.Element {
