@@ -31,8 +31,13 @@ export default function PhotoList({ photos }: PhotoListProps): JSX.Element {
 			confirmButtonText: 'Yes, delete it!',
 			cancelButtonText: 'No, keep it',
 		})
-			.then(result => {
+			.then(async result => {
 				if (result.isConfirmed) {
+					await Swal.fire(
+						'Deleted!',
+						'Mentira, aun no puedes eliminar fotos en esta sección :D',
+						'success',
+					);
 					setIdsSelected([]);
 				}
 			})
@@ -77,6 +82,7 @@ export default function PhotoList({ photos }: PhotoListProps): JSX.Element {
 				{photos.map(photo => {
 					return (
 						<CardPhoto
+							isSelected={idsSelected.includes(photo.id)}
 							key={photo.id}
 							photo={photo}
 							addIdSelected={addIdSelected}

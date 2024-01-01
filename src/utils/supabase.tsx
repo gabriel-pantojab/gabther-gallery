@@ -105,6 +105,25 @@ export async function getAlbums(supabase: any): Promise<AlbumDB[]> {
 	return data;
 }
 
+export async function updatePhotoToAlbum({
+	idPhoto,
+	idAlbum,
+	supabase,
+}: {
+	idPhoto: number;
+	idAlbum: number | null;
+	supabase: any;
+}): Promise<void> {
+	console.log(idPhoto, idAlbum);
+	const { error } = await supabase
+		.from('photo')
+		.update({ id_album: idAlbum })
+		.eq('id', idPhoto);
+	if (error !== null) {
+		throw error;
+	}
+}
+
 export async function insertAlbum({
 	name,
 	urlAlbumCover = '',
@@ -124,6 +143,23 @@ export async function insertAlbum({
 	if (error !== null) {
 		throw error;
 	}
+}
+
+export async function getPhotosByAlbum(
+	id: number,
+	supabase: any,
+): Promise<PhotoDB[]> {
+	const { data, error } = await supabase
+		.from('photo')
+		.select('*')
+		.eq('id_album', id)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
 }
 
 // STORAGE
