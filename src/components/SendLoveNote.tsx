@@ -108,8 +108,9 @@ export default function SendLoveNote(): JSX.Element {
 		const emailReceived = idUsers.find((u: Users) => u.id === recipientId);
 
 		if (emailReceived === undefined) return;
-
+		let idToast;
 		try {
+			idToast = toast.loading('Sending love note...');
 			const dataBlob = await domToPng(container.current as HTMLElement, {
 				bgcolor: 'white',
 				quality: 1,
@@ -134,21 +135,25 @@ export default function SendLoveNote(): JSX.Element {
 			setTitle('');
 			setUrlTemplate('');
 
-			toast.success('Love note sent', {
-				position: 'top-right',
+			toast.update(idToast, {
+				render: 'Love note sent successfully 💖',
+				type: 'success',
 				autoClose: 5000,
 				hideProgressBar: false,
 				closeOnClick: true,
 				pauseOnHover: true,
 			});
 		} catch (error: any) {
-			toast.error('Error sending love note, ' + error.message, {
-				position: 'top-right',
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-			});
+			if (idToast !== undefined) {
+				toast.update(idToast, {
+					render: 'Error 🤨, ' + error.message,
+					type: 'error',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+				});
+			}
 		}
 	};
 
@@ -301,13 +306,18 @@ export default function SendLoveNote(): JSX.Element {
 						ref={container}
 						onMouseUp={() => {
 							setMove(false);
+							const root = document.getElementById('root');
+							document.body.style.overflow = 'visible';
+							if (root !== null) {
+								root.style.overflow = 'visible';
+							}
 						}}
 						onTouchEnd={() => {
 							setMove(false);
 							const root = document.getElementById('root');
-							document.body.style.overflow = 'auto';
+							document.body.style.overflow = 'visible';
 							if (root !== null) {
-								root.style.overflow = 'auto';
+								root.style.overflow = 'visible';
 							}
 						}}
 						onMouseMove={e => {
@@ -355,7 +365,7 @@ export default function SendLoveNote(): JSX.Element {
 								onChange={e => {
 									setTitle(e.target.value);
 								}}
-								className=':outline-none w-full cursor-pointer resize overflow-hidden rounded-md bg-transparent p-3 outline-none focus:border-2 active:outline-none'
+								className=':outline-none w-full cursor-pointer resize-none overflow-hidden rounded-md bg-transparent p-3 outline-none hover:resize focus:border-2 active:outline-none'
 							></textarea>
 						</label>
 
@@ -388,7 +398,7 @@ export default function SendLoveNote(): JSX.Element {
 								onChange={e => {
 									setMessage(e.target.value);
 								}}
-								className='h-full w-full cursor-pointer resize rounded-md bg-transparent p-2 outline-none focus:border-2 focus:outline-none active:outline-none'
+								className='h-full w-full cursor-pointer resize-none rounded-md bg-transparent p-2 outline-none hover:resize focus:border-2 focus:outline-none active:outline-none'
 							></textarea>
 						</div>
 					</div>

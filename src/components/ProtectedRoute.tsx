@@ -16,11 +16,10 @@ export default function ProtectedRoute({
 }: ProtectedRouteProps): JSX.Element {
 	const isAuthorized: boolean = guard();
 	const navigate = useNavigate();
-	if (isAuthorized) {
-		return <>{children}</>;
-	}
+
 	useEffect(() => {
-		navigate(redirect);
+		if (!isAuthorized) navigate(redirect);
 	}, [isAuthorized]);
-	return <></>;
+
+	return <>{isAuthorized && children}</>;
 }
