@@ -11,10 +11,11 @@ import { toast } from 'react-toastify';
 
 import { SupabaseContext } from '../context/supabaseContext';
 import { UserContext } from '../context/userContext';
-import { getTemplates, sendLoveNote } from '../utils/supabase';
+import { getTemplates, sendLoveNote, uploadLoveNote } from '../utils/supabase';
 import BackIcon from './icons/BackIcon';
 import { type Template } from '../models/template.interface';
 import TrashIcon from './icons/TrashIcon';
+import { domToPng } from '../utils/domToImage';
 
 interface Users {
 	id: string;
@@ -91,7 +92,7 @@ export default function SendLoveNote(): JSX.Element {
 		}
 	};
 
-	const onSubmit = (event: FormEvent): void => {
+	const onSubmit = async (event: FormEvent): Promise<void> => {
 		event.preventDefault();
 		if (currentUser === null) return;
 		if (message === '' || title === '') {
@@ -108,8 +109,17 @@ export default function SendLoveNote(): JSX.Element {
 
 		if (emailReceived === undefined) return;
 
-		sendLoveNote(
-			{
+		try {
+			const dataBlob = await domToPng(container.current as HTMLElement, {
+				bgcolor: 'white',
+				quality: 1,
+			});
+			const uuid = crypto.randomUUID();
+			const file = new File([dataBlob], `love-note-${uuid}.png`, {
+				type: 'image/png',
+			});
+			const { url } = await uploadLoveNote(file, supabase);
+			const loveNote = {
 				author: currentUser.id,
 				email_author: currentUser.email,
 				email_recipient: emailReceived.email,
@@ -117,15 +127,29 @@ export default function SendLoveNote(): JSX.Element {
 				title,
 				message,
 				template: urlTemplate,
-			},
-			supabase,
-		)
-			.then(() => {
-				setMessage('');
-			})
-			.catch(error => {
-				console.log(error);
+				url_love_note: url,
+			};
+			await sendLoveNote(loveNote, supabase);
+			setMessage('');
+			setTitle('');
+			setUrlTemplate('');
+
+			toast.success('Love note sent', {
+				position: 'top-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
 			});
+		} catch (error: any) {
+			toast.error('Error sending love note, ' + error.message, {
+				position: 'top-right',
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -237,6 +261,7 @@ export default function SendLoveNote(): JSX.Element {
 
 			<div className='flex w-full flex-col p-4'>
 				<form
+					// eslint-disable-next-line @typescript-eslint/no-misused-promises
 					onSubmit={onSubmit}
 					className='m-auto flex h-full w-full max-w-[600px] flex-col items-center gap-4'
 				>
@@ -330,7 +355,7 @@ export default function SendLoveNote(): JSX.Element {
 								onChange={e => {
 									setTitle(e.target.value);
 								}}
-								className='w-full cursor-pointer resize overflow-hidden rounded-md border-2 bg-transparent p-3 outline-none focus:outline-none active:outline-none'
+								className=':outline-none w-full cursor-pointer resize overflow-hidden rounded-md bg-transparent p-3 outline-none focus:border-2 active:outline-none'
 							></textarea>
 						</label>
 
@@ -363,7 +388,7 @@ export default function SendLoveNote(): JSX.Element {
 								onChange={e => {
 									setMessage(e.target.value);
 								}}
-								className='h-full w-full cursor-pointer resize rounded-md border-2 bg-transparent p-2 outline-none focus:outline-none active:outline-none'
+								className='h-full w-full cursor-pointer resize rounded-md bg-transparent p-2 outline-none focus:border-2 focus:outline-none active:outline-none'
 							></textarea>
 						</div>
 					</div>

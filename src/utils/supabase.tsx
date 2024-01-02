@@ -207,6 +207,7 @@ export async function sendLoveNote(
 		template: string;
 		email_recipient: string;
 		email_author: string;
+		url_love_note: string;
 	},
 	supabase: any,
 ): Promise<void> {
@@ -297,5 +298,24 @@ export async function uploadAlbumCover(
 	if (error !== null) {
 		throw error;
 	}
+	return { url: data2.publicUrl };
+}
+
+export async function uploadLoveNote(file: File, supabase: any): Promise<any> {
+	const { data, error } = await supabase.storage
+		.from('love_notes')
+		.upload(`${file.name}`, file, {
+			cacheControl: '3600',
+			upsert: false,
+		});
+
+	const { data: data2 } = supabase.storage
+		.from('love_notes')
+		.getPublicUrl(data.path);
+
+	if (error !== null) {
+		throw error;
+	}
+
 	return { url: data2.publicUrl };
 }
