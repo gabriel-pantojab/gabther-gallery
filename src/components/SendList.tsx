@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { getSendLoveNotes } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
 import { UserContext } from '../context/userContext';
 import { type LoveNote } from '../models/loveNote.interface';
-import { Link } from 'react-router-dom';
 
 export default function SendList(): JSX.Element {
 	const { supabase } = useContext(SupabaseContext);
