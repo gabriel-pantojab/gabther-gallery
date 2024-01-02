@@ -63,7 +63,7 @@ function UserProvider({ children }: any): JSX.Element {
 		const {
 			data: { subscription },
 		} = supabase.auth.onAuthStateChange(async (_: any, session: any) => {
-			if (session !== null) {
+			if (session !== null && currentUser === null) {
 				const {
 					// eslint-disable-next-line @typescript-eslint/naming-convention
 					user: { email, id, created_at, user_metadata },
@@ -77,7 +77,7 @@ function UserProvider({ children }: any): JSX.Element {
 					id,
 				});
 			} else {
-				setCurrentUser(null);
+				if (session === null) setCurrentUser(null);
 			}
 		});
 

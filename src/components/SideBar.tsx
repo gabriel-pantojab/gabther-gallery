@@ -106,11 +106,11 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 								</div>
 
 								<ul className='ml-8 flex w-full flex-col gap-3 p-2'>
-									<SideBarItem close={close} path='/cartas/enviadas'>
+									<SideBarItem close={close} path='/love-notes/sends'>
 										<span>Enviadas</span>
 									</SideBarItem>
 
-									<SideBarItem close={close} path='/cartas/recibidas'>
+									<SideBarItem close={close} path='/love-notes/received'>
 										<span>Recibidas</span>
 									</SideBarItem>
 								</ul>

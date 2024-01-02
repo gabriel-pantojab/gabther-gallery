@@ -1,5 +1,7 @@
 import { type AlbumDB } from '../models/album.interface';
+import { type LoveNote } from '../models/loveNote.interface';
 import { type PhotoDB } from '../models/photo.interface';
+import { type Template } from '../models/template.interface';
 
 // DATABASE
 
@@ -153,6 +155,89 @@ export async function getPhotosByAlbum(
 		.from('photo')
 		.select('*')
 		.eq('id_album', id)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function getSendLoveNotes(
+	idAuthor: string,
+	supabase: any,
+): Promise<LoveNote[]> {
+	const { data, error } = await supabase
+		.from('love_note')
+		.select('*')
+		.eq('author', idAuthor)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function getReceivedLoveNotes(
+	idReceived: string,
+	supabase: any,
+): Promise<LoveNote[]> {
+	const { data, error } = await supabase
+		.from('love_note')
+		.select('*')
+		.eq('recipient', idReceived)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function sendLoveNote(
+	loveNote: {
+		author: string;
+		recipient: string;
+		title: string;
+		message: string;
+		template: string;
+		email_recipient: string;
+		email_author: string;
+	},
+	supabase: any,
+): Promise<void> {
+	const { error } = await supabase.from('love_note').insert(loveNote);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
+export async function getLoveNote(
+	idLoveNote: number,
+	supabase: any,
+): Promise<LoveNote> {
+	const { data, error } = await supabase
+		.from('love_note')
+		.select('*')
+		.eq('id', idLoveNote)
+		.single();
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function getTemplates(supabase: any): Promise<Template[]> {
+	const { data, error } = await supabase
+		.from('template')
+		.select('*')
 		.order('created_at', { ascending: false });
 
 	if (error !== null) {
