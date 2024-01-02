@@ -8,4 +8,5 @@ export interface LoveNote {
 	email_recipient: string;
 	email_author: string;
 	created_at: string;
+	url_love_note: string;
 }
