@@ -66,9 +66,9 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 			ref={myRefElement1}
 			className={`${
 				!open ? '-translate-x-full' : 'translate-x-0'
-			} fixed left-0 top-0 z-40 h-screen w-64 transition-transform duration-300 lg:sticky lg:translate-x-0`}
+			} fixed bottom-0 left-0 top-0 z-40 h-screen min-w-72 overflow-hidden transition-transform duration-300 lg:sticky lg:translate-x-0`}
 		>
-			<div className='h-full overflow-y-auto bg-gray-50 px-3 py-4 dark:bg-gray-800'>
+			<div className='h-full overflow-hidden overflow-y-auto bg-gray-100 px-3 py-4 dark:bg-gray-800'>
 				<div className='mb-4 flex w-full flex-col items-center justify-center'>
 					<figure className='max-h-[90px] max-w-[90px] overflow-hidden rounded-full'>
 						<img src={currentUser?.avatar_url} alt={currentUser?.name} />
