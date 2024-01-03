@@ -75,6 +75,29 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 					console.log(error);
 				});
 		}
+
+		const channel = supabase
+			.channel('room1')
+			.on(
+				'postgres_changes',
+				{ event: 'UPDATE', schema: 'public', table: 'love_note' },
+				(payload: any) => {
+					if (payload.new.state === 'READ') {
+						setUnreadLoveNotes(prev => {
+							return prev - 1;
+						});
+					} else {
+						setUnreadLoveNotes(prev => {
+							return prev + 1;
+						});
+					}
+				},
+			)
+			.subscribe();
+
+		return () => {
+			channel.unsubscribe();
+		};
 	}, [currentUser]);
 
 	return (
@@ -135,10 +158,17 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 										path='/love-notes/received'
 										className='border-b-2 px-2 pb-3'
 									>
-										<span className='w-full'>Recibidas</span>
+										<span
+											className={`
+											w-full 
+											${unreadLoveNotes > 0 && 'font-bold'}
+										`}
+										>
+											Recibidas
+										</span>
 
 										{unreadLoveNotes > 0 && (
-											<span className='ml-2 flex items-baseline justify-center rounded-full bg-red-500 px-2 text-sm text-white'>
+											<span className='ml-2 flex items-baseline justify-center rounded-full bg-[#B195D2] px-2 text-sm text-white'>
 												{unreadLoveNotes}
 											</span>
 										)}

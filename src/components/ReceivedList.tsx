@@ -40,7 +40,10 @@ export default function ReceivedList(): JSX.Element {
 								: 'opacity-60'
 						}`}
 					>
-						<article className='flex h-full w-full flex-col justify-center rounded-md border-2 p-4'>
+						<article
+							className={`flex h-full w-full flex-col justify-center rounded-md border-2 p-4
+						${loveNote.state === StateLoveNote.SENT ? 'border-black' : 'border-gray-300'}`}
+						>
 							<h3 className='font-bold'>{loveNote.title}</h3>
 
 							<p>

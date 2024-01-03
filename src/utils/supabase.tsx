@@ -265,6 +265,20 @@ export async function getCountUnreadLoveNotes(
 	return data.length;
 }
 
+export async function readLoveNote(
+	idLoveNote: number,
+	supabase: any,
+): Promise<void> {
+	const { error } = await supabase
+		.from('love_note')
+		.update({ state: 'READ' })
+		.eq('id', idLoveNote);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
 // STORAGE
 
 export async function uploadFile(file: File, supabase: any): Promise<any> {
