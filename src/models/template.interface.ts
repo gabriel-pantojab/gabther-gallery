@@ -1,5 +1,11 @@
 export interface Template {
 	id: number;
-	url_image: string;
+	name: string;
+	url_template: UrlTemplate[];
 	created_at: Date;
+}
+
+export interface UrlTemplate {
+	id: number;
+	url: string;
 }

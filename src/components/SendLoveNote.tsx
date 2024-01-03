@@ -13,7 +13,7 @@ import { SupabaseContext } from '../context/supabaseContext';
 import { UserContext } from '../context/userContext';
 import { getTemplates, sendLoveNote, uploadLoveNote } from '../utils/supabase';
 import BackIcon from './icons/BackIcon';
-import { type Template } from '../models/template.interface';
+import { type UrlTemplate, type Template } from '../models/template.interface';
 import TrashIcon from './icons/TrashIcon';
 import { domToPng } from '../utils/domToImage';
 
@@ -35,7 +35,8 @@ export default function SendLoveNote(): JSX.Element {
 	const [idUsers, setIdUsers] = useState<Users[]>([]);
 
 	const [templates, setTemplates] = useState<Template[]>([]);
-	const [urlTemplate, setUrlTemplate] = useState<string>('');
+	const [template, setTemplate] = useState<Template | null>(null);
+	const [urlImage, setUrlImage] = useState<string>('');
 
 	const textArea = useRef<HTMLDivElement>(null);
 	const titleRef = useRef<HTMLLabelElement>(null);
@@ -127,17 +128,19 @@ export default function SendLoveNote(): JSX.Element {
 				recipient: recipientId,
 				title,
 				message,
-				template: urlTemplate,
+				template: urlImage,
 				url_love_note: url,
 			};
 			await sendLoveNote(loveNote, supabase);
 			setMessage('');
 			setTitle('');
-			setUrlTemplate('');
+			setTemplate(null);
+			setUrlImage('');
 
 			toast.update(idToast, {
 				render: 'Love note sent successfully 💖',
 				type: 'success',
+				isLoading: false,
 				autoClose: 5000,
 				hideProgressBar: false,
 				closeOnClick: true,
@@ -149,6 +152,7 @@ export default function SendLoveNote(): JSX.Element {
 					render: 'Error 🤨, ' + error.message,
 					type: 'error',
 					autoClose: 5000,
+					isLoading: false,
 					hideProgressBar: false,
 					closeOnClick: true,
 					pauseOnHover: true,
@@ -181,7 +185,23 @@ export default function SendLoveNote(): JSX.Element {
 	useEffect(() => {
 		getTemplates(supabase)
 			.then(data => {
-				setTemplates(data);
+				const d = data.map(template => {
+					const urlT = template.url_template.sort(
+						(a: UrlTemplate, b: UrlTemplate) => {
+							const x = a.url.split(/.png|.jpg|.jpeg|.webp/)[0];
+							const y = b.url.split(/.png|.jpg|.jpeg|.webp/)[0];
+							if (x[x.length - 1] === 'M') return -1;
+							if (y[y.length - 1] === 'M') return 1;
+							return 0;
+						},
+					);
+					return {
+						...template,
+						url_template: urlT,
+					};
+				});
+
+				setTemplates(d);
 			})
 			.catch(error => {
 				console.log(error);
@@ -193,9 +213,15 @@ export default function SendLoveNote(): JSX.Element {
 		let xT, yT, xI, yI: number;
 
 		if (window.matchMedia('(max-width: 320px)').matches) {
+			if (template !== null) {
+				setUrlImage(template.url_template[0].url);
+			}
 			widthContainer = 290;
 			heightContainer = 400;
 		} else {
+			if (template !== null) {
+				setUrlImage(template.url_template[1].url);
+			}
 			widthContainer = 600;
 			heightContainer = 700;
 		}
@@ -232,7 +258,7 @@ export default function SendLoveNote(): JSX.Element {
 		setOldHeightContainer(prevHeight => {
 			return prevHeight !== heightContainer ? heightContainer : prevHeight;
 		});
-	}, [oldWidthContainer, oldHeightContainer]);
+	}, [oldWidthContainer, oldHeightContainer, template]);
 
 	useEffect(() => {
 		if (window.innerWidth === 320) {
@@ -250,8 +276,18 @@ export default function SendLoveNote(): JSX.Element {
 		};
 	}, [handleResize]);
 
+	useEffect(() => {
+		if (template !== null) {
+			if (window.matchMedia('(max-width: 320px)').matches) {
+				setUrlImage(template.url_template[0].url);
+			} else {
+				setUrlImage(template.url_template[1].url);
+			}
+		}
+	}, [template]);
+
 	return (
-		<section className='w-full'>
+		<section className='w-full overflow-hidden'>
 			<div className='flex w-full justify-between p-4'>
 				<h3>SendLoveNote</h3>
 
@@ -289,11 +325,12 @@ export default function SendLoveNote(): JSX.Element {
 						</select>
 					</label>
 
-					{urlTemplate !== '' && (
+					{template !== null && (
 						<div className='flex w-full'>
 							<button
 								onClick={() => {
-									setUrlTemplate('');
+									setTemplate(null);
+									setUrlImage('');
 								}}
 								className='text-red-500'
 							>
@@ -329,7 +366,7 @@ export default function SendLoveNote(): JSX.Element {
 							moveElement(clientX, clientY);
 						}}
 						style={{
-							backgroundImage: `url(${urlTemplate})`,
+							backgroundImage: `url(${urlImage})`,
 							backgroundPosition: 'center',
 							backgroundRepeat: 'no-repeat',
 						}}
@@ -418,13 +455,14 @@ export default function SendLoveNote(): JSX.Element {
 						scrollSnapType: 'x mandatory',
 						gap: '1rem',
 						padding: '1rem',
+						width: '100%',
 					}}
 				>
 					{templates.map((template: Template) => {
 						return (
-							<figure
+							<picture
 								onClick={() => {
-									setUrlTemplate(template.url_image);
+									setTemplate(template);
 								}}
 								key={template.id}
 								style={{
@@ -433,12 +471,22 @@ export default function SendLoveNote(): JSX.Element {
 								}}
 								className='max-h-[300px] max-w-[200px] cursor-pointer border-2'
 							>
+								<source
+									media='(max-width: 768px)'
+									srcSet={template.url_template[1].url}
+								/>
+
+								<source
+									media='(max-width: 320px)'
+									srcSet={template.url_template[0].url}
+								/>
+
 								<img
-									src={template.url_image}
-									alt={`tempalte ${template.id}`}
+									src={template.url_template[0].url}
+									alt={`template ${template.id}`}
 									className='h-full w-full object-cover'
 								/>
-							</figure>
+							</picture>
 						);
 					})}
 				</div>

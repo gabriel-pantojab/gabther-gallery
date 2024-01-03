@@ -59,7 +59,7 @@ export default function LoveNote(): JSX.Element {
 
 			<div className='w-full p-4'>
 				<div
-					className='m-auto flex min-h-[500px] w-full max-w-[700px] flex-col  items-center justify-center gap-4
+					className='m-auto flex max-h-[700px] w-full max-w-[600px] flex-col  items-center justify-center gap-4
 					rounded-md bg-gray-200 p-2'
 				>
 					{

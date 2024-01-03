@@ -238,7 +238,14 @@ export async function getLoveNote(
 export async function getTemplates(supabase: any): Promise<Template[]> {
 	const { data, error } = await supabase
 		.from('template')
-		.select('*')
+		.select(
+			`
+		id, 
+		name,
+		created_at,
+		url_template ( id, url )
+	`,
+		)
 		.order('created_at', { ascending: false });
 
 	if (error !== null) {
