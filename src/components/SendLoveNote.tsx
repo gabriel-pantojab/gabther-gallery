@@ -112,9 +112,13 @@ export default function SendLoveNote(): JSX.Element {
 		let idToast;
 		try {
 			idToast = toast.loading('Sending love note...');
+			const width = window.innerWidth === 320 ? 290 : 600;
+			const height = window.innerWidth === 320 ? 400 : 700;
 			const dataBlob = await domToPng(container.current as HTMLElement, {
 				bgcolor: 'white',
 				quality: 1,
+				width,
+				height,
 			});
 			const uuid = crypto.randomUUID();
 			const file = new File([dataBlob], `love-note-${uuid}.png`, {

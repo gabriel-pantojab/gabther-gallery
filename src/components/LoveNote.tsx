@@ -58,20 +58,15 @@ export default function LoveNote(): JSX.Element {
 			</header>
 
 			<div className='w-full p-4'>
-				<div
-					className='m-auto flex max-h-[700px] w-full max-w-[600px] flex-col  items-center justify-center gap-4
-					rounded-md bg-gray-200 p-2'
-				>
-					{
-						<figure className='h-full w-full'>
-							<img
-								className='h-full w-full object-contain'
-								src={loveNote?.url_love_note}
-								alt={loveNote?.title}
-							/>
-						</figure>
-					}
-				</div>
+				{
+					<figure className='m-auto h-[400px] w-[290px] md:h-[700px] md:w-[600px]'>
+						<img
+							className='h-full w-full object-contain'
+							src={loveNote?.url_love_note}
+							alt={loveNote?.title}
+						/>
+					</figure>
+				}
 			</div>
 		</section>
 	);

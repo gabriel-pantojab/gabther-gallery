@@ -76,8 +76,8 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 				});
 		}
 
-		const channel = supabase
-			.channel('room1')
+		const updateChannel = supabase
+			.channel('update-love-note')
 			.on(
 				'postgres_changes',
 				{ event: 'UPDATE', schema: 'public', table: 'love_note' },
@@ -95,8 +95,24 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 			)
 			.subscribe();
 
+		const insertChannel = supabase
+			.channel('insert-love-note')
+			.on(
+				'postgres_changes',
+				{ event: 'INSERT', schema: 'public', table: 'love_note' },
+				(payload: any) => {
+					if (payload.new.author !== currentUser?.id) {
+						setUnreadLoveNotes(prev => {
+							return prev + 1;
+						});
+					}
+				},
+			)
+			.subscribe();
+
 		return () => {
-			channel.unsubscribe();
+			updateChannel.unsubscribe();
+			insertChannel.unsubscribe();
 		};
 	}, [currentUser]);
 

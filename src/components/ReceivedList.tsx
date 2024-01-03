@@ -12,20 +12,42 @@ export default function ReceivedList(): JSX.Element {
 
 	const [receivedLoveNotes, setReceivedLoveNotes] = useState<LoveNote[]>([]);
 
-	useEffect(() => {
+	const getLoveNotes = async (): Promise<void> => {
 		if (currentUser === null) return;
-		getReceivedLoveNotes(currentUser.id, supabase)
-			.then(data => {
-				// const d = data.filter(
-				// 	loveNote => loveNote.state === StateLoveNote.SENT,
-				// );
-				// console.log(d);
-				setReceivedLoveNotes(data);
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		try {
+			const data = await getReceivedLoveNotes(currentUser.id, supabase);
+			setReceivedLoveNotes(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		getLoveNotes();
 	}, [currentUser]);
+
+	useEffect(() => {
+		const insertChannel = supabase
+			.channel('insert-received-love-note')
+			.on(
+				'postgres_changes',
+				{ event: 'INSERT', schema: 'public', table: 'love_note' },
+				(payload: any) => {
+					if (payload.new.author !== currentUser?.id) {
+						// eslint-disable-next-line @typescript-eslint/no-floating-promises
+						setReceivedLoveNotes(prev => {
+							return [payload.new, ...prev];
+						});
+					}
+				},
+			)
+			.subscribe();
+
+		return () => {
+			insertChannel.unsubscribe();
+		};
+	}, []);
 
 	return (
 		<section className='m-auto flex h-full w-full max-w-[700px] flex-col items-center justify-center gap-4'>
