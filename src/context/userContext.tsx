@@ -23,7 +23,14 @@ const UserContext = createContext<UserContextProps>({
 });
 
 function UserProvider({ children }: any): JSX.Element {
-	const [currentUser, setCurrentUser] = useState<User | null>(null);
+	const [currentUser, setCurrentUser] = useState<User | null>(() => {
+		const user = localStorage.getItem('user');
+		if (user !== null) {
+			const u = JSON.parse(user) as User;
+			return u;
+		}
+		return null;
+	});
 	const { supabase } = useContext(SupabaseContext);
 
 	const signInWithGoogle = async (): Promise<void> => {
@@ -56,6 +63,7 @@ function UserProvider({ children }: any): JSX.Element {
 		try {
 			await supabase.auth.signOut();
 			setCurrentUser(null);
+			localStorage.removeItem('user');
 		} catch (error) {}
 	};
 
@@ -68,6 +76,17 @@ function UserProvider({ children }: any): JSX.Element {
 					// eslint-disable-next-line @typescript-eslint/naming-convention
 					user: { email, id, created_at, user_metadata },
 				} = session;
+
+				localStorage.setItem(
+					'user',
+					JSON.stringify({
+						email,
+						created_at,
+						name: user_metadata.name,
+						avatar_url: user_metadata.avatar_url,
+						id,
+					}),
+				);
 
 				setCurrentUser({
 					email,
