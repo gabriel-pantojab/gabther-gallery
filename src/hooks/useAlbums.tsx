@@ -13,6 +13,7 @@ export default function useAlbums(): TypeReturnHook {
 	const [albums, setAlbums] = useState<AlbumDB[] | null>(null);
 
 	useEffect(() => {
+		setAlbums(null);
 		getAlbums(supabase)
 			.then(data => {
 				setAlbums(data);

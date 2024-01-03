@@ -116,13 +116,7 @@ export default function Photos(): JSX.Element {
 					</div>
 				)}
 
-				{photos !== null && photos.length > 0 ? (
-					<PhotoList photos={photos} />
-				) : photos === null ? (
-					<div>loading...</div>
-				) : (
-					<div>no files</div>
-				)}
+				<PhotoList photos={photos} />
 			</div>
 		</section>
 	);
