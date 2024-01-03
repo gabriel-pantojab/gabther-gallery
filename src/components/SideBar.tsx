@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import useOnClickOutside from '../hooks/useOnClickOutside';
@@ -8,6 +8,8 @@ import AlbumIcon from './icons/AlbumIcon';
 import FavoriteIcon from './icons/FavoriteIcon';
 import { UserContext } from '../context/userContext';
 import MailIcon from './icons/MailIcon';
+import { getCountUnreadLoveNotes } from '../utils/supabase';
+import { SupabaseContext } from '../context/supabaseContext';
 
 interface SideBarProps {
 	open: boolean;
@@ -15,6 +17,7 @@ interface SideBarProps {
 }
 
 export default function SideBar({ open, close }: SideBarProps): JSX.Element {
+	const { supabase } = useContext(SupabaseContext);
 	const myRefElement1 = useRef(null);
 	const handleClickOutsideFn = (): void => {
 		if (open) {
@@ -28,6 +31,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [unreadLoveNotes, setUnreadLoveNotes] = useState(0);
 
 	const onSubmit = async (
 		e: React.FormEvent<HTMLFormElement>,
@@ -60,6 +64,18 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 			});
 		}
 	};
+
+	useEffect(() => {
+		if (currentUser !== null) {
+			getCountUnreadLoveNotes(currentUser.id, supabase)
+				.then(data => {
+					setUnreadLoveNotes(data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
+	}, [currentUser]);
 
 	return (
 		<aside
@@ -105,13 +121,27 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 									<span>Cartas</span>
 								</div>
 
-								<ul className='ml-8 flex w-full flex-col gap-3 p-2'>
-									<SideBarItem close={close} path='/love-notes/sends'>
+								<ul className='flex w-full flex-col gap-3 py-2 pl-8'>
+									<SideBarItem
+										close={close}
+										path='/love-notes/sends'
+										className='border-b-2 pb-3 pl-2'
+									>
 										<span>Enviadas</span>
 									</SideBarItem>
 
-									<SideBarItem close={close} path='/love-notes/received'>
-										<span>Recibidas</span>
+									<SideBarItem
+										close={close}
+										path='/love-notes/received'
+										className='border-b-2 px-2 pb-3'
+									>
+										<span className='w-full'>Recibidas</span>
+
+										{unreadLoveNotes > 0 && (
+											<span className='ml-2 flex items-baseline justify-center rounded-full bg-red-500 px-2 text-sm text-white'>
+												{unreadLoveNotes}
+											</span>
+										)}
 									</SideBarItem>
 								</ul>
 							</div>

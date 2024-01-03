@@ -9,4 +9,10 @@ export interface LoveNote {
 	email_author: string;
 	created_at: string;
 	url_love_note: string;
+	state: StateLoveNote;
+}
+
+export enum StateLoveNote {
+	SENT = 'SENT',
+	READ = 'READ',
 }

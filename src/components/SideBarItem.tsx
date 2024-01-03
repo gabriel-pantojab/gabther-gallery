@@ -4,16 +4,18 @@ interface SideBarItemProps {
 	children: React.ReactNode;
 	path?: string;
 	close: () => void;
+	className?: string;
 }
 
 export default function SideBarItem({
 	children,
 	close,
 	path = '',
+	className = '',
 }: SideBarItemProps): JSX.Element {
 	return (
 		<li
-			className='w-full'
+			className={`w-full ${className}`}
 			onClick={() => {
 				close();
 			}}

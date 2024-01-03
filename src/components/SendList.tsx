@@ -5,6 +5,7 @@ import { getSendLoveNotes } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
 import { UserContext } from '../context/userContext';
 import { type LoveNote } from '../models/loveNote.interface';
+import CheckIcon2 from './icons/CheckIcon2';
 
 export default function SendList(): JSX.Element {
 	const { supabase } = useContext(SupabaseContext);
@@ -32,8 +33,30 @@ export default function SendList(): JSX.Element {
 						to={`/love-notes/sends/${loveNote.id}`}
 						className='w-full'
 					>
-						<article className='flex h-full w-full flex-col  justify-center rounded-md border-2 p-4'>
-							<h3 className='font-bold'>{loveNote.title}</h3>
+						<article
+							className={`flex h-full w-full flex-col  justify-center rounded-md border-2 p-4 ${
+								loveNote.state === 'SENT'
+									? 'border-gray-300'
+									: 'border-blue-600'
+							}`}
+						>
+							<div className='flex w-full'>
+								<h3 className='w-full font-bold'>{loveNote.title}</h3>
+
+								{loveNote.state === 'SENT' ? (
+									<span className='flex font-bold text-gray-400'>
+										<CheckIcon2 width={20} height={20} />
+
+										<CheckIcon2 width={20} height={20} />
+									</span>
+								) : (
+									<span className='flex font-bold text-blue-600'>
+										<CheckIcon2 width={20} height={20} />
+
+										<CheckIcon2 width={20} height={20} />
+									</span>
+								)}
+							</div>
 
 							<p>
 								<span className='font-bold'>To: </span>{' '}

@@ -248,6 +248,23 @@ export async function getTemplates(supabase: any): Promise<Template[]> {
 	return data;
 }
 
+export async function getCountUnreadLoveNotes(
+	idUser: string,
+	supabase: any,
+): Promise<number> {
+	const { data, error } = await supabase
+		.from('love_note')
+		.select('id')
+		.eq('recipient', idUser)
+		.eq('state', 'SENT');
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data.length;
+}
+
 // STORAGE
 
 export async function uploadFile(file: File, supabase: any): Promise<any> {

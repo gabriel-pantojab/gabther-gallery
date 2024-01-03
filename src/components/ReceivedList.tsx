@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { getReceivedLoveNotes } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
 import { UserContext } from '../context/userContext';
-import { type LoveNote } from '../models/loveNote.interface';
-import { Link } from 'react-router-dom';
+import { StateLoveNote, type LoveNote } from '../models/loveNote.interface';
 
 export default function ReceivedList(): JSX.Element {
 	const { supabase } = useContext(SupabaseContext);
@@ -16,6 +16,10 @@ export default function ReceivedList(): JSX.Element {
 		if (currentUser === null) return;
 		getReceivedLoveNotes(currentUser.id, supabase)
 			.then(data => {
+				// const d = data.filter(
+				// 	loveNote => loveNote.state === StateLoveNote.SENT,
+				// );
+				// console.log(d);
 				setReceivedLoveNotes(data);
 			})
 			.catch(error => {
@@ -30,7 +34,11 @@ export default function ReceivedList(): JSX.Element {
 					<Link
 						key={loveNote.id}
 						to={`/love-notes/received/${loveNote.id}`}
-						className='w-full'
+						className={`w-full ${
+							loveNote.state === StateLoveNote.SENT
+								? 'opacity-100'
+								: 'opacity-60'
+						}`}
 					>
 						<article className='flex h-full w-full flex-col justify-center rounded-md border-2 p-4'>
 							<h3 className='font-bold'>{loveNote.title}</h3>
