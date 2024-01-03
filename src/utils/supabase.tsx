@@ -248,6 +248,37 @@ export async function getTemplates(supabase: any): Promise<Template[]> {
 	return data;
 }
 
+export async function getCountUnreadLoveNotes(
+	idUser: string,
+	supabase: any,
+): Promise<number> {
+	const { data, error } = await supabase
+		.from('love_note')
+		.select('id')
+		.eq('recipient', idUser)
+		.eq('state', 'SENT');
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data.length;
+}
+
+export async function readLoveNote(
+	idLoveNote: number,
+	supabase: any,
+): Promise<void> {
+	const { error } = await supabase
+		.from('love_note')
+		.update({ state: 'READ' })
+		.eq('id', idLoveNote);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
 // STORAGE
 
 export async function uploadFile(file: File, supabase: any): Promise<any> {

@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { type LoveNote as LoveNoteType } from '../models/loveNote.interface';
-import { getLoveNote } from '../utils/supabase';
+import { getLoveNote, readLoveNote } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
 import BackIcon from './icons/BackIcon';
+import { UserContext } from '../context/userContext';
 
 export default function LoveNote(): JSX.Element {
+	const { currentUser } = useContext(UserContext);
 	const { supabase } = useContext(SupabaseContext);
 	const { idLoveNote } = useParams();
 	const [loveNote, setLoveNote] = useState<LoveNoteType | null>(null);
@@ -21,6 +23,19 @@ export default function LoveNote(): JSX.Element {
 				console.log(error);
 			});
 	}, []);
+
+	useEffect(() => {
+		if (currentUser === null || loveNote === null) return;
+		if (loveNote?.author !== currentUser?.id && loveNote?.state === 'SENT') {
+			readLoveNote(Number(idLoveNote), supabase)
+				.then(() => {
+					console.log('read');
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		}
+	}, [loveNote]);
 
 	return (
 		<section className='w-full'>
