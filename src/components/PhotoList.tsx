@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import Skeleton from 'react-loading-skeleton';
 
 import { type PhotoDB } from '../models/photo.interface';
 import CardPhoto from './CardPhoto';
@@ -8,7 +9,7 @@ import TrashIcon from './icons/TrashIcon';
 import PlusIcon from './icons/PlusIcon';
 
 interface PhotoListProps {
-	photos: PhotoDB[];
+	photos: PhotoDB[] | null;
 }
 
 export default function PhotoList({ photos }: PhotoListProps): JSX.Element {
@@ -79,17 +80,25 @@ export default function PhotoList({ photos }: PhotoListProps): JSX.Element {
 			<div
 				className={`relative grid h-full min-h-screen w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4`}
 			>
-				{photos.map(photo => {
-					return (
-						<CardPhoto
-							isSelected={idsSelected.includes(photo.id)}
-							key={photo.id}
-							photo={photo}
-							addIdSelected={addIdSelected}
-							removeIdSelected={removeIdSelected}
-						/>
-					);
-				})}
+				{photos === null ? (
+					new Array(12).fill(0).map((_, index) => {
+						return <Skeleton key={index} height={200} />;
+					})
+				) : photos.length === 0 ? (
+					<p className='text-center text-gray-500'>No Photos 🤧</p>
+				) : (
+					photos.map(photo => {
+						return (
+							<CardPhoto
+								isSelected={idsSelected.includes(photo.id)}
+								key={photo.id}
+								photo={photo}
+								addIdSelected={addIdSelected}
+								removeIdSelected={removeIdSelected}
+							/>
+						);
+					})
+				)}
 			</div>
 		</div>
 	);

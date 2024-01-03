@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import Skeleton from 'react-loading-skeleton';
 
 import usePhoto from '../hooks/usePhoto';
 import StarIcon from './icons/StarIcon';
@@ -95,11 +96,15 @@ export default function PhotoPage(): JSX.Element {
 			</header>
 
 			<figure className='max-h-screen max-w-fit overflow-hidden rounded-md'>
-				<img
-					className='h-full w-full'
-					src={photo?.url_image}
-					alt={photo?.name}
-				/>
+				{photo === null ? (
+					<Skeleton height={500} width={500} />
+				) : (
+					<img
+						className='h-full w-full'
+						src={photo?.url_image}
+						alt={photo?.name}
+					/>
+				)}
 			</figure>
 
 			<div className='flex w-full'>

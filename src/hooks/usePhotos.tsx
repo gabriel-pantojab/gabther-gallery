@@ -13,6 +13,7 @@ export default function usePhotos(): TypeReturnHook {
 	const [photos, setPhotos] = useState<PhotoDB[] | null>(null);
 
 	useEffect(() => {
+		setPhotos(null);
 		getPhotos(supabase)
 			.then(data => {
 				setPhotos(data);

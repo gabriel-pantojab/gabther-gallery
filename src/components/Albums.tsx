@@ -31,13 +31,7 @@ export default function Albums(): JSX.Element {
 			</header>
 
 			<div>
-				{albums !== null && albums.length > 0 ? (
-					<AlbumList albums={albums} />
-				) : albums === null ? (
-					<div>loading...</div>
-				) : (
-					<div>no albums</div>
-				)}
+				<AlbumList albums={albums} />
 			</div>
 
 			<CreateAlbumModal openModal={openModal} setOpenModal={setOpenModal} />
