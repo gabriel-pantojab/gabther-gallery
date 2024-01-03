@@ -402,7 +402,7 @@ export default function SendLoveNote(): JSX.Element {
 								onChange={e => {
 									setTitle(e.target.value);
 								}}
-								className=':outline-none w-full cursor-pointer resize-none overflow-hidden rounded-md bg-transparent p-3 outline-none hover:resize focus:border-2 active:outline-none'
+								className='w-full cursor-pointer resize-none overflow-hidden rounded-md border-black bg-transparent p-3 outline-none placeholder:text-black hover:resize focus:border-2'
 							></textarea>
 						</label>
 
@@ -435,7 +435,7 @@ export default function SendLoveNote(): JSX.Element {
 								onChange={e => {
 									setMessage(e.target.value);
 								}}
-								className='h-full w-full cursor-pointer resize-none rounded-md bg-transparent p-2 outline-none hover:resize focus:border-2 focus:outline-none active:outline-none'
+								className='h-full w-full cursor-pointer resize-none rounded-md border-black bg-transparent p-2 outline-none placeholder:text-black hover:resize focus:border-2 focus:outline-none'
 							></textarea>
 						</div>
 					</div>
