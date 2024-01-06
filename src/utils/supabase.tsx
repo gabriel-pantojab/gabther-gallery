@@ -286,6 +286,20 @@ export async function readLoveNote(
 	}
 }
 
+export async function getFavoritePhotos(supabase: any): Promise<PhotoDB[]> {
+	const { data, error } = await supabase
+		.from('photo')
+		.select('*')
+		.eq('favorite', true)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
 // STORAGE
 
 export async function uploadFile(file: File, supabase: any): Promise<any> {
