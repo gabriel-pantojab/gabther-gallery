@@ -1,30 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 
-import { getSendLoveNotes } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
-import { UserContext } from '../context/userContext';
 import { type LoveNote } from '../models/loveNote.interface';
 import CheckIcon2 from './icons/CheckIcon2';
+import useSendList from '../hooks/useSendList';
 
 export default function SendList(): JSX.Element {
-	const { supabase } = useContext(SupabaseContext);
-	const { currentUser } = useContext(UserContext);
-
-	const [sendLoveNotes, setSendLoveNotes] = useState<LoveNote[] | null>([]);
-
-	useEffect(() => {
-		if (currentUser === null) return;
-		setSendLoveNotes(null);
-		getSendLoveNotes(currentUser.id, supabase)
-			.then(data => {
-				setSendLoveNotes(data);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-	}, [currentUser]);
+	const { sendLoveNotes } = useSendList();
 
 	return (
 		<section className='m-auto flex h-full w-full max-w-[700px] flex-col items-center justify-center gap-4'>
