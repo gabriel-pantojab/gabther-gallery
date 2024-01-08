@@ -1,6 +1,10 @@
 import { type AlbumDB } from '../models/album.interface';
 import { type LoveNote } from '../models/loveNote.interface';
 import { type PhotoDB } from '../models/photo.interface';
+import {
+	type ReactionType,
+	type ReactionData,
+} from '../models/reaction.interface';
 import { type Template } from '../models/template.interface';
 
 // DATABASE
@@ -298,6 +302,46 @@ export async function getFavoritePhotos(supabase: any): Promise<PhotoDB[]> {
 	}
 
 	return data;
+}
+
+export async function getReactionsLoveNote(
+	idLoveNote: number,
+	supabase: any,
+): Promise<ReactionData[]> {
+	const { data, error } = await supabase
+		.from('reaction')
+		.select('id, created_at, id_love_note, reaction, user( name)')
+		.eq('id_love_note', idLoveNote);
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function insertReaction({
+	idLoveNote,
+	idUser,
+	reaction,
+	supabase,
+}: {
+	idLoveNote: number;
+	idUser: string;
+	reaction: ReactionType;
+	supabase: any;
+}): Promise<void> {
+	const reactionData: {
+		id_love_note: number;
+		id_user: string;
+		reaction: string;
+	} = { id_love_note: idLoveNote, id_user: idUser, reaction };
+
+	const { error } = await supabase.from('reaction').insert(reactionData);
+
+	if (error !== null) {
+		throw error;
+	}
 }
 
 // STORAGE
