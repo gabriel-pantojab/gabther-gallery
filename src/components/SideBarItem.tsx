@@ -15,7 +15,9 @@ export default function SideBarItem({
 }: SideBarItemProps): JSX.Element {
 	return (
 		<li
-			className={`w-full ${className}`}
+			className={`w-full ${className}
+				rounded-md p-2 transition-colors duration-300 ease-in-out hover:bg-gray-200
+			`}
 			onClick={() => {
 				close();
 			}}
