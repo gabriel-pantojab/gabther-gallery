@@ -10,6 +10,7 @@ import { UserContext } from '../context/userContext';
 import MailIcon from './icons/MailIcon';
 import { getCountUnreadLoveNotes } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
+import Loader from './Loader';
 
 interface SideBarProps {
 	open: boolean;
@@ -24,6 +25,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 			close();
 		}
 	};
+	const [loading, setLoading] = useState(false);
 
 	useOnClickOutside(myRefElement1, handleClickOutsideFn);
 	const { signInWithEmailAndPassword, signOut, currentUser } =
@@ -40,6 +42,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 
 		try {
 			if (email !== '' && password !== '') {
+				setLoading(true);
 				await signInWithEmailAndPassword(email.trim(), password);
 			} else {
 				toast.warning('Email and password are required.', {
@@ -62,6 +65,8 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 				draggable: true,
 				progress: undefined,
 			});
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -257,6 +262,12 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 							SignOut
 						</button>
 					</li>
+
+					{loading && (
+						<li className='flex w-full items-center justify-center'>
+							<Loader width={20} border={3} />
+						</li>
+					)}
 				</ul>
 			</div>
 		</aside>
