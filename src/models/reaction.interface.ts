@@ -16,6 +16,6 @@ export interface ReactionData {
 	id: number;
 	created_at: string;
 	id_love_note: number;
-	name_user: string;
+	user: { name: string; id: string };
 	reaction: ReactionType;
 }

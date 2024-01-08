@@ -310,7 +310,7 @@ export async function getReactionsLoveNote(
 ): Promise<ReactionData[]> {
 	const { data, error } = await supabase
 		.from('reaction')
-		.select('id, created_at, id_love_note, reaction, user( name)')
+		.select('id, created_at, id_love_note, reaction, user( id, name)')
 		.eq('id_love_note', idLoveNote);
 
 	if (error !== null) {
@@ -338,6 +338,57 @@ export async function insertReaction({
 	} = { id_love_note: idLoveNote, id_user: idUser, reaction };
 
 	const { error } = await supabase.from('reaction').insert(reactionData);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
+export async function updateReaction({
+	idLoveNote,
+	idUser,
+	reaction,
+	supabase,
+}: {
+	idLoveNote: number;
+	idUser: string;
+	reaction: ReactionType;
+	supabase: any;
+}): Promise<void> {
+	const updateDate = new Date();
+	const day = updateDate.getDate();
+	const month = updateDate.getMonth() + 1;
+	const year = updateDate.getFullYear();
+	const hr = updateDate.getHours();
+	const min = updateDate.getMinutes();
+	const sec = updateDate.getSeconds();
+	const ms = updateDate.getMilliseconds();
+	const updateDateStr = `${year}-${month}-${day} ${hr}:${min}:${sec}.${ms}`;
+	const { error } = await supabase
+		.from('reaction')
+		.update({ reaction, created_at: updateDateStr })
+		.eq('id_love_note', idLoveNote)
+		.eq('id_user', idUser);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
+export async function deleteReaction({
+	idLoveNote,
+	idUser,
+	supabase,
+}: {
+	idLoveNote: number;
+	idUser: string;
+	supabase: any;
+}): Promise<void> {
+	const { error } = await supabase
+		.from('reaction')
+		.delete()
+		.eq('id_love_note', idLoveNote)
+		.eq('id_user', idUser);
 
 	if (error !== null) {
 		throw error;
