@@ -73,7 +73,7 @@ export default function LoveNote(): JSX.Element {
 					/>
 				</figure>
 
-				<div className='m-auto h-[400px] w-[290px] md:h-[700px] md:w-[600px]'>
+				<div className='m-auto w-[290px] md:w-[600px]'>
 					<div className='flex border-b-2 pb-2 pl-4'>
 						{reactions.map(reaction => {
 							return <Reaction key={reaction} type={reaction} />;
