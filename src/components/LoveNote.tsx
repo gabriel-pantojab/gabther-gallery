@@ -80,78 +80,56 @@ export default function LoveNote(): JSX.Element {
 						})}
 					</div>
 
-					<div className='flex gap-2 border-b-2 py-2 pl-4'>
+					<div className='flex justify-center gap-2 border-b-2 py-2 pl-4'>
 						<div
-							className='cursor-pointer p-1 hover:bg-gray-200'
+							className={`cursor-pointer p-1 text-red-500 grayscale hover:bg-gray-200 hover:grayscale-0
+							${reactionUser === ReactionType.LOVE && 'grayscale-0'}
+							`}
 							onClick={() => {
 								// eslint-disable-next-line @typescript-eslint/no-floating-promises
 								handleUpdateReaction(ReactionType.LOVE);
 							}}
 						>
 							<span
-								className={`flex items-center justify-center gap-2 text-sm text-gray-500
-								${reactionUser === ReactionType.LOVE ? 'text-red-500' : ''}
+								className={`flex w-full flex-col items-center justify-center gap-2 text-xs md:flex-row
 							`}
 							>
-								<span
-									className={`text-sm ${
-										reactionUser === ReactionType.LOVE
-											? 'grayscale-0'
-											: 'grayscale'
-									}`}
-								>
-									💖
-								</span>
+								<span className={`text-sm`}>💖</span>
 								Me encanta
 							</span>
 						</div>
 
 						<div
-							className='cursor-pointer p-1 hover:bg-gray-200'
+							className={`cursor-pointer p-1 text-yellow-400 grayscale hover:bg-gray-200 hover:grayscale-0
+							${reactionUser === ReactionType.HAPPY && 'grayscale-0'}
+							`}
 							onClick={() => {
 								// eslint-disable-next-line @typescript-eslint/no-floating-promises
 								handleUpdateReaction(ReactionType.HAPPY);
 							}}
 						>
 							<span
-								className={`flex items-center justify-center gap-2 text-sm text-gray-500
-								${reactionUser === ReactionType.HAPPY ? 'text-yellow-400' : ''}
+								className={`flex flex-col items-center justify-center gap-2 text-xs md:flex-row
 							`}
 							>
-								<span
-									className={`text-sm ${
-										reactionUser === ReactionType.HAPPY
-											? 'grayscale-0'
-											: 'grayscale'
-									}`}
-								>
-									🤗
-								</span>
+								<span className={`text-sm`}>🤗</span>
 								Me alegra
 							</span>
 						</div>
 
 						<div
-							className='cursor-pointer p-1 hover:bg-gray-200'
+							className={`cursor-pointer p-1 text-yellow-400 grayscale hover:bg-gray-200 hover:grayscale-0
+							${reactionUser === ReactionType.SAD && 'grayscale-0'}
+							`}
 							onClick={() => {
 								// eslint-disable-next-line @typescript-eslint/no-floating-promises
 								handleUpdateReaction(ReactionType.SAD);
 							}}
 						>
 							<span
-								className={`flex items-center justify-center gap-2 text-sm text-gray-500
-								${reactionUser === ReactionType.SAD ? 'text-yellow-400' : ''}
-							`}
+								className={`flex flex-col items-center justify-center gap-2 text-xs md:flex-row`}
 							>
-								<span
-									className={`text-sm ${
-										reactionUser === ReactionType.SAD
-											? 'grayscale-0'
-											: 'grayscale'
-									}`}
-								>
-									😢
-								</span>
+								<span className={`text-sm`}>😢</span>
 								Me entristece
 							</span>
 						</div>
