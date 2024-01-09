@@ -62,6 +62,8 @@ function UserProvider({ children }: any): JSX.Element {
 	const signOut = async (): Promise<void> => {
 		try {
 			await supabase.auth.signOut();
+			localStorage.removeItem('user');
+			setCurrentUser(null);
 		} catch (error) {}
 	};
 
