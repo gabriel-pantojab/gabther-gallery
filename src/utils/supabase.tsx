@@ -395,6 +395,23 @@ export async function deleteReaction({
 	}
 }
 
+export async function getUserName(
+	idUser: string,
+	supabase: any,
+): Promise<string> {
+	const { data, error } = await supabase
+		.from('user')
+		.select('name')
+		.eq('id', idUser)
+		.single();
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data.name;
+}
+
 // STORAGE
 
 export async function uploadFile(file: File, supabase: any): Promise<any> {
