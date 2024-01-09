@@ -82,7 +82,7 @@ export default function LoveNote(): JSX.Element {
 
 					<div className='flex justify-center gap-2 border-b-2 py-2 pl-4'>
 						<div
-							className={`cursor-pointer p-1 text-red-500 grayscale hover:bg-gray-200 hover:grayscale-0
+							className={`cursor-pointer p-1 text-red-500 grayscale hover:bg-gray-200
 							${reactionUser === ReactionType.LOVE && 'grayscale-0'}
 							`}
 							onClick={() => {
@@ -100,7 +100,7 @@ export default function LoveNote(): JSX.Element {
 						</div>
 
 						<div
-							className={`cursor-pointer p-1 text-yellow-400 grayscale hover:bg-gray-200 hover:grayscale-0
+							className={`cursor-pointer p-1 text-yellow-400 grayscale hover:bg-gray-200
 							${reactionUser === ReactionType.HAPPY && 'grayscale-0'}
 							`}
 							onClick={() => {
@@ -118,7 +118,7 @@ export default function LoveNote(): JSX.Element {
 						</div>
 
 						<div
-							className={`cursor-pointer p-1 text-yellow-400 grayscale hover:bg-gray-200 hover:grayscale-0
+							className={`cursor-pointer p-1 text-yellow-400 grayscale hover:bg-gray-200
 							${reactionUser === ReactionType.SAD && 'grayscale-0'}
 							`}
 							onClick={() => {
