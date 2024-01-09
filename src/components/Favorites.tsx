@@ -18,7 +18,7 @@ export default function Favorites(): JSX.Element {
 			</header>
 
 			<div
-				className={`relative grid h-full min-h-screen w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4`}
+				className={`relative grid w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4`}
 			>
 				{favorites === null
 					? new Array(12).fill(0).map((_, index) => {
