@@ -93,21 +93,15 @@ export default function LoveNote(): JSX.Element {
 								${reactionUser === ReactionType.LOVE ? 'text-red-500' : ''}
 							`}
 							>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									width='24'
-									height='24'
-									viewBox='0 0 24 24'
-									strokeWidth='2'
-									stroke='currentColor'
-									fill='none'
-									strokeLinecap='round'
-									strokeLinejoin='round'
+								<span
+									className={`text-sm ${
+										reactionUser === ReactionType.LOVE
+											? 'grayscale-0'
+											: 'grayscale'
+									}`}
 								>
-									<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-
-									<path d='M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572' />
-								</svg>
+									💖
+								</span>
 								Me encanta
 							</span>
 						</div>
@@ -124,27 +118,15 @@ export default function LoveNote(): JSX.Element {
 								${reactionUser === ReactionType.HAPPY ? 'text-yellow-400' : ''}
 							`}
 							>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									width='24'
-									height='24'
-									viewBox='0 0 24 24'
-									strokeWidth='2'
-									stroke='currentColor'
-									fill='none'
-									strokeLinecap='round'
-									strokeLinejoin='round'
+								<span
+									className={`text-sm ${
+										reactionUser === ReactionType.HAPPY
+											? 'grayscale-0'
+											: 'grayscale'
+									}`}
 								>
-									<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-
-									<path d='M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0' />
-
-									<path d='M9 9l.01 0' />
-
-									<path d='M15 9l.01 0' />
-
-									<path d='M8 13a4 4 0 1 0 8 0h-8' />
-								</svg>
+									🤗
+								</span>
 								Me alegra
 							</span>
 						</div>
@@ -161,27 +143,15 @@ export default function LoveNote(): JSX.Element {
 								${reactionUser === ReactionType.SAD ? 'text-yellow-400' : ''}
 							`}
 							>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									width='24'
-									height='24'
-									viewBox='0 0 24 24'
-									strokeWidth='2'
-									stroke='currentColor'
-									fill='none'
-									strokeLinecap='round'
-									strokeLinejoin='round'
+								<span
+									className={`text-sm ${
+										reactionUser === ReactionType.SAD
+											? 'grayscale-0'
+											: 'grayscale'
+									}`}
 								>
-									<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-
-									<path d='M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0' />
-
-									<path d='M9 10l.01 0' />
-
-									<path d='M15 10l.01 0' />
-
-									<path d='M9.5 15.25a3.5 3.5 0 0 1 5 0' />
-								</svg>
+									😢
+								</span>
 								Me entristece
 							</span>
 						</div>
