@@ -93,11 +93,6 @@ function UserProvider({ children }: any): JSX.Element {
 					avatar_url: user_metadata.avatar_url,
 					id,
 				});
-			} else {
-				if (session === null) {
-					setCurrentUser(null);
-					localStorage.removeItem('user');
-				}
 			}
 		});
 
