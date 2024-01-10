@@ -2,7 +2,6 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import App from '../App';
 import Videos from '../components/Videos';
-import Albums from '../components/Albums';
 import Favorites from '../components/Favorites';
 import PhotoPage from '../components/PhotoPage';
 import AlbumPage from '../components/AlbumPage';
@@ -13,6 +12,7 @@ import LoveNote from '../components/LoveNote';
 import ProtectedRoute from '../components/ProtectedRoute';
 import useAuthGuard from '../guards/auth.guard';
 import PhotoListPage from '../pages/PhotoListPage';
+import AlbumListPage from '../pages/AlbumListPage';
 
 export const router = createBrowserRouter([
 	{
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: '/albums',
-				element: <Albums />,
+				element: <AlbumListPage />,
 			},
 			{
 				path: '/favorites',
