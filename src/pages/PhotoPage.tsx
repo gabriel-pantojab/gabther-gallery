@@ -5,11 +5,11 @@ import { toast } from 'react-toastify';
 import Skeleton from 'react-loading-skeleton';
 
 import usePhoto from '../hooks/usePhoto';
-import StarIcon from './icons/StarIcon';
-import TrashIcon from './icons/TrashIcon';
-import DotsVerticalIcon from './icons/DotsVertical';
+import StarIcon from '../components/icons/StarIcon';
+import TrashIcon from '../components/icons/TrashIcon';
+import DotsVerticalIcon from '../components/icons/DotsVertical';
 import { dateFormat } from '../utils/utils';
-import BackIcon from './icons/BackIcon';
+import BackIcon from '../components/icons/BackIcon';
 import { UserContext } from '../context/userContext';
 
 export default function PhotoPage(): JSX.Element {

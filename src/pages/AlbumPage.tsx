@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import BackIcon from './icons/BackIcon';
-import PhotoPlusIcon from './icons/PhotoPlusIcon';
-import PhotoList from './PhotoList';
+import BackIcon from '../components/icons/BackIcon';
+import PhotoPlusIcon from '../components/icons/PhotoPlusIcon';
+import PhotoList from '../components/PhotoList';
 import usePhotosAlbum from '../hooks/usePhotosAlbum';
-import SelectPhoto from './SelectPhoto';
+import SelectPhoto from '../components/SelectPhoto';
 import { UserContext } from '../context/userContext';
 
 export default function AlbumPage(): JSX.Element {

@@ -1,18 +1,17 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
-import Photos from '../components/Photos';
 import App from '../App';
-import Videos from '../components/Videos';
-import Albums from '../components/Albums';
-import Favorites from '../components/Favorites';
-import PhotoPage from '../components/PhotoPage';
-import AlbumPage from '../components/AlbumPage';
-import SendLoveNotes from '../components/SendLoveNotes';
+import PhotoPage from '../pages/PhotoPage';
+import AlbumPage from '../pages/AlbumPage';
+import SendLoveNotes from '../pages/SendLoveNotes';
 import SendLoveNote from '../components/SendLoveNote';
-import ReceivedLoveNotes from '../components/ReceivedLoveNotes';
-import LoveNote from '../components/LoveNote';
+import ReceivedLoveNotes from '../pages/ReceivedLoveNotes';
+import LoveNote from '../pages/LoveNote';
 import ProtectedRoute from '../components/ProtectedRoute';
 import useAuthGuard from '../guards/auth.guard';
+import PhotoListPage from '../pages/PhotoListPage';
+import AlbumListPage from '../pages/AlbumListPage';
+import FavoriteListPage from '../pages/FavoriteListPage';
 
 export const router = createBrowserRouter([
 	{
@@ -25,19 +24,15 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: '/photos',
-				element: <Photos />,
-			},
-			{
-				path: '/videos',
-				element: <Videos />,
+				element: <PhotoListPage />,
 			},
 			{
 				path: '/albums',
-				element: <Albums />,
+				element: <AlbumListPage />,
 			},
 			{
 				path: '/favorites',
-				element: <Favorites />,
+				element: <FavoriteListPage />,
 			},
 			{
 				path: '/photos/photo/:photoId',

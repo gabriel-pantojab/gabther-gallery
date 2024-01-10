@@ -1,7 +1,7 @@
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { type AlbumDB } from '../models/album.interface';
+import { type AlbumDB } from '../../models/album.interface';
 import CardAlbum from './CardAlbum';
 
 interface AlbumListProps {
@@ -10,7 +10,7 @@ interface AlbumListProps {
 
 export default function AlbumList({ albums }: AlbumListProps): JSX.Element {
 	return (
-		<div className='grid w-full grid-flow-dense auto-rows-[minmax(200px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4'>
+		<div className='grid w-full grid-flow-dense auto-rows-[250px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4'>
 			{albums === null ? (
 				new Array(12).fill(0).map((_, index) => {
 					return <Skeleton key={index} height={200} />;

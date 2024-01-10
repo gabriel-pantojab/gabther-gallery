@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import SendList from './SendList';
+import SendList from '../components/SendList';
 
 export default function SendLoveNotes(): JSX.Element {
 	return (

@@ -4,9 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { type LoveNote as LoveNoteType } from '../models/loveNote.interface';
 import { getLoveNote, readLoveNote } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
-import BackIcon from './icons/BackIcon';
+import BackIcon from '../components/icons/BackIcon';
 import { UserContext } from '../context/userContext';
-import Reaction from './Reaction';
+import Reaction from '../components/Reaction';
 import { ReactionType } from '../models/reaction.interface';
 import useReactions from '../hooks/useReactions';
 
