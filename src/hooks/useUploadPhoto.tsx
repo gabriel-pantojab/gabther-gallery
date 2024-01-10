@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { SupabaseContext } from '../context/supabaseContext';
 import { insertFile, uploadFile } from '../utils/supabase';
-import { toast } from 'react-toastify';
 
 interface TypeReturnHook {
 	handleUploadPhotos: (files: File[]) => void;
