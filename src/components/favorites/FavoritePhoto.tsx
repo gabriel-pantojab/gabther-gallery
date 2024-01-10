@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { type PhotoDB } from '../models/photo.interface';
-import StarIcon from './icons/StarIcon';
-import { UserContext } from '../context/userContext';
+import { type PhotoDB } from '../../models/photo.interface';
+import StarIcon from '../icons/StarIcon';
+import { UserContext } from '../../context/userContext';
 
 interface FavoritePhotoProps {
 	photo: PhotoDB;

@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton';
 
-import useFavorites from '../hooks/useFavorites';
+import useFavorites from '../../hooks/useFavorites';
 import FavoritePhoto from './FavoritePhoto';
 
 export default function FavoriteList(): JSX.Element {

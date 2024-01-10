@@ -1,4 +1,4 @@
-import ReceivedList from './ReceivedList';
+import ReceivedList from '../components/ReceivedList';
 
 export default function ReceivedLoveNotes(): JSX.Element {
 	return (

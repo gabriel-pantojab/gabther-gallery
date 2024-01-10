@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import { type AlbumDB } from '../models/album.interface';
-import CameraIcon from './icons/CameraIcon';
+import { type AlbumDB } from '../../models/album.interface';
+import CameraIcon from '../icons/CameraIcon';
 
 interface CardAlbumProps {
 	album: AlbumDB;

@@ -1,12 +1,12 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import App from '../App';
-import PhotoPage from '../components/PhotoPage';
-import AlbumPage from '../components/AlbumPage';
-import SendLoveNotes from '../components/SendLoveNotes';
+import PhotoPage from '../pages/PhotoPage';
+import AlbumPage from '../pages/AlbumPage';
+import SendLoveNotes from '../pages/SendLoveNotes';
 import SendLoveNote from '../components/SendLoveNote';
-import ReceivedLoveNotes from '../components/ReceivedLoveNotes';
-import LoveNote from '../components/LoveNote';
+import ReceivedLoveNotes from '../pages/ReceivedLoveNotes';
+import LoveNote from '../pages/LoveNote';
 import ProtectedRoute from '../components/ProtectedRoute';
 import useAuthGuard from '../guards/auth.guard';
 import PhotoListPage from '../pages/PhotoListPage';

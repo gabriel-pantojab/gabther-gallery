@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import useAlbums from '../hooks/useAlbums';
-import AlbumList from '../components/AlbumList';
+import AlbumList from '../components/albums/AlbumList';
 import CreateAlbumModal from '../components/CreateAlbumModal';
-import AlbumListHeader from '../components/AlbumListHeader';
+import AlbumListHeader from '../components/albums/AlbumListHeader';
 
 export default function AlbumListPage(): JSX.Element {
 	const { albums } = useAlbums();

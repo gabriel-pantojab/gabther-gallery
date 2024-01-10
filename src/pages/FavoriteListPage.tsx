@@ -1,4 +1,4 @@
-import FavoriteList from '../components/FavoriteList';
+import FavoriteList from '../components/favorites/FavoriteList';
 
 export default function FavoriteListPage(): JSX.Element {
 	return (

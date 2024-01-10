@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { UserContext } from '../context/userContext';
-import PlusIcon from './icons/PlusIcon';
+import { UserContext } from '../../context/userContext';
+import PlusIcon from '../icons/PlusIcon';
 
 interface AlbumListHeaderProps {
 	setOpenModal: (open: boolean) => void;
