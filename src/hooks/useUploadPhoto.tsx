@@ -2,13 +2,14 @@ import { useContext, useState } from 'react';
 
 import { SupabaseContext } from '../context/supabaseContext';
 import { insertFile, uploadFile } from '../utils/supabase';
+import { toast } from 'react-toastify';
 
 interface TypeReturnHook {
-	uploadFiles: (files: File[]) => Promise<any>;
+	handleUploadPhotos: (files: File[]) => void;
 	uploading: boolean;
 }
 
-export default function useUploadFile(): TypeReturnHook {
+export default function useUploadPhoto(): TypeReturnHook {
 	const { supabase } = useContext(SupabaseContext);
 
 	const [uploading, setUploading] = useState(false);
@@ -40,5 +41,34 @@ export default function useUploadFile(): TypeReturnHook {
 		}
 	};
 
-	return { uploadFiles, uploading };
+	const handleUploadPhotos = (files: File[]): void => {
+		const id = toast.loading('Uploading...');
+		uploadFiles(files)
+			.then(_ => {
+				toast.update(id, {
+					render: 'Photo uploaded successfully!',
+					type: 'success',
+					isLoading: false,
+					autoClose: 5000,
+					closeOnClick: true,
+				});
+			})
+			.catch(error => {
+				toast.update(id, {
+					render: 'Error, ' + error.message,
+					type: 'error',
+					isLoading: false,
+					position: 'top-right',
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+					theme: 'light',
+				});
+			});
+	};
+
+	return { handleUploadPhotos, uploading };
 }

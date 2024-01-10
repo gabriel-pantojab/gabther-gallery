@@ -1,6 +1,5 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
-import Photos from '../components/Photos';
 import App from '../App';
 import Videos from '../components/Videos';
 import Albums from '../components/Albums';
@@ -13,6 +12,7 @@ import ReceivedLoveNotes from '../components/ReceivedLoveNotes';
 import LoveNote from '../components/LoveNote';
 import ProtectedRoute from '../components/ProtectedRoute';
 import useAuthGuard from '../guards/auth.guard';
+import PhotoListPage from '../pages/PhotoListPage';
 
 export const router = createBrowserRouter([
 	{
@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: '/photos',
-				element: <Photos />,
+				element: <PhotoListPage />,
 			},
 			{
 				path: '/videos',
