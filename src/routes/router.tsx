@@ -1,7 +1,6 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 
 import App from '../App';
-import Videos from '../components/Videos';
 import PhotoPage from '../components/PhotoPage';
 import AlbumPage from '../components/AlbumPage';
 import SendLoveNotes from '../components/SendLoveNotes';
@@ -26,10 +25,6 @@ export const router = createBrowserRouter([
 			{
 				path: '/photos',
 				element: <PhotoListPage />,
-			},
-			{
-				path: '/videos',
-				element: <Videos />,
 			},
 			{
 				path: '/albums',
