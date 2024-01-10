@@ -80,7 +80,7 @@ export default function LoveNote(): JSX.Element {
 						})}
 					</div>
 
-					<div className='flex justify-center gap-2 border-b-2 py-2 pl-4'>
+					<div className='flex justify-center gap-2 border-b-2 py-2'>
 						<div
 							className={`cursor-pointer p-1 text-red-500 grayscale hover:bg-gray-200
 							${reactionUser === ReactionType.LOVE && 'grayscale-0'}
