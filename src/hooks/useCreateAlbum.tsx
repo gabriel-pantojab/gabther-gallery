@@ -19,10 +19,12 @@ interface TypeReturnHook {
 
 interface TypeProps {
 	setOpenModal: (value: boolean) => void;
+	parentId?: number | null;
 }
 
 export default function useCreateAlbum({
 	setOpenModal,
+	parentId,
 }: TypeProps): TypeReturnHook {
 	const { createAlbum } = useAlbum();
 
@@ -47,7 +49,8 @@ export default function useCreateAlbum({
 			const name = albumName.trim();
 			setOpenModal(false);
 			idToast = toast.loading('Creating...');
-			await createAlbum(name, albumCover);
+			if (parentId === undefined) parentId = null;
+			await createAlbum(name, albumCover, parentId);
 			toast.update(idToast, {
 				render: 'Created',
 				type: 'success',

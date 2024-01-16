@@ -7,7 +7,11 @@ import {
 } from '../utils/supabase';
 
 interface TypeReturnHook {
-	createAlbum: (name: string, albumCover?: File | null) => Promise<void>;
+	createAlbum: (
+		name: string,
+		albumCover?: File | null,
+		parentId?: number | null,
+	) => Promise<void>;
 	creating: boolean;
 }
 
@@ -18,6 +22,7 @@ export default function useAlbum(): TypeReturnHook {
 	const createAlbum = async (
 		name: string,
 		albumCover?: File | null,
+		parentId: number | null = null,
 	): Promise<void> => {
 		try {
 			setCreating(true);
@@ -25,7 +30,7 @@ export default function useAlbum(): TypeReturnHook {
 			let urlAlbumCover;
 			if (albumCover !== undefined && albumCover !== null)
 				urlAlbumCover = await uploadAlbumCover(albumCover, name);
-			await insertAlbum({ name, urlAlbumCover, supabase });
+			await insertAlbum({ name, urlAlbumCover, supabase, parentId });
 		} finally {
 			setCreating(false);
 		}

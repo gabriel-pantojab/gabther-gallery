@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import usePhotos from '../hooks/usePhotos';
 import CardPhoto from './CardPhoto';
-import { updatePhotoToAlbum } from '../utils/supabase';
+import { insertPhotoToAlbum } from '../utils/supabase';
 import { SupabaseContext } from '../context/supabaseContext';
 
 interface TypeProps {
@@ -32,13 +32,13 @@ export default function SelectPhoto({
 	};
 
 	const addPhotosToAlbum = async (): Promise<void> => {
-		const id = toast.loading('Adding...');
+		const idToast = toast.loading('Adding...');
 		const promises = idsSelected.map(async (id): Promise<void> => {
-			await updatePhotoToAlbum({ idAlbum, idPhoto: id, supabase });
+			await insertPhotoToAlbum({ idAlbum, idPhoto: id, supabase });
 		});
 
 		await Promise.all(promises);
-		toast.update(id, {
+		toast.update(idToast, {
 			render: 'Added',
 			type: 'success',
 			isLoading: false,
