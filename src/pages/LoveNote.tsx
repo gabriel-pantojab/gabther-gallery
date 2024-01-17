@@ -42,7 +42,7 @@ export default function LoveNote(): JSX.Element {
 					console.log(error);
 				});
 		}
-	}, [loveNote]);
+	}, [loveNote, currentUser]);
 
 	return (
 		<section className='w-full'>
