@@ -10,6 +10,8 @@ import { UserContext } from '../context/userContext';
 import CardAlbum from '../components/albums/CardAlbum';
 import CreateAlbumModal from '../components/CreateAlbumModal';
 import PlusIcon from '../components/icons/PlusIcon';
+import SelectedOptions from '../components/SelectedOptions';
+import TrashIcon from '../components/icons/TrashIcon';
 
 export default function AlbumPage(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
@@ -21,6 +23,16 @@ export default function AlbumPage(): JSX.Element {
 
 	const [openSelectPhoto, setOpenSelectPhoto] = useState(false);
 	const [openModal, setOpenModal] = useState(false);
+	const [idsSelected, setIdsSelected] = useState<number[]>([]);
+
+	const addIdSelected = (id: number): void => {
+		console.log(id);
+		setIdsSelected([...idsSelected, id]);
+	};
+
+	const removeIdSelected = (id: number): void => {
+		setIdsSelected(idsSelected.filter(idSelected => idSelected !== id));
+	};
 
 	return (
 		<section className='h-full w-full'>
@@ -63,16 +75,33 @@ export default function AlbumPage(): JSX.Element {
 				</div>
 			</header>
 
-			<div>
+			<div className='w-full'>
+				<SelectedOptions idsSelected={idsSelected} className='border-t-0'>
+					<TrashIcon />
+				</SelectedOptions>
+
 				{subAlbums !== null && (
 					<div className='grid w-full grid-flow-dense auto-rows-[250px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4'>
 						{subAlbums.map(album => {
-							return <CardAlbum key={album.id} album={album} />;
+							return (
+								<CardAlbum
+									key={album.id}
+									album={album}
+									addIdSelected={addIdSelected}
+									removeIdSelected={removeIdSelected}
+									isSelected={idsSelected.includes(album.id)}
+								/>
+							);
 						})}
 					</div>
 				)}
 
-				{photos !== null && <PhotoList photos={photos} />}
+				<PhotoList
+					photos={photos}
+					idsSelected={idsSelected}
+					addIdSelected={addIdSelected}
+					removeIdSelected={removeIdSelected}
+				/>
 			</div>
 
 			{openSelectPhoto && (

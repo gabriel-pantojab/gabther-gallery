@@ -6,9 +6,17 @@ import CardAlbum from './CardAlbum';
 
 interface AlbumListProps {
 	albums: AlbumDB[] | null;
+	idsSelected: number[];
+	addIdSelected: (id: number) => void;
+	removeIdSelected: (id: number) => void;
 }
 
-export default function AlbumList({ albums }: AlbumListProps): JSX.Element {
+export default function AlbumList({
+	albums,
+	idsSelected,
+	addIdSelected,
+	removeIdSelected,
+}: AlbumListProps): JSX.Element {
 	return (
 		<div className='grid w-full grid-flow-dense auto-rows-[250px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4'>
 			{albums === null ? (
@@ -18,7 +26,15 @@ export default function AlbumList({ albums }: AlbumListProps): JSX.Element {
 			) : albums.length === 0 ? (
 				<p className='text-center text-gray-500'>No albums 🤧</p>
 			) : (
-				albums.map(album => <CardAlbum key={album.id} album={album} />)
+				albums.map(album => (
+					<CardAlbum
+						key={album.id}
+						album={album}
+						isSelected={idsSelected.includes(album.id)}
+						addIdSelected={addIdSelected}
+						removeIdSelected={removeIdSelected}
+					/>
+				))
 			)}
 		</div>
 	);

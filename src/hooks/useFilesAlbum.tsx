@@ -67,6 +67,7 @@ export default function usePhotosAlbum({
 
 	const getPhotos = async (): Promise<void> => {
 		try {
+			setPhotos(null);
 			const photos = await getPhotosByAlbum(idAlbum, supabase);
 			setPhotos(photos);
 		} catch (error) {
@@ -76,6 +77,7 @@ export default function usePhotosAlbum({
 
 	const getSubAlbums = async (): Promise<void> => {
 		try {
+			setSubAlbums(null);
 			const subAlbums = await getSubAlbumsById(idAlbum, supabase);
 			setSubAlbums(subAlbums);
 		} catch (error) {
