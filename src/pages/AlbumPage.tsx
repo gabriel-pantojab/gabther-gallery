@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import BackIcon from '../components/icons/BackIcon';
 import PhotoPlusIcon from '../components/icons/PhotoPlusIcon';
@@ -12,9 +13,13 @@ import CreateAlbumModal from '../components/CreateAlbumModal';
 import PlusIcon from '../components/icons/PlusIcon';
 import SelectedOptions from '../components/SelectedOptions';
 import TrashIcon from '../components/icons/TrashIcon';
+import { SupabaseContext } from '../context/supabaseContext';
+import { deletePhotoFromAlbum } from '../utils/supabase';
+import Swal from 'sweetalert2';
 
 export default function AlbumPage(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
+	const { supabase } = useContext(SupabaseContext);
 	const { album } = useParams();
 	const navigation = useNavigate();
 	const name = album?.split('-')[0];
@@ -26,7 +31,6 @@ export default function AlbumPage(): JSX.Element {
 	const [idsSelected, setIdsSelected] = useState<number[]>([]);
 
 	const addIdSelected = (id: number): void => {
-		console.log(id);
 		setIdsSelected([...idsSelected, id]);
 	};
 
@@ -34,10 +38,50 @@ export default function AlbumPage(): JSX.Element {
 		setIdsSelected(idsSelected.filter(idSelected => idSelected !== id));
 	};
 
+	const deleteSelectedPhotos = (): void => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: 'They will be deleted from the album.',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, delete it!',
+			cancelButtonText: 'No, keep it',
+		})
+			.then(result => {
+				if (result.isConfirmed) {
+					const promises = idsSelected.map(async idPhoto => {
+						await deletePhotoFromAlbum({ idPhoto, idAlbum: id, supabase });
+					});
+					const idToast = toast.loading('Deleting photos');
+					Promise.all(promises)
+						.then(() => {
+							setIdsSelected([]);
+							toast.update(idToast, {
+								render: 'Deleted',
+								type: 'success',
+								isLoading: false,
+								autoClose: 1000,
+							});
+						})
+						.catch(error => {
+							toast.update(idToast, {
+								render: error.message,
+								type: 'error',
+								isLoading: false,
+								autoClose: 1000,
+							});
+						});
+				}
+			})
+			.catch(error => {
+				console.error(error);
+			});
+	};
+
 	return (
 		<section className='h-full w-full'>
 			<header className='flex w-full border-b-2 p-4 pt-2'>
-				<h2 className='text-xl font-bold'>{name}</h2>
+				<h2 className='w-full text-xl font-bold'>{name}</h2>
 
 				<div className='flex w-full justify-end gap-2'>
 					{currentUser !== null && (
@@ -77,7 +121,12 @@ export default function AlbumPage(): JSX.Element {
 
 			<div className='w-full'>
 				<SelectedOptions idsSelected={idsSelected} className='border-t-0'>
-					<TrashIcon />
+					<button
+						onClick={deleteSelectedPhotos}
+						className='flex cursor-pointer items-center gap-1 p-1 text-sm text-red-500 hover:bg-gray-200'
+					>
+						<TrashIcon />
+					</button>
 				</SelectedOptions>
 
 				{subAlbums !== null && (
@@ -96,12 +145,14 @@ export default function AlbumPage(): JSX.Element {
 					</div>
 				)}
 
-				<PhotoList
-					photos={photos}
-					idsSelected={idsSelected}
-					addIdSelected={addIdSelected}
-					removeIdSelected={removeIdSelected}
-				/>
+				{photos?.length !== 0 && (
+					<PhotoList
+						photos={photos}
+						idsSelected={idsSelected}
+						addIdSelected={addIdSelected}
+						removeIdSelected={removeIdSelected}
+					/>
+				)}
 			</div>
 
 			{openSelectPhoto && (

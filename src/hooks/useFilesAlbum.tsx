@@ -49,6 +49,27 @@ export default function usePhotosAlbum({
 
 	useEffect(() => {
 		const channel = supabase
+			.channel('album-delete')
+			.on(
+				'postgres_changes',
+				{ event: 'DELETE', schema: 'public', table: 'photo_album' },
+				(payload: any) => {
+					const idPhoto = payload.old.id_photo;
+					setPhotos(prev => {
+						if (prev === null) return [];
+						return prev.filter(photo => photo.id !== idPhoto);
+					});
+				},
+			)
+			.subscribe();
+
+		return () => {
+			channel.unsubscribe();
+		};
+	}, [idAlbum]);
+
+	useEffect(() => {
+		const channel = supabase
 			.channel('album-insert-album')
 			.on(
 				'postgres_changes',

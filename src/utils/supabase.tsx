@@ -129,6 +129,26 @@ export async function insertPhotoToAlbum({
 	}
 }
 
+export async function deletePhotoFromAlbum({
+	idPhoto,
+	idAlbum,
+	supabase,
+}: {
+	idPhoto: number;
+	idAlbum: number;
+	supabase: any;
+}): Promise<void> {
+	const { error } = await supabase
+		.from('photo_album')
+		.delete()
+		.eq('id_photo', idPhoto)
+		.eq('id_album', idAlbum);
+
+	if (error !== null) {
+		throw error;
+	}
+}
+
 export async function insertAlbum({
 	name,
 	urlAlbumCover = '',
