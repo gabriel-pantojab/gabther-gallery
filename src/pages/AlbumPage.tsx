@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 import BackIcon from '../components/icons/BackIcon';
 import PhotoPlusIcon from '../components/icons/PhotoPlusIcon';
@@ -15,7 +16,6 @@ import SelectedOptions from '../components/SelectedOptions';
 import TrashIcon from '../components/icons/TrashIcon';
 import { SupabaseContext } from '../context/supabaseContext';
 import { deletePhotoFromAlbum } from '../utils/supabase';
-import Swal from 'sweetalert2';
 
 export default function AlbumPage(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
