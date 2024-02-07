@@ -102,6 +102,7 @@ export async function getAlbums(supabase: any): Promise<AlbumDB[]> {
 	const { data, error } = await supabase
 		.from('album')
 		.select('*')
+		.is('parent_id', null)
 		.order('created_at', { ascending: false });
 
 	if (error !== null) {
@@ -111,7 +112,7 @@ export async function getAlbums(supabase: any): Promise<AlbumDB[]> {
 	return data;
 }
 
-export async function updatePhotoToAlbum({
+export async function insertPhotoToAlbum({
 	idPhoto,
 	idAlbum,
 	supabase,
@@ -120,11 +121,29 @@ export async function updatePhotoToAlbum({
 	idAlbum: number | null;
 	supabase: any;
 }): Promise<void> {
-	console.log(idPhoto, idAlbum);
 	const { error } = await supabase
-		.from('photo')
-		.update({ id_album: idAlbum })
-		.eq('id', idPhoto);
+		.from('photo_album')
+		.insert({ id_photo: idPhoto, id_album: idAlbum });
+	if (error !== null) {
+		throw error;
+	}
+}
+
+export async function deletePhotoFromAlbum({
+	idPhoto,
+	idAlbum,
+	supabase,
+}: {
+	idPhoto: number;
+	idAlbum: number;
+	supabase: any;
+}): Promise<void> {
+	const { error } = await supabase
+		.from('photo_album')
+		.delete()
+		.eq('id_photo', idPhoto)
+		.eq('id_album', idAlbum);
+
 	if (error !== null) {
 		throw error;
 	}
@@ -133,16 +152,19 @@ export async function updatePhotoToAlbum({
 export async function insertAlbum({
 	name,
 	urlAlbumCover = '',
+	parentId = null,
 	supabase,
 }: {
 	name: string;
 	urlAlbumCover?: string;
+	parentId?: number | null;
 	supabase: any;
 }): Promise<void> {
 	const album: {
 		name: string;
 		url_album_cover: string;
-	} = { name, url_album_cover: urlAlbumCover };
+		parent_id?: number | null;
+	} = { name, url_album_cover: urlAlbumCover, parent_id: parentId };
 
 	const { error } = await supabase.from('album').insert(album);
 
@@ -156,9 +178,30 @@ export async function getPhotosByAlbum(
 	supabase: any,
 ): Promise<PhotoDB[]> {
 	const { data, error } = await supabase
-		.from('photo')
+		.from('photo_album')
+		.select('id_photo, photo (id, created_at, name, url_image, favorite)')
+		.eq('id_album', id);
+
+	const photos: PhotoDB[] = data.map((item: any) => item.photo);
+	photos.sort((a, b) => {
+		return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+	});
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return photos;
+}
+
+export async function getSubAlbumsById(
+	parentId: number,
+	supabase: any,
+): Promise<AlbumDB[]> {
+	const { data, error } = await supabase
+		.from('album')
 		.select('*')
-		.eq('id_album', id)
+		.eq('parent_id', parentId)
 		.order('created_at', { ascending: false });
 
 	if (error !== null) {

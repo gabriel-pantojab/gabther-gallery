@@ -65,8 +65,8 @@ export default function CardPhoto({
 			<div
 				className={`absolute top-0 z-50 cursor-pointer p-1 text-gray-300 transition duration-300 ease-in-out
 					${isHover || isSelected ? 'opacity-100' : 'opacity-0'}
-					${isSelected && 'w-ful bottom-0 left-0 right-0 h-full text-blue-500'}
-					${!isSelected && 'hover:text-white'}
+					${isSelected && 'bottom-0 left-0 right-0 h-full w-full text-blue-500'}
+					${!isSelected && 'hover:text-blue-500'}
 				`}
 				onClick={() => {
 					if (currentUser === null) return;
@@ -77,7 +77,11 @@ export default function CardPhoto({
 					}
 				}}
 			>
-				<CheckIcon />
+				<CheckIcon
+					className={`${isSelected && 'text-blue-500'} ${
+						isSelected && 'hover:text-gray-300'
+					}`}
+				/>
 			</div>
 
 			<CoverElement>

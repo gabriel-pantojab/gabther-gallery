@@ -95,12 +95,12 @@ export default function PhotoPage(): JSX.Element {
 				</div>
 			</header>
 
-			<figure className='max-h-screen max-w-fit overflow-hidden rounded-md'>
+			<figure className='max-w-fit overflow-hidden rounded-md lg:max-h-screen'>
 				{photo === null ? (
 					<Skeleton height={500} width={500} />
 				) : (
 					<img
-						className='h-full w-full'
+						className='aspect-auto h-full w-full'
 						src={photo?.url_image}
 						alt={photo?.name}
 					/>

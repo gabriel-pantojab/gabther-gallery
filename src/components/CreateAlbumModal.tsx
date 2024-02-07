@@ -4,11 +4,13 @@ import TrashIcon from './icons/TrashIcon';
 interface CreateAlbumModalProps {
 	openModal: boolean;
 	setOpenModal: (value: boolean) => void;
+	parentId?: number;
 }
 
 export default function CreateAlbumModal({
 	openModal,
 	setOpenModal,
+	parentId,
 }: CreateAlbumModalProps): JSX.Element {
 	const {
 		albumName,
@@ -21,7 +23,7 @@ export default function CreateAlbumModal({
 		setAlbumCover,
 		setUrlAlbumCover,
 		handleCreateAlbum,
-	} = useCreateAlbum({ setOpenModal });
+	} = useCreateAlbum({ setOpenModal, parentId });
 
 	if (!openModal) return <></>;
 	return (
@@ -42,6 +44,7 @@ export default function CreateAlbumModal({
 						name='albumName'
 						id='albumName'
 						value={albumName}
+						autoFocus
 						onChange={(e): void => {
 							setAlbumName(e.target.value);
 						}}
