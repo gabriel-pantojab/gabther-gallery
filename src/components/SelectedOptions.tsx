@@ -19,7 +19,7 @@ export default function SelectedOptions({
 				>
 					<p>X {idsSelected.length} selected </p>
 
-					{children}
+					<div className='flex gap-2'>{children}</div>
 				</div>
 			)}
 		</div>
