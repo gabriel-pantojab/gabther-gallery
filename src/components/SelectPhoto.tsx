@@ -33,17 +33,33 @@ export default function SelectPhoto({
 
 	const addPhotosToAlbum = async (): Promise<void> => {
 		const idToast = toast.loading('Adding...');
-		const promises = idsSelected.map(async (id): Promise<void> => {
-			await insertPhotoToAlbum({ idAlbum, idPhoto: id, supabase });
-		});
+		try {
+			const promises = idsSelected.map(async (id): Promise<void> => {
+				await insertPhotoToAlbum({ idAlbum, idPhoto: id, supabase });
+			});
 
-		await Promise.all(promises);
-		toast.update(idToast, {
-			render: 'Added',
-			type: 'success',
-			isLoading: false,
-			autoClose: 2000,
-		});
+			await Promise.all(promises);
+			toast.update(idToast, {
+				render: 'Added',
+				type: 'success',
+				isLoading: false,
+				autoClose: 2000,
+			});
+		} catch (error: any) {
+			let message = 'Unknown error';
+			if (error.code === '23505') {
+				message = 'Photo already added';
+			}
+			toast.update(idToast, {
+				render: message,
+				type: 'error',
+				isLoading: false,
+				autoClose: 2000,
+			});
+		} finally {
+			setOpen(false);
+			setIdsSelected([]);
+		}
 	};
 
 	return (
@@ -66,14 +82,7 @@ export default function SelectPhoto({
 
 					<button
 						onClick={() => {
-							addPhotosToAlbum()
-								.then(() => {
-									setIdsSelected([]);
-									setOpen(false);
-								})
-								.catch(error => {
-									console.log(error);
-								});
+							void addPhotosToAlbum();
 						}}
 						className='rounded-md bg-blue-500 px-4 py-1 text-white shadow-md transition duration-300 ease-in-out hover:bg-blue-600'
 					>

@@ -98,11 +98,25 @@ export async function deletePhoto(id: number, supabase: any): Promise<void> {
 	}
 }
 
+// TODO: Cambiar nombre de método, no va con la funcionalidad
 export async function getAlbums(supabase: any): Promise<AlbumDB[]> {
 	const { data, error } = await supabase
 		.from('album')
 		.select('*')
 		.is('parent_id', null)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw error;
+	}
+
+	return data;
+}
+
+export async function getAlbumsAll(supabase: any): Promise<AlbumDB[]> {
+	const { data, error } = await supabase
+		.from('album')
+		.select('*')
 		.order('created_at', { ascending: false });
 
 	if (error !== null) {
