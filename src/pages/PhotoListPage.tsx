@@ -1,6 +1,8 @@
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { insertPhotoToAlbum } from '../services/album-services';
+
 import { UserContext } from '../context/userContext';
 import usePhotos from '../hooks/usePhotos';
 import PhotoList from '../components/PhotoList';
@@ -10,11 +12,8 @@ import SelectedOptions from '../components/SelectedOptions';
 import TrashIcon from '../components/icons/TrashIcon';
 import PlusIcon from '../components/icons/PlusIcon';
 import SelectAlbum from '../components/SelectAlbum';
-import { insertPhotoToAlbum } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
 
 export default function PhotoListPage(): JSX.Element {
-	const { supabase } = useContext(SupabaseContext);
 	const { currentUser } = useContext(UserContext);
 	const { photos } = usePhotos();
 
@@ -37,7 +36,6 @@ export default function PhotoListPage(): JSX.Element {
 				await insertPhotoToAlbum({
 					idPhoto: id,
 					idAlbum: idAlbumSelected,
-					supabase,
 				});
 			});
 

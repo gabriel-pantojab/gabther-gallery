@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
+import { deletePhotoFromAlbum } from '../services/album-services';
+
 import BackIcon from '../components/icons/BackIcon';
 import PhotoPlusIcon from '../components/icons/PhotoPlusIcon';
 import PhotoList from '../components/PhotoList';
@@ -14,12 +16,9 @@ import CreateAlbumModal from '../components/CreateAlbumModal';
 import PlusIcon from '../components/icons/PlusIcon';
 import SelectedOptions from '../components/SelectedOptions';
 import TrashIcon from '../components/icons/TrashIcon';
-import { SupabaseContext } from '../context/supabaseContext';
-import { deletePhotoFromAlbum } from '../utils/supabase';
 
 export default function AlbumPage(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
-	const { supabase } = useContext(SupabaseContext);
 	const { album } = useParams();
 	const navigation = useNavigate();
 	const name = album?.split('-')[0];
@@ -50,7 +49,7 @@ export default function AlbumPage(): JSX.Element {
 			.then(result => {
 				if (result.isConfirmed) {
 					const promises = idsSelected.map(async idPhoto => {
-						await deletePhotoFromAlbum({ idPhoto, idAlbum: id, supabase });
+						await deletePhotoFromAlbum({ idPhoto, idAlbum: id });
 					});
 					const idToast = toast.loading('Deleting photos');
 					Promise.all(promises)

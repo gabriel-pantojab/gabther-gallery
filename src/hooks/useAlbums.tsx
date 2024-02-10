@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { SupabaseContext } from '../context/supabaseContext';
-import { getAlbums } from '../utils/supabase';
+import supabase from '../services/supabase-service';
+import { getMainAlbums } from '../services/album-services';
+
 import { type AlbumDB } from '../models/album.interface';
 
 interface TypeReturnHook {
@@ -9,12 +10,11 @@ interface TypeReturnHook {
 }
 
 export default function useAlbums(): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
 	const [albums, setAlbums] = useState<AlbumDB[] | null>(null);
 
 	useEffect(() => {
 		setAlbums(null);
-		getAlbums(supabase)
+		getMainAlbums()
 			.then(data => {
 				setAlbums(data);
 			})
@@ -42,7 +42,7 @@ export default function useAlbums(): TypeReturnHook {
 			.subscribe();
 
 		return () => {
-			channel.unsubscribe();
+			void channel.unsubscribe();
 		};
 	}, []);
 

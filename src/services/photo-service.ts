@@ -72,39 +72,6 @@ export async function deletePhoto(id: number): Promise<void> {
 	}
 }
 
-export async function insertPhotoToAlbum({
-	idPhoto,
-	idAlbum,
-}: {
-	idPhoto: number;
-	idAlbum: number | null;
-}): Promise<void> {
-	const { error } = await supabase
-		.from('photo_album')
-		.insert({ id_photo: idPhoto, id_album: idAlbum });
-	if (error !== null) {
-		throw new SupabaseError(error);
-	}
-}
-
-export async function deletePhotoFromAlbum({
-	idPhoto,
-	idAlbum,
-}: {
-	idPhoto: number;
-	idAlbum: number;
-}): Promise<void> {
-	const { error } = await supabase
-		.from('photo_album')
-		.delete()
-		.eq('id_photo', idPhoto)
-		.eq('id_album', idAlbum);
-
-	if (error !== null) {
-		throw new SupabaseError(error);
-	}
-}
-
 export async function deletePhotoStorage(name: string): Promise<void> {
 	const { error } = await supabase.storage.from('photos').remove([`${name}`]);
 
