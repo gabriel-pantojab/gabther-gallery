@@ -10,14 +10,14 @@ export default function SelectedOptions({
 	className = '',
 }: SelectedOptionsProps): JSX.Element {
 	return (
-		<div className='w-full'>
+		<div className='sticky top-0 z-30 w-full'>
 			{idsSelected.length > 0 && (
 				<div
-					className={`sticky top-0 z-50 flex w-full justify-between border-y-2 bg-white px-4 py-2
+					className={`flex w-full justify-between border-y-2 bg-white px-4 py-2
         ${className}
         `}
 				>
-					<p>X {idsSelected.length} selected </p>
+					<p className='flex items-center'>X {idsSelected.length} selected </p>
 
 					<div className='flex gap-2'>{children}</div>
 				</div>

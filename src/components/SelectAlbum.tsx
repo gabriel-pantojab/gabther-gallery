@@ -8,18 +8,17 @@ interface SelectAlbumProps {
 	setAlbumSelected: (value: number | null) => void;
 	setOpen: (value: boolean) => void;
 	addSelectPhotosToAlbum: () => void;
-	albumSelected: number | null;
 }
 
 export default function SelectAlbum({
 	setAlbumSelected,
-	albumSelected,
 	setOpen,
 	addSelectPhotosToAlbum,
 }: SelectAlbumProps): JSX.Element {
 	const { supabase } = useContext(SupabaseContext);
 
 	const [albums, setAlbums] = useState<AlbumDB[] | null>(null);
+	const [albumSelected, setAlbum] = useState<number | null>(null);
 
 	useEffect(() => {
 		const fetchAlbums = async (): Promise<void> => {
@@ -66,10 +65,10 @@ export default function SelectAlbum({
 								<div
 									onClick={() => {
 										setAlbumSelected(item.id);
+										setAlbum(item.id);
 									}}
 									key={item.id}
 									className={`flex cursor-pointer items-center justify-between border-b-2 p-4
-                
                   active:bg-blue-200
                 ${
 									albumSelected === item.id

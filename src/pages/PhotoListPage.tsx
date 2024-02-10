@@ -96,7 +96,6 @@ export default function PhotoListPage(): JSX.Element {
 
 			{open && (
 				<SelectAlbum
-					albumSelected={idAlbumSelected}
 					setAlbumSelected={setIdAlbumSelected}
 					setOpen={setOpen}
 					addSelectPhotosToAlbum={() => {
