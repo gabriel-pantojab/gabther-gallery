@@ -43,6 +43,32 @@ export async function getPhoto(id: number): Promise<PhotoDB | null> {
 	return data;
 }
 
+export async function insertPhoto({
+	name,
+	urlImage,
+	idAlbum,
+}: {
+	name: string;
+	urlImage: string;
+	idAlbum?: number;
+}): Promise<void> {
+	const file: {
+		name: string;
+		url_image: string;
+		id_album?: number;
+	} = { name, url_image: urlImage };
+
+	if (idAlbum !== undefined) {
+		file.id_album = idAlbum;
+	}
+
+	const { error } = await supabase.from('photo').insert(file);
+
+	if (error !== null) {
+		throw new SupabaseError(error);
+	}
+}
+
 export async function updateFavorite({
 	photoId,
 	favorite,
@@ -78,4 +104,18 @@ export async function deletePhotoStorage(name: string): Promise<void> {
 	if (error !== null) {
 		throw error;
 	}
+}
+
+export async function uploadPhoto(file: File): Promise<any> {
+	const { data, error } = await supabase.storage
+		.from('photos')
+		.upload(`${file.name}`, file, {
+			cacheControl: '3600',
+			upsert: false,
+		});
+
+	if (error !== null) {
+		throw error;
+	}
+	return data;
 }

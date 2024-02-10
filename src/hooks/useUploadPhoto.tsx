@@ -1,8 +1,8 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { SupabaseContext } from '../context/supabaseContext';
-import { insertFile, uploadFile } from '../utils/supabase';
+import supabase from '../services/supabase-service';
+import { insertPhoto, uploadPhoto } from '../services/photo-service';
 
 interface TypeReturnHook {
 	handleUploadPhotos: (files: File[]) => void;
@@ -10,26 +10,21 @@ interface TypeReturnHook {
 }
 
 export default function useUploadPhoto(): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
-
 	const [uploading, setUploading] = useState(false);
 
 	const uploadFiles = async (files: File[]): Promise<any> => {
 		try {
 			setUploading(true);
-			const promises = files.map(
-				async file => await uploadFile(file, supabase),
-			);
+			const promises = files.map(async file => await uploadPhoto(file));
 			const results = await Promise.all(promises);
 
 			const promisesInsert = results.map(async result => {
 				const { data } = supabase.storage
 					.from('photos')
-					.getPublicUrl(result.path);
-				await insertFile({
+					.getPublicUrl(result.path as string);
+				await insertPhoto({
 					name: result.path,
 					urlImage: data.publicUrl,
-					supabase,
 				});
 			});
 
