@@ -10,7 +10,7 @@ interface TypeReturnHook {
 	subAlbums: AlbumDB[] | null;
 }
 
-export default function usePhotosAlbum({
+export default function useFilesAlbum({
 	idAlbum,
 }: {
 	idAlbum: number;
