@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
+
+import supabase from '../services/supabase-service';
 
 import { type User } from '../models/user.interface';
-import { SupabaseContext } from './supabaseContext';
 
 interface UserContextProps {
 	currentUser: User | null;
@@ -31,7 +32,6 @@ function UserProvider({ children }: any): JSX.Element {
 		}
 		return null;
 	});
-	const { supabase } = useContext(SupabaseContext);
 
 	const signInWithGoogle = async (): Promise<void> => {
 		try {

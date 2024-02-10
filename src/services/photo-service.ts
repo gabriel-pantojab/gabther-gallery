@@ -15,6 +15,20 @@ export async function getPhotos(): Promise<PhotoDB[]> {
 	return data;
 }
 
+export async function getFavoritePhotos(): Promise<PhotoDB[]> {
+	const { data, error } = await supabase
+		.from('photo')
+		.select('*')
+		.eq('favorite', true)
+		.order('created_at', { ascending: false });
+
+	if (error !== null) {
+		throw new SupabaseError(error);
+	}
+
+	return data;
+}
+
 export async function getPhoto(id: number): Promise<PhotoDB | null> {
 	const { data, error } = await supabase
 		.from('photo')
@@ -88,5 +102,13 @@ export async function deletePhotoFromAlbum({
 
 	if (error !== null) {
 		throw new SupabaseError(error);
+	}
+}
+
+export async function deletePhotoStorage(name: string): Promise<void> {
+	const { error } = await supabase.storage.from('photos').remove([`${name}`]);
+
+	if (error !== null) {
+		throw error;
 	}
 }
