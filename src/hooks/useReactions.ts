@@ -1,14 +1,15 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 
-import { type ReactionType } from '../models/reaction.interface';
+import supabase from '../services/supabase-service';
 import {
 	deleteReaction,
 	getReactionsLoveNote,
-	getUserName,
 	insertReaction,
 	updateReaction,
-} from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
+} from '../services/reaction-service';
+import { getUserName } from '../services/user-service';
+
+import { type ReactionType } from '../models/reaction.interface';
 import { UserContext } from '../context/userContext';
 
 interface User {
@@ -27,7 +28,6 @@ export default function useReactions({
 }: {
 	idLoveNote: number;
 }): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
 	const { currentUser } = useContext(UserContext);
 	const [reactionsMap, setReactionsMap] = useState<Map<ReactionType, User[]>>(
 		new Map<ReactionType, User[]>(),
@@ -77,27 +77,27 @@ export default function useReactions({
 			.on(
 				'postgres_changes',
 				{ event: 'INSERT', schema: 'public', table: 'reaction' },
-				async (payload: any) => {
-					const newReaction = payload.new;
-					const nameUser = await getUserName(
-						newReaction.id_user as string,
-						supabase,
-					);
-					const temp = structuredClone(reactionsMap);
-					if (!temp.has(newReaction.reaction as ReactionType)) {
-						temp.set(newReaction.reaction as ReactionType, [
-							{
+				(payload: any) => {
+					const insertReaction = async (): Promise<void> => {
+						const newReaction = payload.new;
+						const nameUser = await getUserName(newReaction.id_user as string);
+						const temp = structuredClone(reactionsMap);
+						if (!temp.has(newReaction.reaction as ReactionType)) {
+							temp.set(newReaction.reaction as ReactionType, [
+								{
+									name: nameUser,
+									id: newReaction.id_user,
+								},
+							]);
+						} else {
+							temp.get(newReaction.reaction as ReactionType)?.push({
 								name: nameUser,
 								id: newReaction.id_user,
-							},
-						]);
-					} else {
-						temp.get(newReaction.reaction as ReactionType)?.push({
-							name: nameUser,
-							id: newReaction.id_user,
-						});
-					}
-					setReactionsMap(temp);
+							});
+						}
+						setReactionsMap(temp);
+					};
+					void insertReaction();
 				},
 			)
 			.subscribe();
@@ -115,9 +115,9 @@ export default function useReactions({
 			.subscribe();
 
 		return () => {
-			updateChannel.unsubscribe();
-			insertChannel.unsubscribe();
-			deleteChannel.unsubscribe();
+			void updateChannel.unsubscribe();
+			void insertChannel.unsubscribe();
+			void deleteChannel.unsubscribe();
 		};
 	}, [reactionsMap, currentUser]);
 
@@ -128,7 +128,7 @@ export default function useReactions({
 
 	const getReactions = async (): Promise<void> => {
 		try {
-			const data = await getReactionsLoveNote(idLoveNote, supabase);
+			const data = await getReactionsLoveNote(idLoveNote);
 
 			const reactionsMap: Map<ReactionType, User[]> = new Map<
 				ReactionType,
@@ -245,7 +245,6 @@ export default function useReactions({
 							idLoveNote: Number(idLoveNote),
 							idUser: currentUser?.id,
 							reaction: type,
-							supabase,
 						});
 					} catch (error) {
 						setReactionUser(null);
@@ -257,7 +256,6 @@ export default function useReactions({
 							idLoveNote: Number(idLoveNote),
 							idUser: currentUser?.id,
 							reaction: type,
-							supabase,
 						});
 					} catch (error) {
 						setReactionUser(oldReaction);
@@ -268,7 +266,6 @@ export default function useReactions({
 						await deleteReaction({
 							idLoveNote: Number(idLoveNote),
 							idUser: currentUser?.id,
-							supabase,
 						});
 					} catch (error) {
 						setReactionUser(oldReaction);
