@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 
+import supabase from '../services/supabase-service';
+import { getCountUnreadLoveNotes } from '../services/love-note-service';
+
 import { UserContext } from '../context/userContext';
-import { getCountUnreadLoveNotes } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
 
 interface TypeReturnHook {
 	unreadLoveNotes: number;
@@ -10,12 +11,11 @@ interface TypeReturnHook {
 
 export default function useUnreadLoveNotes(): TypeReturnHook {
 	const { currentUser } = useContext(UserContext);
-	const { supabase } = useContext(SupabaseContext);
 	const [unreadLoveNotes, setUnreadLoveNotes] = useState(0);
 
 	useEffect(() => {
 		if (currentUser !== null) {
-			getCountUnreadLoveNotes(currentUser.id, supabase)
+			getCountUnreadLoveNotes(currentUser.id)
 				.then(data => {
 					setUnreadLoveNotes(data);
 				})
@@ -59,8 +59,8 @@ export default function useUnreadLoveNotes(): TypeReturnHook {
 			.subscribe();
 
 		return () => {
-			updateChannel.unsubscribe();
-			insertChannel.unsubscribe();
+			void updateChannel.unsubscribe();
+			void insertChannel.unsubscribe();
 		};
 	}, [currentUser]);
 

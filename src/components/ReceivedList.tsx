@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { getReceivedLoveNotes } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
+import supabase from '../services/supabase-service';
+import { getReceivedLoveNotes } from '../services/love-note-service';
+
 import { UserContext } from '../context/userContext';
 import { StateLoveNote, type LoveNote } from '../models/loveNote.interface';
 
 export default function ReceivedList(): JSX.Element {
-	const { supabase } = useContext(SupabaseContext);
 	const { currentUser } = useContext(UserContext);
 
 	const [receivedLoveNotes, setReceivedLoveNotes] = useState<LoveNote[] | null>(
@@ -20,7 +20,7 @@ export default function ReceivedList(): JSX.Element {
 		if (currentUser === null) return;
 		try {
 			setReceivedLoveNotes(null);
-			const data = await getReceivedLoveNotes(currentUser.id, supabase);
+			const data = await getReceivedLoveNotes(currentUser.id);
 			setReceivedLoveNotes(data);
 		} catch (error) {
 			console.log(error);
@@ -53,7 +53,7 @@ export default function ReceivedList(): JSX.Element {
 			.subscribe();
 
 		return () => {
-			insertChannel.unsubscribe();
+			void insertChannel.unsubscribe();
 		};
 	}, []);
 
