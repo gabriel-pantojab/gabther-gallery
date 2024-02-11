@@ -9,13 +9,19 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { SupabaseContext } from '../context/supabaseContext';
+import {
+	getTemplates,
+	sendLoveNote,
+	uploadLoveNote,
+} from '../services/love-note-service';
+
 import { UserContext } from '../context/userContext';
-import { getTemplates, sendLoveNote, uploadLoveNote } from '../utils/supabase';
+
 import BackIcon from './icons/BackIcon';
 import { type UrlTemplate, type Template } from '../models/template.interface';
 import TrashIcon from './icons/TrashIcon';
 import { domToPng } from '../utils/domToImage';
+import { getUsers } from '../services/user-service';
 
 interface Users {
 	id: string;
@@ -23,7 +29,6 @@ interface Users {
 }
 
 export default function SendLoveNote(): JSX.Element {
-	const { supabase } = useContext(SupabaseContext);
 	const { currentUser } = useContext(UserContext);
 
 	const navigate = useNavigate();
@@ -124,7 +129,7 @@ export default function SendLoveNote(): JSX.Element {
 			const file = new File([dataBlob], `love-note-${uuid}.png`, {
 				type: 'image/png',
 			});
-			const { url } = await uploadLoveNote(file, supabase);
+			const { url } = await uploadLoveNote(file);
 			const loveNote = {
 				author: currentUser.id,
 				email_author: currentUser.email,
@@ -135,7 +140,7 @@ export default function SendLoveNote(): JSX.Element {
 				template: urlImage,
 				url_love_note: url,
 			};
-			await sendLoveNote(loveNote, supabase);
+			await sendLoveNote(loveNote);
 			setMessage('');
 			setTitle('');
 			setTemplate(null);
@@ -167,27 +172,29 @@ export default function SendLoveNote(): JSX.Element {
 
 	useEffect(() => {
 		if (currentUser === null) return;
-		supabase
-			.from('user')
-			.select('*')
-			.neq('id', currentUser?.id)
-			.then(({ data, error }: { data: any; error: any }) => {
-				if (error !== null) {
-					throw error;
-				}
+		const getUsersRegistered = async (): Promise<void> => {
+			try {
+				const users = await getUsers();
 
-				if (data !== null) {
-					const ids: Users[] = data.map((user: any) => {
-						return { id: user.id as string, email: user.email as string };
-					});
-					setRecipientId(ids[0].id);
-					setIdUsers(ids);
-				}
-			});
+				const ids: Users[] = users
+					.map(user => {
+						return { id: user.id, email: user.email };
+					})
+					.filter(user => user.id !== currentUser.id);
+
+				setRecipientId(ids[0].id);
+				setIdUsers(ids);
+			} catch (error) {
+				setRecipientId('');
+				setIdUsers([]);
+			}
+		};
+
+		void getUsersRegistered();
 	}, [currentUser]);
 
 	useEffect(() => {
-		getTemplates(supabase)
+		getTemplates()
 			.then(data => {
 				const d = data.map(template => {
 					const urlT = template.url_template.sort(

@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import usePhotos from '../hooks/usePhotos';
 import CardPhoto from './CardPhoto';
-import { insertPhotoToAlbum } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
+import { insertPhotoToAlbum } from '../services/album-services';
 
 interface TypeProps {
 	setOpen: (value: boolean) => void;
@@ -15,7 +14,6 @@ export default function SelectPhoto({
 	setOpen,
 	idAlbum,
 }: TypeProps): JSX.Element {
-	const { supabase } = useContext(SupabaseContext);
 	const { photos } = usePhotos();
 	const [idsSelected, setIdsSelected] = useState<number[]>([]);
 
@@ -35,7 +33,7 @@ export default function SelectPhoto({
 		const idToast = toast.loading('Adding...');
 		try {
 			const promises = idsSelected.map(async (id): Promise<void> => {
-				await insertPhotoToAlbum({ idAlbum, idPhoto: id, supabase });
+				await insertPhotoToAlbum({ idAlbum, idPhoto: id });
 			});
 
 			await Promise.all(promises);

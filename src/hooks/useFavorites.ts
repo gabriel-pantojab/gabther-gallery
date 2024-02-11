@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
-import { getFavoritePhotos, updateFavorite } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
+import supabase from '../services/supabase-service';
+import { getFavoritePhotos, updateFavorite } from '../services/photo-service';
+
 import { type PhotoDB } from '../models/photo.interface';
 
 interface TypeReturnHook {
@@ -12,12 +13,11 @@ interface TypeReturnHook {
 }
 
 export default function useFavorites(): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
 	const [favorites, setFavorites] = useState<PhotoDB[] | null>([]);
 
 	useEffect(() => {
 		setFavorites(null);
-		getFavoritePhotos(supabase)
+		getFavoritePhotos()
 			.then(data => {
 				setFavorites(data);
 			})
@@ -45,7 +45,7 @@ export default function useFavorites(): TypeReturnHook {
 			.subscribe();
 
 		return () => {
-			updateChannel.unsubscribe();
+			void updateChannel.unsubscribe();
 		};
 	}, []);
 
@@ -62,7 +62,6 @@ export default function useFavorites(): TypeReturnHook {
 					await updateFavorite({
 						photoId: id,
 						favorite: false,
-						supabase,
 					});
 				}
 			})

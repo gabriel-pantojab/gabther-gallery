@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
-import { SupabaseContext } from '../context/supabaseContext';
 import {
 	insertAlbum,
-	uploadAlbumCover as upAlbumCover,
-} from '../utils/supabase';
+	uploadAlbumCover as uploadAlbumCoverStorage,
+} from '../services/album-services';
 
 interface TypeReturnHook {
 	createAlbum: (
@@ -16,7 +15,6 @@ interface TypeReturnHook {
 }
 
 export default function useAlbum(): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
 	const [creating, setCreating] = useState<boolean>(false);
 
 	const createAlbum = async (
@@ -30,7 +28,7 @@ export default function useAlbum(): TypeReturnHook {
 			let urlAlbumCover;
 			if (albumCover !== undefined && albumCover !== null)
 				urlAlbumCover = await uploadAlbumCover(albumCover, name);
-			await insertAlbum({ name, urlAlbumCover, supabase, parentId });
+			await insertAlbum({ name, urlAlbumCover, parentId });
 		} finally {
 			setCreating(false);
 		}
@@ -40,7 +38,7 @@ export default function useAlbum(): TypeReturnHook {
 		file: File,
 		name: string,
 	): Promise<string> => {
-		const { url } = await upAlbumCover(file, name, supabase);
+		const { url } = await uploadAlbumCoverStorage(file, name);
 		return url;
 	};
 

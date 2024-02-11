@@ -1,14 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { SupabaseContext } from '../context/supabaseContext';
-import { type PhotoDB } from '../models/photo.interface';
 import {
 	getPhoto,
-	updateFavorite,
 	deletePhoto as deletePhotoDB,
+	updateFavorite,
 	deletePhotoStorage,
-} from '../utils/supabase';
+} from '../services/photo-service';
+
+import { type PhotoDB } from '../models/photo.interface';
 
 interface TypeReturnHook {
 	photo: PhotoDB | null;
@@ -23,14 +23,12 @@ export default function usePhoto({
 }: {
 	photoId: number;
 }): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
-
 	const [photo, setPhoto] = useState<PhotoDB | null>(null);
 	const [favorite, setFavorite] = useState<boolean>(false);
 	const [deleting, setDeleting] = useState<boolean>(false);
 
 	useEffect(() => {
-		getPhoto(photoId, supabase)
+		getPhoto(photoId)
 			.then(data => {
 				setPhoto(data);
 				setFavorite(data?.favorite ?? false);
@@ -43,20 +41,18 @@ export default function usePhoto({
 	const toggleFavorite = (): void => {
 		const oldFavorite = favorite;
 		setFavorite(!oldFavorite);
-		updateFavorite({ photoId, favorite: !favorite, supabase }).catch(
-			(error: any) => {
-				setFavorite(oldFavorite);
-				toast.error('Error, ' + error.message);
-			},
-		);
+		updateFavorite({ photoId, favorite: !favorite }).catch((error: any) => {
+			setFavorite(oldFavorite);
+			toast.error('Error, ' + error.message);
+		});
 	};
 
 	const deletePhoto = async (): Promise<void> => {
 		const id = toast.loading('Deleting...');
 		try {
 			setDeleting(true);
-			await deletePhotoStorage(photo?.name ?? '', supabase);
-			await deletePhotoDB(photoId, supabase);
+			await deletePhotoStorage(photo?.name ?? '');
+			await deletePhotoDB(photoId);
 			toast.update(id, {
 				render: 'Photo deleted successfully!',
 				type: 'success',

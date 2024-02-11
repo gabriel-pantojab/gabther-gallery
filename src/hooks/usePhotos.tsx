@@ -1,20 +1,20 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { SupabaseContext } from '../context/supabaseContext';
+import supabase from '../services/supabase-service';
+import { getPhotos } from '../services/photo-service';
+
 import { type PhotoDB } from '../models/photo.interface';
-import { getPhotos } from '../utils/supabase';
 
 interface TypeReturnHook {
 	photos: PhotoDB[] | null;
 }
 
 export default function usePhotos(): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
 	const [photos, setPhotos] = useState<PhotoDB[] | null>(null);
 
 	useEffect(() => {
 		setPhotos(null);
-		getPhotos(supabase)
+		getPhotos()
 			.then(data => {
 				setPhotos(data);
 			})
@@ -41,7 +41,7 @@ export default function usePhotos(): TypeReturnHook {
 			.subscribe();
 
 		return () => {
-			channel.unsubscribe();
+			void channel.unsubscribe();
 		};
 	}, []);
 

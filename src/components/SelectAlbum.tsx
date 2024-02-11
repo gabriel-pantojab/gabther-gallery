@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { SupabaseContext } from '../context/supabaseContext';
-import { getAlbumsAll } from '../utils/supabase';
+import { getAlbumsAll } from '../services/album-services';
+
 import { type AlbumDB } from '../models/album.interface';
 
 interface SelectAlbumProps {
@@ -15,15 +15,13 @@ export default function SelectAlbum({
 	setOpen,
 	addSelectPhotosToAlbum,
 }: SelectAlbumProps): JSX.Element {
-	const { supabase } = useContext(SupabaseContext);
-
 	const [albums, setAlbums] = useState<AlbumDB[] | null>(null);
 	const [albumSelected, setAlbum] = useState<number | null>(null);
 
 	useEffect(() => {
 		const fetchAlbums = async (): Promise<void> => {
 			try {
-				const data = await getAlbumsAll(supabase);
+				const data = await getAlbumsAll();
 				setAlbums(data);
 			} catch (error) {
 				setAlbums([]);

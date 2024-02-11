@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import supabase from '../services/supabase-service';
+import { getPhotosByAlbum, getSubAlbumsById } from '../services/album-services';
 
 import { type PhotoDB } from '../models/photo.interface';
-import { getPhotosByAlbum, getSubAlbumsById } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
 import { type AlbumDB } from '../models/album.interface';
 
 interface TypeReturnHook {
@@ -10,12 +11,11 @@ interface TypeReturnHook {
 	subAlbums: AlbumDB[] | null;
 }
 
-export default function usePhotosAlbum({
+export default function useFilesAlbum({
 	idAlbum,
 }: {
 	idAlbum: number;
 }): TypeReturnHook {
-	const { supabase } = useContext(SupabaseContext);
 	const [photos, setPhotos] = useState<PhotoDB[] | null>([]);
 	const [subAlbums, setSubAlbums] = useState<AlbumDB[] | null>([]);
 
@@ -43,7 +43,7 @@ export default function usePhotosAlbum({
 			.subscribe();
 
 		return () => {
-			channel.unsubscribe();
+			void channel.unsubscribe();
 		};
 	}, [idAlbum]);
 
@@ -64,7 +64,7 @@ export default function usePhotosAlbum({
 			.subscribe();
 
 		return () => {
-			channel.unsubscribe();
+			void channel.unsubscribe();
 		};
 	}, [idAlbum]);
 
@@ -82,27 +82,27 @@ export default function usePhotosAlbum({
 			.subscribe();
 
 		return () => {
-			channel.unsubscribe();
+			void channel.unsubscribe();
 		};
 	}, [idAlbum]);
 
 	const getPhotos = async (): Promise<void> => {
 		try {
 			setPhotos(null);
-			const photos = await getPhotosByAlbum(idAlbum, supabase);
+			const photos = await getPhotosByAlbum(idAlbum);
 			setPhotos(photos);
 		} catch (error) {
-			console.log(error);
+			setPhotos([]);
 		}
 	};
 
 	const getSubAlbums = async (): Promise<void> => {
 		try {
 			setSubAlbums(null);
-			const subAlbums = await getSubAlbumsById(idAlbum, supabase);
+			const subAlbums = await getSubAlbumsById(idAlbum);
 			setSubAlbums(subAlbums);
 		} catch (error) {
-			console.log(error);
+			setSubAlbums([]);
 		}
 	};
 

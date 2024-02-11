@@ -2,17 +2,16 @@ import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { type LoveNote as LoveNoteType } from '../models/loveNote.interface';
-import { getLoveNote, readLoveNote } from '../utils/supabase';
-import { SupabaseContext } from '../context/supabaseContext';
+
 import BackIcon from '../components/icons/BackIcon';
 import { UserContext } from '../context/userContext';
 import Reaction from '../components/Reaction';
 import { ReactionType } from '../models/reaction.interface';
 import useReactions from '../hooks/useReactions';
+import { getLoveNote, readLoveNote } from '../services/love-note-service';
 
 export default function LoveNote(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
-	const { supabase } = useContext(SupabaseContext);
 	const { idLoveNote } = useParams();
 	const [loveNote, setLoveNote] = useState<LoveNoteType | null>(null);
 
@@ -22,7 +21,7 @@ export default function LoveNote(): JSX.Element {
 	});
 
 	useEffect(() => {
-		getLoveNote(Number(idLoveNote), supabase)
+		getLoveNote(Number(idLoveNote))
 			.then(data => {
 				setLoveNote(data);
 			})
@@ -34,7 +33,7 @@ export default function LoveNote(): JSX.Element {
 	useEffect(() => {
 		if (currentUser === null || loveNote === null) return;
 		if (loveNote?.author !== currentUser?.id && loveNote?.state === 'SENT') {
-			readLoveNote(Number(idLoveNote), supabase)
+			readLoveNote(Number(idLoveNote))
 				.then(() => {
 					console.log('read');
 				})
