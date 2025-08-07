@@ -12,6 +12,8 @@ import useAuthGuard from '../guards/auth.guard';
 import PhotoListPage from '../pages/PhotoListPage';
 import AlbumListPage from '../pages/AlbumListPage';
 import FavoriteListPage from '../pages/FavoriteListPage';
+import { SpecialNotes } from '../pages/special-notes';
+import { SPECIAL_NOTES } from '../shared/constants/special-notes';
 
 export const router = createBrowserRouter([
 	{
@@ -82,6 +84,18 @@ export const router = createBrowserRouter([
 					</ProtectedRoute>
 				),
 			},
+			{
+				path: '/special-notes',
+				element: (
+					<ProtectedRoute guard={useAuthGuard} redirect='/photos'>
+						<SpecialNotes />
+					</ProtectedRoute>
+				),
+			},
+			...SPECIAL_NOTES.map(specialNote => ({
+				path: specialNote.specialRoute,
+				element: specialNote.element,
+			})),
 		],
 		errorElement: <div>404</div>,
 	},

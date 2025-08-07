@@ -132,6 +132,14 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 												</span>
 											)}
 										</SideBarItem>
+
+										<SideBarItem
+											close={close}
+											path='/special-notes'
+											className='border-b-2 pb-3 pl-2'
+										>
+											<span>Special Notes</span>
+										</SideBarItem>
 									</ul>
 								</div>
 							</div>

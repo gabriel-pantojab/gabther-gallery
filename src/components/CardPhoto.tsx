@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { type PhotoDB } from '../models/photo.interface';
@@ -46,6 +46,30 @@ export default function CardPhoto({
 		}
 	};
 
+	const isPhoto = (url: string): boolean => {
+		return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+	};
+
+	const MediaElement = useMemo(() => {
+		return isPhoto(photo.url_image) ? (
+			<img
+				className='w-full bg-cover'
+				src={photo.url_image}
+				alt={photo.name}
+				width={100}
+				height={100}
+			/>
+		) : (
+			<video
+				className='w-full bg-cover'
+				src={photo.url_image}
+				width={100}
+				height={100}
+				controls
+			/>
+		);
+	}, [photo.url_image, photo.name]);
+
 	return (
 		<div
 			style={{
@@ -90,13 +114,7 @@ export default function CardPhoto({
 						isSelected && 'scale-75'
 					} h-full w-full overflow-hidden rounded-md bg-gray-200 transition duration-300 ease-in-out`}
 				>
-					<img
-						className='w-full bg-cover'
-						src={photo.url_image}
-						alt={photo.name}
-						width={100}
-						height={100}
-					/>
+					{MediaElement}
 				</div>
 			</CoverElement>
 		</div>
