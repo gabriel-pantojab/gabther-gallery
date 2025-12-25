@@ -12,6 +12,7 @@ import SelectedOptions from '../components/SelectedOptions';
 import TrashIcon from '../components/icons/TrashIcon';
 import PlusIcon from '../components/icons/PlusIcon';
 import SelectAlbum from '../components/SelectAlbum';
+import { PhotoListContainer } from '@/modules/photos/containers/photo-list-container';
 
 export default function PhotoListPage(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
@@ -33,10 +34,7 @@ export default function PhotoListPage(): JSX.Element {
 		const idToast = toast.loading('Adding...');
 		try {
 			const promises = idsSelected.map(async id => {
-				await insertPhotoToAlbum({
-					idPhoto: id,
-					idAlbum: idAlbumSelected,
-				});
+				await insertPhotoToAlbum({ idPhoto: id, idAlbum: idAlbumSelected });
 			});
 
 			await Promise.all(promises);
@@ -68,7 +66,7 @@ export default function PhotoListPage(): JSX.Element {
 		<section className='relative w-full'>
 			<PhotoListHeader />
 
-			<SelectedOptions idsSelected={idsSelected}>
+			{/* <SelectedOptions idsSelected={idsSelected}>
 				<button
 					onClick={() => {
 						setOpen(true);
@@ -81,18 +79,20 @@ export default function PhotoListPage(): JSX.Element {
 				<button className='flex cursor-pointer items-center gap-1 p-1 text-sm text-red-500 hover:bg-gray-200'>
 					<TrashIcon />
 				</button>
-			</SelectedOptions>
+			</SelectedOptions> */}
 
 			<UploadPhotoDD enableUpload={currentUser !== null}>
-				<PhotoList
+				{/* <PhotoList
 					photos={photos}
 					idsSelected={idsSelected}
 					addIdSelected={addIdSelected}
 					removeIdSelected={removeIdSelected}
-				/>
+				/> */}
+
+				<PhotoListContainer />
 			</UploadPhotoDD>
 
-			{open && (
+			{/* {open && (
 				<SelectAlbum
 					setAlbumSelected={setIdAlbumSelected}
 					setOpen={setOpen}
@@ -100,7 +100,7 @@ export default function PhotoListPage(): JSX.Element {
 						void addSelectPhotosToAlbum();
 					}}
 				/>
-			)}
+			)} */}
 		</section>
 	);
 }

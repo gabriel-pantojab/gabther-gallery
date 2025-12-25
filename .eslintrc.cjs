@@ -36,5 +36,7 @@ module.exports = {
 		],
 	},
 	plugins: ['react'],
-	rules: {},
+	rules: {
+		'@typescript-eslint/strict-boolean-expressions': 'off',
+	},
 };
