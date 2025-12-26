@@ -23,7 +23,7 @@ export default function SendList(): JSX.Element {
 					return (
 						<Link
 							key={loveNote.id}
-							to={`/love-notes/sends/${loveNote.id}`}
+							to={`/secure/love-notes/sends/${loveNote.id}`}
 							className='w-full'
 						>
 							<article

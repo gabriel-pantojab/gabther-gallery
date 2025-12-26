@@ -74,7 +74,7 @@ export default function ReceivedList(): JSX.Element {
 					return (
 						<Link
 							key={loveNote.id}
-							to={`/love-notes/received/${loveNote.id}`}
+							to={`/secure/love-notes/received/${loveNote.id}`}
 							className={`w-full ${
 								loveNote.state === StateLoveNote.SENT
 									? 'opacity-100'
