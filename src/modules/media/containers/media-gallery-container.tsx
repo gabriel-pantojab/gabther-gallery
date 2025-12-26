@@ -1,5 +1,5 @@
-import { UserContext } from '@/context/userContext';
 import { useContext } from 'react';
+import { UserContext } from '@/context/userContext';
 import { MediaGallery } from '../components/media-gallery/media-gallery';
 import useMedia from '../hooks/use-media';
 import { useAddMediaToAlbum } from '../hooks/use-add-media-to-album';
@@ -23,7 +23,7 @@ export function MediaGalleryContainer() {
 			isLogged={!!currentUser}
 			photos={photos}
 			albums={albums}
-			eventAddSelectedPhotosToAlbum={addSelectedPhotosToAlbum}
+			eventAddSelectedMediaToAlbum={addSelectedPhotosToAlbum}
 		/>
 	);
 }

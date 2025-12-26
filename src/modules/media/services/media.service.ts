@@ -1,10 +1,10 @@
 import { PostgrestError } from '@supabase/supabase-js';
 import supabase from '@/core/supabase/supabase-client';
 import SupabaseError from '@/core/supabase/supabase-error';
-import type { PhotoResponse } from '../../../core/types/dto/response/photo.response';
-import { CreateRequest } from '../../../core/types/dto/request/create-request';
-import { UpdateFavorite } from '../../../core/types/dto/request/update-favorite.request';
-import { AlbumResponse } from '../../../core/types/dto/response/album.response';
+import { CreateRequest } from '@/core/types/dto/request/create-request';
+import { UpdateFavorite } from '@/core/types/dto/request/update-favorite.request';
+import type { PhotoResponse } from '@/core/types/dto/response/photo.response';
+import { AlbumResponse } from '@/core/types/dto/response/album.response';
 
 export class MediaService {
 	static #instance: MediaService;

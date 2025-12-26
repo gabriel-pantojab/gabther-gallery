@@ -4,16 +4,16 @@ type Props = {
 	photoId: number;
 	isSelected: boolean;
 	isHover: boolean;
-	addIdSelected: (id: number) => void;
-	removeIdSelected: (id: number) => void;
+	addSelectedId: (id: number) => void;
+	removeSelectedId: (id: number) => void;
 };
 
 export function ToggleSelect({
 	photoId,
 	isSelected,
 	isHover,
-	addIdSelected,
-	removeIdSelected,
+	addSelectedId,
+	removeSelectedId,
 }: Props): JSX.Element {
 	return (
 		<div
@@ -24,10 +24,10 @@ export function ToggleSelect({
           `}
 			onClick={() => {
 				if (isSelected) {
-					removeIdSelected(photoId);
+					removeSelectedId(photoId);
 					return;
 				}
-				addIdSelected(photoId);
+				addSelectedId(photoId);
 			}}
 		>
 			<CheckIcon

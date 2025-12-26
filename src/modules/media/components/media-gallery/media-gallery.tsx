@@ -1,32 +1,32 @@
 import { useState } from 'react';
-import { Photo } from '../../../../core/types/domain/photo.model';
+import { Photo } from '@/core/types/domain/photo.model';
+import { Album } from '@/core/types/domain/album.model';
+import TrashIcon from '@/components/icons/TrashIcon';
+import PlusIcon from '@/components/icons/PlusIcon';
 import { MediaCard } from '../media-card/media-card';
 import { MediaSelectedOptions } from '../media-selected-options/media-selected-options';
-import PlusIcon from '@/components/icons/PlusIcon';
-import TrashIcon from '@/components/icons/TrashIcon';
 import { SelectAlbum } from '../select-album/select-album';
-import { Album } from '@/core/types/domain/album.model';
 
 type Props = {
 	photos: Photo[];
 	albums: Album[];
 	isLogged: boolean;
-	eventAddSelectedPhotosToAlbum: (ids: number[], albumId: number) => void;
+	eventAddSelectedMediaToAlbum: (ids: number[], albumId: number) => void;
 };
 
 export function MediaGallery({
 	photos = [],
 	albums = [],
 	isLogged = false,
-	eventAddSelectedPhotosToAlbum,
+	eventAddSelectedMediaToAlbum,
 }: Props): JSX.Element {
 	const [selectedIds, setSelectedIds] = useState<number[]>([]);
 	const [openSelectedAlbum, setOpenSelectedAlbum] = useState<boolean>(false);
 	const isEmpty: boolean = photos.length === 0;
 
-	const handleAddSelectedPhotosToAlbum = (albumId: number): void => {
+	const handleAddSelectedMediaToAlbum = (albumId: number): void => {
 		if (albumId >= 0 && selectedIds?.length) {
-			eventAddSelectedPhotosToAlbum(selectedIds, albumId);
+			eventAddSelectedMediaToAlbum(selectedIds, albumId);
 		}
 		setOpenSelectedAlbum(false);
 		setSelectedIds([]);
@@ -99,7 +99,7 @@ export function MediaGallery({
 			{openSelectedAlbum && (
 				<SelectAlbum
 					albums={albums}
-					eventSelectAlbum={handleAddSelectedPhotosToAlbum}
+					eventSelectAlbum={handleAddSelectedMediaToAlbum}
 				/>
 			)}
 		</article>

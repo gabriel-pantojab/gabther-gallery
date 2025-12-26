@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Photo } from '../../../../core/types/domain/photo.model';
+import { Photo } from '@/core/types/domain/photo.model';
+import { isPhoto, isVideo } from '@/utils/multimedia';
 import { PhotoCard } from '../photo-card/photo-card';
 import { CoverMediaElement } from './cover-media-element';
 import { ToggleSelect } from './toggle-select';
 import { VideoCard } from '../video-card/video-card';
-import { isPhoto, isVideo } from '@/utils/multimedia';
 
 type Props = {
 	photo: Photo;
@@ -18,8 +18,8 @@ export function MediaCard({
 	photo,
 	isSelected,
 	isLogged,
-	addSelectedId: addIdSelected,
-	removeSelectedId: removeIdSelected,
+	addSelectedId,
+	removeSelectedId,
 }: Props): JSX.Element {
 	const [isHover, setIsHover] = useState<boolean>(false);
 
@@ -53,8 +53,8 @@ export function MediaCard({
 				photoId={photo.id}
 				isSelected={isSelected}
 				isHover={isHover}
-				addIdSelected={addIdSelected}
-				removeIdSelected={removeIdSelected}
+				addSelectedId={addSelectedId}
+				removeSelectedId={removeSelectedId}
 			/>
 
 			<CoverMediaElement

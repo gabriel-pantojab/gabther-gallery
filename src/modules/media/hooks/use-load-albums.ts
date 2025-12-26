@@ -1,8 +1,8 @@
 import { Album } from '@/core/types/domain/album.model';
 import { useEffect, useState } from 'react';
+import { AlbumMapper } from '@/core/mappers/album.mapper';
+import { AlbumResponse } from '@/core/types/dto/response/album.response';
 import { MediaService } from '../services/media.service';
-import { AlbumResponse } from '../../../core/types/dto/response/album.response';
-import { AlbumMapper } from '../../../core/mappers/album.mapper';
 
 type Return = { albums: Album[] };
 
