@@ -20,30 +20,12 @@ export const router = createBrowserRouter([
 		path: '/',
 		element: <App />,
 		children: [
-			{
-				path: '/',
-				element: <Navigate to='/photos' replace />,
-			},
-			{
-				path: '/photos',
-				element: <PhotoListPage />,
-			},
-			{
-				path: '/albums',
-				element: <AlbumListPage />,
-			},
-			{
-				path: '/favorites',
-				element: <FavoriteListPage />,
-			},
-			{
-				path: '/photos/photo/:photoId',
-				element: <PhotoPage />,
-			},
-			{
-				path: '/albums/album/:album',
-				element: <AlbumPage />,
-			},
+			{ path: '/', element: <Navigate to='/photos' replace /> },
+			{ path: '/photos', element: <PhotoListPage /> },
+			{ path: '/albums', element: <AlbumListPage /> },
+			{ path: '/favorites', element: <FavoriteListPage /> },
+			{ path: '/photos/photo/:photoId', element: <PhotoPage /> },
+			{ path: '/albums/album/:album', element: <AlbumPage /> },
 			{
 				path: '/love-notes/sends',
 				element: (

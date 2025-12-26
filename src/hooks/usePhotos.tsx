@@ -1,22 +1,27 @@
 import { useEffect, useState } from 'react';
 
 import supabase from '../services/supabase-service';
-import { getPhotos } from '../services/photo-service';
+// import { getPhotos } from '../services/photo-service';
 
 import { type PhotoDB } from '../models/photo.interface';
+import { MediaService } from '@/modules/media/services/media.service';
+import type { Photo } from '@/core/types/domain/photo.model';
+import { PhotoAdapter } from '@/core/mappers/photo.mapper';
+import type { PhotoResponse } from '@/core/types/dto/response/photo.response';
 
 interface TypeReturnHook {
 	photos: PhotoDB[] | null;
 }
 
 export default function usePhotos(): TypeReturnHook {
-	const [photos, setPhotos] = useState<PhotoDB[] | null>(null);
+	const [photos, setPhotos] = useState<Photo[] | null>(null);
 
 	useEffect(() => {
 		setPhotos(null);
-		getPhotos()
-			.then(data => {
-				setPhotos(data);
+		MediaService.getInstance()
+			.findAll()
+			.then((data: PhotoResponse[]) => {
+				setPhotos(PhotoAdapter.many(data));
 			})
 			.catch(_ => {
 				setPhotos([]);
@@ -45,5 +50,15 @@ export default function usePhotos(): TypeReturnHook {
 		};
 	}, []);
 
-	return { photos };
+	return {
+		photos:
+			photos?.map(photo => ({
+				id: photo.id,
+				created_at: photo.createdAt,
+				name: photo.name,
+				url_image: photo.urlImage,
+				id_album: photo.idAlbum,
+				favorite: photo.favorite,
+			})) ?? null,
+	};
 }
