@@ -17,7 +17,8 @@ export function CoverMediaElement({
 	if (navigate) {
 		return (
 			<Link
-				to={`/photos/photo/${photoId}`}
+				// TODO: extract to constant
+				to={`/gallery/media/${photoId}`}
 				className={`${isSelected && 'bg-blue-100'} block h-full w-full`}
 			>
 				{children}

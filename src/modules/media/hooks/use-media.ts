@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Photo } from '@/core/types/domain/photo.model';
-import { PhotoAdapter } from '@/core/mappers/photo.mapper';
+import { PhotoMapper } from '@/core/mappers/photo.mapper';
 import type { PhotoResponse } from '@/core/types/dto/response/photo.response';
 import { MediaService } from '../services/media.service';
 
@@ -16,7 +16,7 @@ export default function useMedia(): Return {
 		MediaService.getInstance()
 			.findAll()
 			.then((data: PhotoResponse[]) => {
-				setPhotos(PhotoAdapter.many(data));
+				setPhotos(PhotoMapper.many(data));
 			})
 			.catch(_ => {
 				setPhotos([]);
