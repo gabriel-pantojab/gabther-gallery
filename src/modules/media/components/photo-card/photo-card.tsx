@@ -5,7 +5,8 @@ type Props = { photo: Photo };
 export function PhotoCard({ photo }: Props): JSX.Element {
 	return (
 		<img
-			className='w-full bg-cover'
+			// TODO: revisar estilos
+			className='aspect-auto h-full w-full'
 			src={photo.urlImage}
 			alt={photo.name}
 			width={100}

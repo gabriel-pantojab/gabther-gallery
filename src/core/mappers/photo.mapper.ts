@@ -16,4 +16,4 @@ function many(photos: PhotoResponse[]): Photo[] {
 	return photos.map((photo: PhotoResponse) => single(photo));
 }
 
-export const PhotoAdapter = { single, many };
+export const PhotoMapper = { single, many };
