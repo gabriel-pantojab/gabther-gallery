@@ -1,5 +1,5 @@
-import type { PhotoResponse } from '../api/response/photo.response';
-import type { Photo } from '../models/photo.model';
+import type { PhotoResponse } from '../types/dto/response/photo.response';
+import type { Photo } from '../types/domain/photo.model';
 
 function single(photo: PhotoResponse): Photo {
 	return {
@@ -16,7 +16,4 @@ function many(photos: PhotoResponse[]): Photo[] {
 	return photos.map((photo: PhotoResponse) => single(photo));
 }
 
-export const PhotoAdapter = {
-	single,
-	many,
-};
+export const PhotoAdapter = { single, many };

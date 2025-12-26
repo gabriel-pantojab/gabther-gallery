@@ -3,5 +3,5 @@ export function isPhoto(url: string): boolean {
 }
 
 export function isVideo(url: string): boolean {
-	return url.match(/\.(mp4|webm|ogg)$/) != null;
+	return url.match(/\.(mp4|webm|ogg|mov)$/) != null;
 }

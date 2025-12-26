@@ -1,4 +1,4 @@
-import { Photo } from '../../models/photo.model';
+import { Photo } from '../../../../core/types/domain/photo.model';
 
 type Props = { photo: Photo };
 

@@ -4,10 +4,10 @@ import supabase from '../services/supabase-service';
 // import { getPhotos } from '../services/photo-service';
 
 import { type PhotoDB } from '../models/photo.interface';
-import { PhotoService } from '@/modules/photos/services/photo.service';
-import type { Photo } from '@/modules/photos/models/photo.model';
-import { PhotoAdapter } from '@/modules/photos/adapters/photo.adapter';
-import type { PhotoResponse } from '@/modules/photos/api/response/photo.response';
+import { MediaService } from '@/modules/media/services/media.service';
+import type { Photo } from '@/core/types/domain/photo.model';
+import { PhotoAdapter } from '@/core/mappers/photo.mapper';
+import type { PhotoResponse } from '@/core/types/dto/response/photo.response';
 
 interface TypeReturnHook {
 	photos: PhotoDB[] | null;
@@ -18,7 +18,7 @@ export default function usePhotos(): TypeReturnHook {
 
 	useEffect(() => {
 		setPhotos(null);
-		PhotoService.getInstance()
+		MediaService.getInstance()
 			.findAll()
 			.then((data: PhotoResponse[]) => {
 				setPhotos(PhotoAdapter.many(data));

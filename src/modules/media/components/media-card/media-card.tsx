@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Photo } from '../../models/photo.model';
+import { Photo } from '../../../../core/types/domain/photo.model';
 import { PhotoCard } from '../photo-card/photo-card';
 import { CoverMediaElement } from './cover-media-element';
 import { ToggleSelect } from './toggle-select';

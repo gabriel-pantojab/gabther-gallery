@@ -1,22 +1,24 @@
+import { PostgrestError } from '@supabase/supabase-js';
 import supabase from '@/core/supabase/supabase-client';
 import SupabaseError from '@/core/supabase/supabase-error';
-import type { PhotoResponse } from '../api/response/photo.response';
-import { CreateRequest } from '../api/request/create-request';
-import { UpdateFavorite } from '../api/request/update-favorite.request';
+import type { PhotoResponse } from '../../../core/types/dto/response/photo.response';
+import { CreateRequest } from '../../../core/types/dto/request/create-request';
+import { UpdateFavorite } from '../../../core/types/dto/request/update-favorite.request';
+import { AlbumResponse } from '../../../core/types/dto/response/album.response';
 
-export class PhotoService {
-	static #instance: PhotoService;
+export class MediaService {
+	static #instance: MediaService;
 
 	private readonly _RESOURCE_NAME: string = 'photo';
 	private readonly _STORAGE_NAME: string = 'photos';
 
 	private constructor() {}
 
-	public static getInstance(): PhotoService {
-		if (PhotoService.#instance === undefined) {
-			PhotoService.#instance = new PhotoService();
+	public static getInstance(): MediaService {
+		if (MediaService.#instance === undefined) {
+			MediaService.#instance = new MediaService();
 		}
-		return PhotoService.#instance;
+		return MediaService.#instance;
 	}
 
 	public async find(id: number): Promise<PhotoResponse | null> {
@@ -77,6 +79,42 @@ export class PhotoService {
 		}
 
 		return data;
+	}
+
+	public async findAllAlbums(): Promise<AlbumResponse[]> {
+		const { data, error } = await supabase
+			.from('album')
+			.select('*')
+			.order('created_at', { ascending: false });
+
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+
+		return data;
+	}
+
+	public async insertPhotoToAlbum(
+		idPhoto: number,
+		idAlbum: number,
+	): Promise<void> {
+		const { error } = await supabase
+			.from('photo_album')
+			.insert({ id_photo: idPhoto, id_album: idAlbum });
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+	}
+
+	public async insertPhotosToAlbum(ids: number[], albumId: number) {
+		try {
+			const promises = ids.map(async id => {
+				await this.insertPhotoToAlbum(id, albumId);
+			});
+			await Promise.all(promises);
+		} catch (error) {
+			throw new SupabaseError(error as PostgrestError);
+		}
 	}
 
 	public async updateFavorite(

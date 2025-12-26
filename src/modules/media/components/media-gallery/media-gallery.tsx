@@ -1,18 +1,22 @@
 import { useState } from 'react';
-import { Photo } from '../../models/photo.model';
+import { Photo } from '../../../../core/types/domain/photo.model';
 import { MediaCard } from '../media-card/media-card';
 import { MediaSelectedOptions } from '../media-selected-options/media-selected-options';
 import PlusIcon from '@/components/icons/PlusIcon';
 import TrashIcon from '@/components/icons/TrashIcon';
+import { SelectAlbum } from '../select-album/select-album';
+import { Album } from '@/core/types/domain/album.model';
 
 type Props = {
 	photos: Photo[];
+	albums: Album[];
 	isLogged: boolean;
 	eventAddSelectedPhotosToAlbum: (ids: number[], albumId: number) => void;
 };
 
-export function PhotoList({
+export function MediaGallery({
 	photos = [],
+	albums = [],
 	isLogged = false,
 	eventAddSelectedPhotosToAlbum,
 }: Props): JSX.Element {
@@ -21,9 +25,11 @@ export function PhotoList({
 	const isEmpty: boolean = photos.length === 0;
 
 	const handleAddSelectedPhotosToAlbum = (albumId: number): void => {
-		if (selectedIds?.length) {
+		if (albumId >= 0 && selectedIds?.length) {
 			eventAddSelectedPhotosToAlbum(selectedIds, albumId);
 		}
+		setOpenSelectedAlbum(false);
+		setSelectedIds([]);
 	};
 
 	const addSelectedId = (id: number): void => {
@@ -54,19 +60,6 @@ export function PhotoList({
 
 	return (
 		<article className='relative w-full'>
-			{openSelectedAlbum && (
-				<div>
-					<p>DUMMY SELECT ALBUM</p>
-
-					<button
-						onClick={() => {
-							handleAddSelectedPhotosToAlbum(1);
-						}}
-					>
-						ADD
-					</button>
-				</div>
-			)}
 			<MediaSelectedOptions countSelectedIds={selectedIds.length}>
 				<button
 					onClick={() => {
@@ -102,6 +95,13 @@ export function PhotoList({
 					)}
 				</PhotoGrid>
 			</section>
+
+			{openSelectedAlbum && (
+				<SelectAlbum
+					albums={albums}
+					eventSelectAlbum={handleAddSelectedPhotosToAlbum}
+				/>
+			)}
 		</article>
 	);
 }
