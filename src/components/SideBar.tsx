@@ -15,9 +15,9 @@ import LoginForm from './LoginForm';
 
 const publicItems = [
 	{
-		name: 'Photos',
+		name: 'Gallery',
 		icon: <PhotoIcon />,
-		path: '/photos',
+		path: '/gallery',
 	},
 	{
 		name: 'Albums',
@@ -106,7 +106,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 									>
 										<SideBarItem
 											close={close}
-											path='/love-notes/sends'
+											path='/secure/love-notes/sends'
 											className='border-b-2 pb-3 pl-2'
 										>
 											<span>Enviadas</span>
@@ -114,7 +114,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 
 										<SideBarItem
 											close={close}
-											path='/love-notes/received'
+											path='/secure/love-notes/received'
 											className='border-b-2 px-2 pb-3'
 										>
 											<span
@@ -135,7 +135,7 @@ export default function SideBar({ open, close }: SideBarProps): JSX.Element {
 
 										<SideBarItem
 											close={close}
-											path='/special-notes'
+											path='/secure/special-notes'
 											className='border-b-2 pb-3 pl-2'
 										>
 											<span>Special Notes</span>

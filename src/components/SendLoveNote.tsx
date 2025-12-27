@@ -304,7 +304,7 @@ export default function SendLoveNote(): JSX.Element {
 
 				<button
 					onClick={() => {
-						navigate('/love-notes/sends');
+						navigate('/secure/love-notes/sends');
 					}}
 				>
 					<BackIcon />

@@ -9,7 +9,7 @@ export default function SendLoveNotes(): JSX.Element {
 				<h2 className='text-2xl font-bold'>Send Love Notes</h2>
 
 				<Link
-					to={`/love-notes/sends/send`}
+					to={`/secure/love-notes/sends/send`}
 					className='flex justify-center rounded-md bg-blue-500 px-2 py-1 text-sm text-white active:bg-blue-600'
 				>
 					New 💖
