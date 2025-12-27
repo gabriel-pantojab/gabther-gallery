@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '@/context/userContext';
-import { MediaViewer } from '../components/media-viewer';
+import { MediaViewer } from '../components/media-viewer/media-viewer';
 import { useMediaViewer } from '../hooks/use-media-viewer';
 
 export function MediaViewerContainer(): JSX.Element {

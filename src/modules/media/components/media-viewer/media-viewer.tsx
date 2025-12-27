@@ -4,8 +4,8 @@ import Swal from 'sweetalert2';
 import { Photo } from '@/core/types/domain/photo.model';
 import { ToastService } from '@/core/service/toast.service';
 import { formatDate } from '@/utils/date';
-import { MediaHeader } from './media-header/media-header';
-import { PhotoCard } from './photo-card/photo-card';
+import { MediaHeader } from '../media-header/media-header';
+import { PhotoCard } from '../photo-card/photo-card';
 
 type Props = {
 	isFavorite: boolean;
