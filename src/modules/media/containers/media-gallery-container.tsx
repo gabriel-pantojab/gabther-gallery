@@ -20,6 +20,7 @@ export function MediaGalleryContainer() {
 		await addPhotosToAlbum(ids, albumId);
 	};
 
+	// TODO: refactor, this container shoulb be only for MediaGallery
 	return (
 		<>
 			<GalleryHeader isLoggedIn={!!currentUser} />
