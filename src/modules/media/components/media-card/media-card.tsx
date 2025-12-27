@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { Photo } from '@/core/types/domain/photo.model';
+import { MediaWrapper } from '@/shared/components/media-wrapper/media-wrapper';
+import { Navigable } from '@/shared/components/navigable/navigable';
 import { isPhoto, isVideo } from '@/utils/multimedia';
 import { PhotoCard } from '../photo-card/photo-card';
-import { CoverMediaElement } from './cover-media-element';
-import { ToggleSelect } from './toggle-select';
 import { VideoCard } from '../video-card/video-card';
 
 type Props = {
@@ -21,8 +20,7 @@ export function MediaCard({
 	addSelectedId,
 	removeSelectedId,
 }: Props): JSX.Element {
-	const [isHover, setIsHover] = useState<boolean>(false);
-
+	const to: string = `/gallery/media/${photo.id}`;
 	let MediaElement: JSX.Element | null = null;
 
 	if (isPhoto(photo.urlImage)) {
@@ -33,6 +31,14 @@ export function MediaCard({
 		MediaElement = <VideoCard photo={photo} />;
 	}
 
+	const handleToggleSelect = () => {
+		if (isSelected) {
+			removeSelectedId(photo.id);
+			return;
+		}
+		addSelectedId(photo.id);
+	};
+
 	return (
 		<div
 			style={{
@@ -40,30 +46,16 @@ export function MediaCard({
 				animationRange: 'entry 20% cover 30%',
 			}}
 			className='relative animate-reveal transition duration-300 ease-in-out'
-			onMouseEnter={() => {
-				if (!isLogged) return;
-				setIsHover(true);
-			}}
-			onMouseLeave={() => {
-				if (!isLogged) return;
-				setIsHover(false);
-			}}
 		>
-			<ToggleSelect
-				photoId={photo.id}
+			<MediaWrapper
+				isLoggedIn={isLogged}
 				isSelected={isSelected}
-				isHover={isHover}
-				addSelectedId={addSelectedId}
-				removeSelectedId={removeSelectedId}
-			/>
-
-			<CoverMediaElement
-				isSelected={isSelected}
-				navigate={true}
-				photoId={photo.id}
+				eventToggleSelect={handleToggleSelect}
 			>
-				{MediaElement}
-			</CoverMediaElement>
+				<Navigable enabled={!isSelected} to={to}>
+					{MediaElement}
+				</Navigable>
+			</MediaWrapper>
 		</div>
 	);
 }

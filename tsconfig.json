@@ -24,7 +24,8 @@
 		"paths": {
 			"@/*": ["src/*"],
 			"@components/*": ["src/components/*"],
-			"@assets/*": ["src/assets/*"]
+			"@assets/*": ["src/assets/*"],
+			"@shared/*": ["src/shared/*"]
 		}
 	},
 	"include": ["src", "./.eslintrc.cjs", "./tailwind.config.js"],

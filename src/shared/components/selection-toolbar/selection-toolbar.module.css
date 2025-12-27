@@ -1,0 +1,27 @@
+.selectionToolbar {
+	position: sticky;
+	top: 0;
+	z-index: 30;
+	width: 100%;
+}
+
+.selectionToolbarContent {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	border-top: 2px solid #d1d5db;
+	border-bottom: 2px solid #d1d5db;
+	background-color: white;
+	padding: 8px 16px;
+}
+
+.count {
+	display: flex;
+	align-items: center;
+}
+
+.tools {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
