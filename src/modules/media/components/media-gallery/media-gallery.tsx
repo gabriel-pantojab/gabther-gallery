@@ -3,8 +3,8 @@ import { Photo } from '@/core/types/domain/photo.model';
 import { Album } from '@/core/types/domain/album.model';
 import TrashIcon from '@/components/icons/TrashIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
+import { SelectionToolbar } from '@/shared/components/selection-toolbar/selection-toolbar';
 import { MediaCard } from '../media-card/media-card';
-import { MediaSelectedOptions } from '../media-selected-options/media-selected-options';
 import { SelectAlbum } from '../select-album/select-album';
 
 type Props = {
@@ -60,7 +60,7 @@ export function MediaGallery({
 
 	return (
 		<article className='relative w-full'>
-			<MediaSelectedOptions countSelectedIds={selectedIds.length}>
+			<SelectionToolbar count={selectedIds.length}>
 				<button
 					onClick={() => {
 						setOpenSelectedAlbum(true);
@@ -73,7 +73,7 @@ export function MediaGallery({
 				<button className='flex cursor-pointer items-center gap-1 p-1 text-sm text-red-500 hover:bg-gray-200'>
 					<TrashIcon />
 				</button>
-			</MediaSelectedOptions>
+			</SelectionToolbar>
 
 			<section className='relative flex w-full flex-col gap-2'>
 				<PhotoGrid>
