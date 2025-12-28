@@ -16,7 +16,12 @@ export const albumRoutes: RouteObject = {
 			element: <AlbumListPage />,
 		},
 		{
-			path: 'album/:idAlbum',
+			path: 'album/:albumId',
+			loader: ({ params }) => {
+				const { albumId } = params;
+
+				return { albumId };
+			},
 			element: <AlbumViewerPage />,
 		},
 	],

@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
 			},
 			{ path: '/albums', children: [albumRoutes] },
 			{ path: '/favorites', element: <FavoriteListPage /> },
-			// { path: '/albums/album/:album', element: <AlbumPage /> },
+			{ path: '/album/:album', element: <AlbumPage /> },
 			{
 				path: 'secure',
 				element: (
