@@ -4,8 +4,8 @@ import { Album } from '@/core/types/domain/album.model';
 import TrashIcon from '@/components/icons/TrashIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
 import { SelectionToolbar } from '@/shared/components/selection-toolbar/selection-toolbar';
-import { MediaCard } from '../media-card/media-card';
 import { SelectAlbum } from '../select-album/select-album';
+import { MediaList } from '../media-list/media-list';
 
 type Props = {
 	photos: Photo[];
@@ -20,47 +20,36 @@ export function MediaGallery({
 	isLogged = false,
 	eventAddSelectedMediaToAlbum,
 }: Props): JSX.Element {
-	const [selectedIds, setSelectedIds] = useState<number[]>([]);
+	const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 	const [openSelectedAlbum, setOpenSelectedAlbum] = useState<boolean>(false);
-	const isEmpty: boolean = photos.length === 0;
 
 	const handleAddSelectedMediaToAlbum = (albumId: number): void => {
-		if (albumId >= 0 && selectedIds?.length) {
-			eventAddSelectedMediaToAlbum(selectedIds, albumId);
+		if (albumId >= 0 && selectedIds.size) {
+			eventAddSelectedMediaToAlbum([...selectedIds], albumId);
 		}
 		setOpenSelectedAlbum(false);
-		setSelectedIds([]);
+		setSelectedIds(new Set());
 	};
 
-	const addSelectedId = (id: number): void => {
-		setSelectedIds(prevIds => (prevIds ? [...prevIds, id] : [id]));
+	const handleAddId = (id: number): void => {
+		setSelectedIds(prev => {
+			const temp = structuredClone(prev);
+			temp.add(id);
+			return temp;
+		});
 	};
 
-	const removeSelectedId = (id: number): void => {
-		setSelectedIds(prevIds =>
-			prevIds ? prevIds.filter(prevId => prevId !== id) : [],
-		);
-	};
-
-	const Empty = () => {
-		return (
-			<div className='col-span-full flex items-center justify-center py-12'>
-				<p className='text-gray-500'>No Photos 🤧</p>
-			</div>
-		);
-	};
-
-	const PhotoGrid = ({ children }: { children: React.ReactNode }) => {
-		return (
-			<div className='relative grid w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4'>
-				{children}
-			</div>
-		);
+	const handleRemoveId = (id: number): void => {
+		setSelectedIds(prev => {
+			const temp = structuredClone(prev);
+			temp.delete(id);
+			return temp;
+		});
 	};
 
 	return (
 		<article className='relative w-full'>
-			<SelectionToolbar count={selectedIds.length}>
+			<SelectionToolbar count={selectedIds.size}>
 				<button
 					onClick={() => {
 						setOpenSelectedAlbum(true);
@@ -75,26 +64,13 @@ export function MediaGallery({
 				</button>
 			</SelectionToolbar>
 
-			<section className='relative flex w-full flex-col gap-2'>
-				<PhotoGrid>
-					{isEmpty ? (
-						<Empty />
-					) : (
-						photos.map(photo => {
-							return (
-								<MediaCard
-									key={photo.id}
-									photo={photo}
-									isLogged={isLogged}
-									isSelected={selectedIds.includes(photo.id)}
-									addSelectedId={addSelectedId}
-									removeSelectedId={removeSelectedId}
-								/>
-							);
-						})
-					)}
-				</PhotoGrid>
-			</section>
+			<MediaList
+				isLoggedIn={isLogged}
+				media={photos}
+				selectedIds={selectedIds}
+				eventAddId={handleAddId}
+				eventRemoveId={handleRemoveId}
+			/>
 
 			{openSelectedAlbum && (
 				<SelectAlbum

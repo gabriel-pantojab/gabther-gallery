@@ -2,15 +2,15 @@ import { useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Album } from '@/core/types/domain/album.model';
-import { AlbumCardWrapper } from '../album-card-wrapper/album-card-wrapper';
 import { SelectionToolbar } from '@/shared/components/selection-toolbar/selection-toolbar';
+import { AlbumList } from '../../album-list/album-list';
 
 type Props = {
 	isLoggedIn: boolean;
 	albums: Album[] | null;
 };
 
-export function AlbumList({ isLoggedIn, albums }: Props): JSX.Element {
+export function AlbumGallery({ isLoggedIn, albums }: Props): JSX.Element {
 	const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 	const gridClass: string =
 		'grid w-full grid-flow-dense auto-rows-[250px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4';
@@ -33,7 +33,7 @@ export function AlbumList({ isLoggedIn, albums }: Props): JSX.Element {
 		);
 	}
 
-	const addSelectedId = (id: number): void => {
+	const handleAddId = (id: number): void => {
 		setSelectedIds(prev => {
 			const temp = structuredClone(prev);
 			temp.add(id);
@@ -41,7 +41,7 @@ export function AlbumList({ isLoggedIn, albums }: Props): JSX.Element {
 		});
 	};
 
-	const removeSelectedId = (id: number): void => {
+	const handleRemoveId = (id: number): void => {
 		setSelectedIds(prev => {
 			const temp = structuredClone(prev);
 			temp.delete(id);
@@ -55,18 +55,13 @@ export function AlbumList({ isLoggedIn, albums }: Props): JSX.Element {
 				<>{/* DUMMY */}</>
 			</SelectionToolbar>
 
-			<section className={gridClass}>
-				{albums.map(album => (
-					<AlbumCardWrapper
-						key={album.id}
-						isLoggedIn={isLoggedIn}
-						album={album}
-						isSelected={selectedIds.has(album.id)}
-						addSelectedId={addSelectedId}
-						removeSelectedId={removeSelectedId}
-					/>
-				))}
-			</section>
+			<AlbumList
+				isLoggedIn={isLoggedIn}
+				albums={albums}
+				selectedIds={selectedIds}
+				eventAddId={handleAddId}
+				eventRemoveId={handleRemoveId}
+			/>
 		</>
 	);
 }
