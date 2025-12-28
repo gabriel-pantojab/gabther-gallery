@@ -2,8 +2,7 @@ import { useContext, useState } from 'react';
 import { UserContext } from '@/context/userContext';
 import { AlbumListHeader } from '../components/album-list-header/album-list-header';
 import { AlbumListContainer } from './album-list-container';
-
-import CreateAlbumModal from '@/components/CreateAlbumModal';
+import { CreateAlbumModal } from '../components/create-album-modal/create-album-modal';
 
 export function AlbumsContainer(): JSX.Element {
 	const { currentUser } = useContext(UserContext);
@@ -18,15 +17,7 @@ export function AlbumsContainer(): JSX.Element {
 
 			<AlbumListContainer />
 
-			{openModal && (
-				// TODO: add this component in albums modulo
-				<CreateAlbumModal
-					// TODO: se puede remover esta prop
-					openModal={openModal}
-					// TODO: change to closeModal
-					setOpenModal={setOpenModal}
-				/>
-			)}
+			{openModal && <CreateAlbumModal close={() => setOpenModal(false)} />}
 		</section>
 	);
 }

@@ -49,6 +49,8 @@ export function MediaViewer({
 			});
 	};
 
+	// TODO: add suport for video
+
 	return (
 		<section className='flex w-full flex-col items-center gap-4 p-4'>
 			<MediaHeader

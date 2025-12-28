@@ -1,5 +1,6 @@
 import supabase from '@/core/supabase/supabase-client';
 import SupabaseError from '@/core/supabase/supabase-error';
+import { CreateAlbumRequest } from '@/core/types/dto/request/create-album.request';
 import { AlbumResponse } from '@/core/types/dto/response/album.response';
 
 export class AlbumService {
@@ -40,5 +41,36 @@ export class AlbumService {
 			roots: true,
 		});
 		return this.findAll(filters);
+	}
+
+	public async create(request: CreateAlbumRequest): Promise<void> {
+		const { error } = await supabase.from('album').insert({
+			name: request.name,
+			url_album_cover: request.urlAlbumCover,
+			parent_id: request.parentId,
+		});
+
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+	}
+
+	public async uploadAlbumCover(file: File, name: string): Promise<any> {
+		const { data: data1, error } = await supabase.storage
+			.from('albums')
+			.upload(`${name}/${file.name}`, file, {
+				cacheControl: '3600',
+				upsert: false,
+			});
+
+		if (error !== null) {
+			throw error;
+		}
+
+		const { data: data2 } = supabase.storage
+			.from('albums')
+			.getPublicUrl(data1.path);
+
+		return { url: data2.publicUrl };
 	}
 }
