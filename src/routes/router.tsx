@@ -4,12 +4,12 @@ import App from '../App';
 import AlbumPage from '../pages/AlbumPage';
 import ProtectedRoute from '../components/ProtectedRoute';
 import useAuthGuard from '../guards/auth.guard';
-import AlbumListPage from '../pages/AlbumListPage';
 import FavoriteListPage from '../pages/FavoriteListPage';
 import { SpecialNotes } from '../pages/special-notes';
 import { SPECIAL_NOTES } from '../shared/constants/special-notes';
 import { mediaRoutes } from '@/modules/media/routes';
 import { lazy, Suspense } from 'react';
+import { albumRoutes } from '@/modules/albums/routes';
 
 const SendLoveNotes = lazy(() => import('../pages/SendLoveNotes'));
 const SendLoveNote = lazy(() => import('../components/SendLoveNote'));
@@ -26,9 +26,9 @@ export const router = createBrowserRouter([
 				path: '/gallery',
 				children: [mediaRoutes],
 			},
-			{ path: '/albums', element: <AlbumListPage /> },
+			{ path: '/albums', children: [albumRoutes] },
 			{ path: '/favorites', element: <FavoriteListPage /> },
-			{ path: '/albums/album/:album', element: <AlbumPage /> },
+			// { path: '/albums/album/:album', element: <AlbumPage /> },
 			{
 				path: 'secure',
 				element: (

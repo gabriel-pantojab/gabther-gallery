@@ -4,6 +4,11 @@
 	height: 100%;
 }
 
+.content {
+	height: 100%;
+	width: 100%;
+}
+
 .mediaWrapperSelected {
 	background-color: rgb(219 234 254);
 }

@@ -50,7 +50,9 @@ export function MediaWrapper({
 				</button>
 			</div>
 
-			<div className={`${isSelected && style.scale75}`}>{children}</div>
+			<div className={`${style.content} ${isSelected && style.scale75}`}>
+				{children}
+			</div>
 		</div>
 	);
 }

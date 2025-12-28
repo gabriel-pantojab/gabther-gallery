@@ -31,12 +31,12 @@ export function MediaCard({
 		MediaElement = <VideoCard photo={photo} />;
 	}
 
-	const handleToggleSelect = () => {
-		if (isSelected) {
-			removeSelectedId(photo.id);
+	const handleToggleSelect = (selectState: boolean) => {
+		if (selectState) {
+			addSelectedId(photo.id);
 			return;
 		}
-		addSelectedId(photo.id);
+		removeSelectedId(photo.id);
 	};
 
 	return (
