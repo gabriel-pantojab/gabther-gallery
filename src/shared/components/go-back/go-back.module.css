@@ -1,0 +1,10 @@
+.goBack {
+	cursor: pointer;
+	transition-property: all;
+	transition-duration: 300ms;
+	transition-timing-function: ease-in-out;
+}
+
+.goBack:active {
+	transform: scale(0.95);
+}
