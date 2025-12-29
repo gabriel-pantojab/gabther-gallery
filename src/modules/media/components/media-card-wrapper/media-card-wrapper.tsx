@@ -1,9 +1,7 @@
 import { Photo } from '@/core/types/domain/photo.model';
 import { MediaWrapper } from '@/shared/components/media-wrapper/media-wrapper';
 import { Navigable } from '@/shared/components/navigable/navigable';
-import { isPhoto, isVideo } from '@/utils/multimedia';
-import { PhotoCard } from '../photo-card/photo-card';
-import { VideoCard } from '../video-card/video-card';
+import { MediaCard } from '@/shared/components/media-card/media-card';
 
 type Props = {
 	photo: Photo;
@@ -13,7 +11,7 @@ type Props = {
 	removeSelectedId: (id: number) => void;
 };
 
-export function MediaCard({
+export function MediaCardWrapper({
 	photo,
 	isSelected,
 	isLogged,
@@ -21,15 +19,6 @@ export function MediaCard({
 	removeSelectedId,
 }: Props): JSX.Element {
 	const to: string = `/gallery/media/${photo.id}`;
-	let MediaElement: JSX.Element | null = null;
-
-	if (isPhoto(photo.urlImage)) {
-		MediaElement = <PhotoCard photo={photo} />;
-	}
-
-	if (isVideo(photo.urlImage)) {
-		MediaElement = <VideoCard photo={photo} />;
-	}
 
 	const handleToggleSelect = (selectState: boolean) => {
 		if (selectState) {
@@ -53,7 +42,7 @@ export function MediaCard({
 				eventToggleSelect={handleToggleSelect}
 			>
 				<Navigable enabled={!isSelected} to={to}>
-					{MediaElement}
+					<MediaCard media={photo} />
 				</Navigable>
 			</MediaWrapper>
 		</div>

@@ -42,6 +42,27 @@ export class AlbumService {
 		}
 	}
 
+	public async addMedia(albumId: number, mediaId: number): Promise<void> {
+		const { error } = await supabase
+			.from('photo_album')
+			.insert({ id_photo: mediaId, id_album: albumId });
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+	}
+
+	public async addMediaBulk(
+		albumId: number,
+		mediaIds: number[],
+	): Promise<void> {
+		const data = mediaIds.map(id => ({ id_photo: id, id_album: albumId }));
+		const { error } = await supabase.from('photo_album').insert(data);
+
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+	}
+
 	public async findAll(filters?: string): Promise<AlbumResponse[]> {
 		const query = supabase.from('album').select('*');
 
@@ -70,6 +91,18 @@ export class AlbumService {
 		return this.findAll(filters);
 	}
 
+	public async findExternalMedia(albumId: number) {
+		const { data, error } = await supabase.rpc('get_photos_not_in_album', {
+			album_id: albumId,
+		});
+
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+
+		return data;
+	}
+
 	public async findMedia(id: number): Promise<PhotoResponse[]> {
 		const { data, error } = await supabase
 			.from('photo_album')
@@ -90,6 +123,20 @@ export class AlbumService {
 			.select('*')
 			.eq('parent_id', parentId)
 			.order('created_at', { ascending: false });
+
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+
+		return data;
+	}
+
+	public async findMediaById(mediaId: number): Promise<PhotoResponse> {
+		const { data, error } = await supabase
+			.from('photo')
+			.select('*')
+			.eq('id', mediaId)
+			.single();
 
 		if (error !== null) {
 			throw new SupabaseError(error);

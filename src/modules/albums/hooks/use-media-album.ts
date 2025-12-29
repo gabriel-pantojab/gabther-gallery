@@ -7,12 +7,23 @@ import { PhotoMapper } from '@/core/mappers/photo.mapper';
 import { AlbumResponse } from '@/core/types/dto/response/album.response';
 import { AlbumMapper } from '@/core/mappers/album.mapper';
 import { AlbumService } from '../services/album.service';
+import { useAddMediaToAlbumEvent } from './use-add-media-to-album-event';
+import { useCreateAlbumEvent } from './use-create-album-event';
 
 type Return = { media: Photo[] | null; subAlbums: Album[] | null };
 
 export function useMediaAlbum(albumId: number): Return {
 	const [media, setMedia] = useState<Photo[] | null>(null);
 	const [subAlbums, setSubAlbums] = useState<Album[] | null>(null);
+	useAddMediaToAlbumEvent((newMedia: Photo | null) => {
+		setMedia(prev => {
+			if (newMedia === null) return [...(prev ?? [])];
+			return [newMedia, ...(prev ?? [])];
+		});
+	});
+	useCreateAlbumEvent((album: AlbumResponse) => {
+		setSubAlbums(prev => [AlbumMapper.single(album), ...(prev ?? [])]);
+	});
 
 	useEffect(() => {
 		getMedia();

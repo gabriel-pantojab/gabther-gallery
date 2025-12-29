@@ -1,20 +1,15 @@
 import { useEffect } from 'react';
-import supabase from '@/core/supabase/supabase-client';
 import { AlbumResponse } from '@/core/types/dto/response/album.response';
+import { AlbumEventsService } from '../services/album-events.service';
 
 export function useCreateAlbumEvent(
 	handle: (album: AlbumResponse) => void,
 ): void {
 	useEffect(() => {
-		const channel = supabase
-			.channel('album-insert')
-			.on(
-				'postgres_changes',
-				{ event: 'INSERT', schema: 'public', table: 'album' },
-				(payload: any) => {
-					handle(payload.new);
-				},
-			)
+		const channel = AlbumEventsService.getInstance()
+			.on('INSERT', 'album', 'INSERT_ALBUM', (payload: any) => {
+				handle(payload.new);
+			})
 			.subscribe();
 
 		return () => {

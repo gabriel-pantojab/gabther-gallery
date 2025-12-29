@@ -3,7 +3,7 @@ import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Album } from '@/core/types/domain/album.model';
 import { SelectionToolbar } from '@/shared/components/selection-toolbar/selection-toolbar';
-import { AlbumList } from '../../album-list/album-list';
+import { AlbumList } from '../album-list/album-list';
 
 type Props = {
 	isLoggedIn: boolean;

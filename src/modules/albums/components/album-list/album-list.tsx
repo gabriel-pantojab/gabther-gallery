@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton';
 import { Album } from '@/core/types/domain/album.model';
-import { AlbumCardWrapper } from '../components/album-card-wrapper/album-card-wrapper';
+import { AlbumCardWrapper } from '../album-card-wrapper/album-card-wrapper';
 
 type Props = {
 	isLoggedIn: boolean;

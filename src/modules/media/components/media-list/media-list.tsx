@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton';
 import { Photo } from '@/core/types/domain/photo.model';
-import { MediaCard } from '../media-card/media-card';
+import { MediaCardWrapper } from '../media-card-wrapper/media-card-wrapper';
 
 type Props = {
 	isLoggedIn: boolean;
@@ -46,7 +46,7 @@ export function MediaList({
 			<div className={gridClass}>
 				{media.map(photo => {
 					return (
-						<MediaCard
+						<MediaCardWrapper
 							key={photo.id}
 							photo={photo}
 							isLogged={isLoggedIn}
