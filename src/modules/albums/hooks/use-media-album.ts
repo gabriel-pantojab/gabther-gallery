@@ -21,8 +21,8 @@ export function useMediaAlbum(albumId: number): Return {
 			return [newMedia, ...(prev ?? [])];
 		});
 	});
-	useCreateAlbumEvent((album: AlbumResponse) => {
-		setSubAlbums(prev => [AlbumMapper.single(album), ...(prev ?? [])]);
+	useCreateAlbumEvent((album: Album) => {
+		setSubAlbums(prev => [album, ...(prev ?? [])]);
 	});
 
 	useEffect(() => {

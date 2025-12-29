@@ -11,8 +11,8 @@ type Return = {
 
 export function useAlbums(): Return {
 	const [albums, setAlbums] = useState<Album[] | null>(null);
-	useCreateAlbumEvent((album: AlbumResponse) => {
-		setAlbums(prev => [AlbumMapper.single(album), ...(prev ?? [])]);
+	useCreateAlbumEvent((album: Album) => {
+		setAlbums(prev => [album, ...(prev ?? [])]);
 	});
 
 	const getAlbums = useCallback(async () => {
