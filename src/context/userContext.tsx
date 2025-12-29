@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from 'react';
 
-import supabase from '../services/supabase-service';
+// import supabase from '../services/supabase-service';
 
 import { type User } from '../models/user.interface';
+import supabase from '@/core/supabase/supabase-client';
 
 interface UserContextProps {
 	currentUser: User | null;
