@@ -3,9 +3,9 @@ import Skeleton from 'react-loading-skeleton';
 import Swal from 'sweetalert2';
 import { Photo } from '@/core/types/domain/photo.model';
 import { ToastService } from '@/core/service/toast.service';
+import { MediaCard } from '@/shared/components/media-card/media-card';
 import { formatDate } from '@/utils/date';
 import { MediaHeader } from '../media-header/media-header';
-import { PhotoCard } from '../photo-card/photo-card';
 
 type Props = {
 	isFavorite: boolean;
@@ -64,7 +64,7 @@ export function MediaViewer({
 				{media === null ? (
 					<Skeleton height={500} width={500} />
 				) : (
-					<PhotoCard photo={media} />
+					<MediaCard media={media} />
 				)}
 			</figure>
 

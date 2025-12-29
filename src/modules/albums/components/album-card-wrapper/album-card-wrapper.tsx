@@ -32,10 +32,7 @@ export function AlbumCardWrapper({
 			isSelected={isSelected}
 			eventToggleSelect={handleToggleSelect}
 		>
-			<Navigable
-				enabled={!isSelected}
-				to={`/albums/album/${album.name}-${album.id}`}
-			>
+			<Navigable enabled={!isSelected} to={`/albums/album/${album.id}`}>
 				<AlbumCard album={album} />
 			</Navigable>
 		</MediaWrapper>
