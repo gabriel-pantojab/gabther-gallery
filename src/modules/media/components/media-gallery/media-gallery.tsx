@@ -33,7 +33,7 @@ export function MediaGallery({
 
 	const handleAddId = (id: number): void => {
 		setSelectedIds(prev => {
-			const temp = structuredClone(prev);
+			const temp = new Set(prev);
 			temp.add(id);
 			return temp;
 		});
@@ -41,7 +41,7 @@ export function MediaGallery({
 
 	const handleRemoveId = (id: number): void => {
 		setSelectedIds(prev => {
-			const temp = structuredClone(prev);
+			const temp = new Set(prev);
 			temp.delete(id);
 			return temp;
 		});
