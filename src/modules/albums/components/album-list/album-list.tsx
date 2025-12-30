@@ -6,16 +6,14 @@ type Props = {
 	isLoggedIn: boolean;
 	albums: Album[] | null;
 	selectedIds: Set<number>;
-	eventAddId: (id: number) => void;
-	eventRemoveId: (id: number) => void;
+	eventSelectAlbum: (album: Album) => void;
 };
 
 export function AlbumList({
 	isLoggedIn,
 	albums,
 	selectedIds,
-	eventAddId,
-	eventRemoveId,
+	eventSelectAlbum,
 }: Props): JSX.Element {
 	const gridClass: string =
 		'grid w-full grid-flow-dense auto-rows-[250px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4';
@@ -38,6 +36,10 @@ export function AlbumList({
 		);
 	}
 
+	const handleSelectAlbum = (album: Album) => {
+		eventSelectAlbum(album);
+	};
+
 	return (
 		<section className={gridClass}>
 			{albums.map(album => (
@@ -46,8 +48,7 @@ export function AlbumList({
 					isLoggedIn={isLoggedIn}
 					album={album}
 					isSelected={selectedIds.has(album.id)}
-					addSelectedId={eventAddId}
-					removeSelectedId={eventRemoveId}
+					eventSelectAlbum={handleSelectAlbum}
 				/>
 			))}
 		</section>

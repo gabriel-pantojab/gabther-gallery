@@ -80,7 +80,7 @@ export function MediaSelector({
 						key={photo.id}
 						isLoggedIn={true}
 						isSelected={selectedIds.has(photo.id)}
-						eventToggleSelect={isSelected =>
+						eventSelectMedia={isSelected =>
 							handleToggleSelect(photo.id, isSelected)
 						}
 					>

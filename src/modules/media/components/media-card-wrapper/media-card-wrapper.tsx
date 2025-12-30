@@ -7,26 +7,16 @@ type Props = {
 	photo: Photo;
 	isSelected: boolean;
 	isLogged: boolean;
-	addSelectedId: (id: number) => void;
-	removeSelectedId: (id: number) => void;
+	eventSelectMedia: (media: Photo) => void;
 };
 
 export function MediaCardWrapper({
 	photo,
 	isSelected,
 	isLogged,
-	addSelectedId,
-	removeSelectedId,
+	eventSelectMedia,
 }: Props): JSX.Element {
 	const to: string = `/gallery/media/${photo.id}`;
-
-	const handleToggleSelect = (selectState: boolean) => {
-		if (selectState) {
-			addSelectedId(photo.id);
-			return;
-		}
-		removeSelectedId(photo.id);
-	};
 
 	return (
 		<div
@@ -39,7 +29,7 @@ export function MediaCardWrapper({
 			<MediaWrapper
 				isLoggedIn={isLogged}
 				isSelected={isSelected}
-				eventToggleSelect={handleToggleSelect}
+				eventSelectMedia={() => eventSelectMedia(photo)}
 			>
 				<Navigable enabled={!isSelected} to={to}>
 					<MediaCard media={photo} />

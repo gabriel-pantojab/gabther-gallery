@@ -53,7 +53,7 @@ export class DatabaseEventsService<T extends Record<string, any>> {
 			'postgres_changes',
 			{ event: 'DELETE', schema: this.schema, table: this.table },
 			(payload: RealtimePostgresChangesPayload<T>) => {
-				callback(payload.new as T);
+				callback(payload.old as T);
 			},
 		);
 	}

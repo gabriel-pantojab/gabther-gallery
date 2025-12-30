@@ -64,6 +64,21 @@ export class MediaService {
 		}
 	}
 
+	public async bulkDeleteMedia(data: { id: number; name: string }[]) {
+		try {
+			const storagePromises = data.map(d => this.deleteFromStorage(d.name));
+			await Promise.all(storagePromises);
+			try {
+				const dbPromises = data.map(d => this.delete(d.id));
+				await Promise.all(dbPromises);
+			} catch (error: any) {
+				throw new SupabaseError(error);
+			}
+		} catch (error: any) {
+			throw new SupabaseError(error);
+		}
+	}
+
 	public async findAll(): Promise<PhotoResponse[]> {
 		const { data, error } = await supabase
 			.from(this._RESOURCE_NAME)

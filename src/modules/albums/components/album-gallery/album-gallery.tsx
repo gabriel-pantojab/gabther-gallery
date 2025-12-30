@@ -11,7 +11,9 @@ type Props = {
 };
 
 export function AlbumGallery({ isLoggedIn, albums }: Props): JSX.Element {
-	const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+	const [selectedAlbums, setSelectedAlbums] = useState<Map<number, Album>>(
+		new Map(),
+	);
 	const gridClass: string =
 		'grid w-full grid-flow-dense auto-rows-[250px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4';
 
@@ -33,34 +35,25 @@ export function AlbumGallery({ isLoggedIn, albums }: Props): JSX.Element {
 		);
 	}
 
-	const handleAddId = (id: number): void => {
-		setSelectedIds(prev => {
-			const temp = structuredClone(prev);
-			temp.add(id);
-			return temp;
-		});
-	};
-
-	const handleRemoveId = (id: number): void => {
-		setSelectedIds(prev => {
-			const temp = structuredClone(prev);
-			temp.delete(id);
+	const handleSelectAlbum = (album: Album) => {
+		setSelectedAlbums(prev => {
+			const temp = new Map(prev);
+			temp.has(album.id) ? temp.delete(album.id) : temp.set(album.id, album);
 			return temp;
 		});
 	};
 
 	return (
 		<>
-			<SelectionToolbar count={selectedIds.size}>
+			<SelectionToolbar count={selectedAlbums.size}>
 				<>{/* DUMMY */}</>
 			</SelectionToolbar>
 
 			<AlbumList
 				isLoggedIn={isLoggedIn}
 				albums={albums}
-				selectedIds={selectedIds}
-				eventAddId={handleAddId}
-				eventRemoveId={handleRemoveId}
+				selectedIds={new Set([...selectedAlbums.keys()])}
+				eventSelectAlbum={handleSelectAlbum}
 			/>
 		</>
 	);

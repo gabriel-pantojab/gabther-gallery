@@ -12,7 +12,7 @@ type Props = {
 	isLoggedIn: boolean;
 	media: Photo | null;
 	toggleFavorite: () => void;
-	deleteMedia: () => void;
+	deleteMedia: () => Promise<void>;
 };
 
 export function MediaViewer({
@@ -40,7 +40,7 @@ export function MediaViewer({
 		})
 			.then(async result => {
 				if (result.isConfirmed) {
-					deleteMedia();
+					await deleteMedia();
 					goBack();
 				}
 			})

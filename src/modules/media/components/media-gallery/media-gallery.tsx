@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Swal from 'sweetalert2';
 import { Photo } from '@/core/types/domain/photo.model';
 import { Album } from '@/core/types/domain/album.model';
 import TrashIcon from '@/components/icons/TrashIcon';
@@ -12,6 +13,7 @@ type Props = {
 	albums: Album[];
 	isLogged: boolean;
 	eventAddSelectedMediaToAlbum: (ids: number[], albumId: number) => void;
+	eventDeleteSelectedMedia: (selectedMedia: Photo[]) => {};
 };
 
 export function MediaGallery({
@@ -19,37 +21,50 @@ export function MediaGallery({
 	albums = [],
 	isLogged = false,
 	eventAddSelectedMediaToAlbum,
+	eventDeleteSelectedMedia,
 }: Props): JSX.Element {
-	const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+	const [selectedMedia, setSelectedMedia] = useState<Map<number, Photo>>(
+		new Map(),
+	);
 	const [openSelectedAlbum, setOpenSelectedAlbum] = useState<boolean>(false);
 
 	const handleAddSelectedMediaToAlbum = (albumId: number): void => {
-		if (albumId >= 0 && selectedIds.size) {
-			eventAddSelectedMediaToAlbum([...selectedIds], albumId);
+		if (albumId >= 0 && selectedMedia.size) {
+			eventAddSelectedMediaToAlbum([...selectedMedia.keys()], albumId);
 		}
 		setOpenSelectedAlbum(false);
-		setSelectedIds(new Set());
+		setSelectedMedia(new Map());
 	};
 
-	const handleAddId = (id: number): void => {
-		setSelectedIds(prev => {
-			const temp = new Set(prev);
-			temp.add(id);
-			return temp;
-		});
+	const handleDeleteSelectedMedia = async () => {
+		if (selectedMedia.size) {
+			Swal.fire({
+				title: 'Are you sure?',
+				text: 'They will be deleted from the album.',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonText: 'Yes, delete it!',
+				cancelButtonText: 'No, keep it',
+			}).then(async result => {
+				if (result.isConfirmed) {
+					eventDeleteSelectedMedia([...selectedMedia.values()]);
+					setSelectedMedia(new Map());
+				}
+			});
+		}
 	};
 
-	const handleRemoveId = (id: number): void => {
-		setSelectedIds(prev => {
-			const temp = new Set(prev);
-			temp.delete(id);
+	const handleSelectMedia = (media: Photo) => {
+		setSelectedMedia(prev => {
+			const temp = new Map(prev);
+			temp.has(media.id) ? temp.delete(media.id) : temp.set(media.id, media);
 			return temp;
 		});
 	};
 
 	return (
 		<article className='relative w-full'>
-			<SelectionToolbar count={selectedIds.size}>
+			<SelectionToolbar count={selectedMedia.size}>
 				<button
 					onClick={() => {
 						setOpenSelectedAlbum(true);
@@ -59,7 +74,10 @@ export function MediaGallery({
 					<PlusIcon />
 				</button>
 
-				<button className='flex cursor-pointer items-center gap-1 p-1 text-sm text-red-500 hover:bg-gray-200'>
+				<button
+					className='flex cursor-pointer items-center gap-1 p-1 text-sm text-red-500 hover:bg-gray-200'
+					onClick={handleDeleteSelectedMedia}
+				>
 					<TrashIcon />
 				</button>
 			</SelectionToolbar>
@@ -67,9 +85,8 @@ export function MediaGallery({
 			<MediaList
 				isLoggedIn={isLogged}
 				media={photos}
-				selectedIds={selectedIds}
-				eventAddId={handleAddId}
-				eventRemoveId={handleRemoveId}
+				selectedIds={new Set([...selectedMedia.keys()])}
+				eventSelectMedia={handleSelectMedia}
 			/>
 
 			{openSelectedAlbum && (

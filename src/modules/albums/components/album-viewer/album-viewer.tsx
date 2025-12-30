@@ -23,61 +23,29 @@ export function AlbumViewer({
 	openCreateAlbum,
 	openMediaSelector,
 }: Props): JSX.Element {
-	const [selectedAlbumIds, setSelectedAbumIds] = useState<Set<number>>(
-		new Set(),
+	const [selectedAlbums, setSelectedAlbums] = useState<Map<number, Album>>(
+		new Map(),
 	);
-	const [selectedMediaIds, setSelectedMediaIds] = useState<Set<number>>(
-		new Set(),
+	const [selectedMedia, setSelectedMedia] = useState<Map<number, Photo>>(
+		new Map(),
 	);
 
-	const total: number = selectedAlbumIds.size + selectedMediaIds.size;
+	const total: number = selectedAlbums.size + selectedMedia.size;
 
-	const handleAddId = (id: number, type: 'media' | 'album'): void => {
-		if (type === 'media') {
-			setSelectedMediaIds(prev => {
-				const temp = structuredClone(prev);
-				temp.add(id);
-				return temp;
-			});
-			return;
-		}
-		setSelectedAbumIds(prev => {
-			const temp = structuredClone(prev);
-			temp.add(id);
+	const handleSelectMedia = (media: Photo) => {
+		setSelectedMedia(prev => {
+			const temp = new Map(prev);
+			temp.has(media.id) ? temp.delete(media.id) : temp.set(media.id, media);
 			return temp;
 		});
 	};
 
-	const handleRemoveId = (id: number, type: 'media' | 'album'): void => {
-		if (type === 'media') {
-			setSelectedMediaIds(prev => {
-				const temp = structuredClone(prev);
-				temp.delete(id);
-				return temp;
-			});
-			return;
-		}
-		setSelectedAbumIds(prev => {
-			const temp = structuredClone(prev);
-			temp.delete(id);
+	const handleSelectAlbum = (album: Album) => {
+		setSelectedAlbums(prev => {
+			const temp = new Map(prev);
+			temp.has(album.id) ? temp.delete(album.id) : temp.set(album.id, album);
 			return temp;
 		});
-	};
-
-	const handleAddMediaId = (id: number) => {
-		handleAddId(id, 'media');
-	};
-
-	const handleAddAlbumId = (id: number) => {
-		handleAddId(id, 'album');
-	};
-
-	const handleRemoveMediaId = (id: number) => {
-		handleRemoveId(id, 'media');
-	};
-
-	const handleRemoveAlbumId = (id: number) => {
-		handleRemoveId(id, 'album');
 	};
 
 	return (
@@ -98,9 +66,8 @@ export function AlbumViewer({
 					<AlbumList
 						isLoggedIn={isLoggedIn}
 						albums={subAlbums}
-						selectedIds={selectedAlbumIds}
-						eventAddId={handleAddAlbumId}
-						eventRemoveId={handleRemoveAlbumId}
+						selectedIds={new Set([...selectedAlbums.keys()])}
+						eventSelectAlbum={handleSelectAlbum}
 					/>
 				)}
 
@@ -108,9 +75,8 @@ export function AlbumViewer({
 					<MediaList
 						isLoggedIn={isLoggedIn}
 						media={media}
-						selectedIds={selectedMediaIds}
-						eventAddId={handleAddMediaId}
-						eventRemoveId={handleRemoveMediaId}
+						selectedIds={new Set([...selectedMedia.keys()])}
+						eventSelectMedia={handleSelectMedia}
 					/>
 				)}
 			</section>
