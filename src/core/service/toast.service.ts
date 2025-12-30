@@ -19,9 +19,10 @@ export class ToastService {
 				type: 'success',
 				isLoading: false,
 				autoClose: 3000,
+				closeButton: true,
 			});
 		} else {
-			toast.success(message, { autoClose: 3000 });
+			toast.success(message, { autoClose: 3000, closeButton: true });
 		}
 	}
 
@@ -32,9 +33,10 @@ export class ToastService {
 				type: 'error',
 				isLoading: false,
 				autoClose: 3000,
+				closeButton: true,
 			});
 		} else {
-			toast.error(message, { autoClose: 3000 });
+			toast.error(message, { autoClose: 3000, closeButton: true });
 		}
 	}
 

@@ -6,16 +6,14 @@ type Props = {
 	isLoggedIn: boolean;
 	media: Photo[] | null;
 	selectedIds: Set<number>;
-	eventAddId: (id: number) => void;
-	eventRemoveId: (id: number) => void;
+	eventSelectMedia: (media: Photo) => void;
 };
 
 export function MediaList({
 	isLoggedIn,
 	media,
 	selectedIds,
-	eventAddId,
-	eventRemoveId,
+	eventSelectMedia,
 }: Props): JSX.Element {
 	const gridClass =
 		'relative grid w-full grid-flow-dense auto-rows-[minmax(100px,auto)] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4';
@@ -41,6 +39,10 @@ export function MediaList({
 		);
 	}
 
+	const handleSelectMedia = (media: Photo) => {
+		eventSelectMedia(media);
+	};
+
 	return (
 		<section className='relative flex w-full flex-col gap-2'>
 			<div className={gridClass}>
@@ -51,8 +53,7 @@ export function MediaList({
 							photo={photo}
 							isLogged={isLoggedIn}
 							isSelected={selectedIds.has(photo.id)}
-							addSelectedId={eventAddId}
-							removeSelectedId={eventRemoveId}
+							eventSelectMedia={handleSelectMedia}
 						/>
 					);
 				})}

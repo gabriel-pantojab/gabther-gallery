@@ -7,30 +7,20 @@ type Props = {
 	album: Album;
 	isLoggedIn: boolean;
 	isSelected: boolean;
-	addSelectedId: (id: number) => void;
-	removeSelectedId: (id: number) => void;
+	eventSelectAlbum: (album: Album) => void;
 };
 
 export function AlbumCardWrapper({
 	album,
 	isLoggedIn,
 	isSelected,
-	addSelectedId,
-	removeSelectedId,
+	eventSelectAlbum,
 }: Props): JSX.Element {
-	const handleToggleSelect = (selectState: boolean) => {
-		if (selectState) {
-			addSelectedId(album.id);
-			return;
-		}
-		removeSelectedId(album.id);
-	};
-
 	return (
 		<MediaWrapper
 			isLoggedIn={isLoggedIn}
 			isSelected={isSelected}
-			eventToggleSelect={handleToggleSelect}
+			eventSelectMedia={() => eventSelectAlbum(album)}
 		>
 			<Navigable enabled={!isSelected} to={`/albums/album/${album.id}`}>
 				<AlbumCard album={album} />

@@ -6,19 +6,15 @@ type Props = {
 	isLoggedIn: boolean;
 	isSelected: boolean;
 	children: React.ReactNode;
-	eventToggleSelect: (selectState: boolean) => void;
+	eventSelectMedia: () => void;
 };
 
 export function MediaWrapper({
 	isLoggedIn,
 	isSelected,
 	children,
-	eventToggleSelect,
+	eventSelectMedia,
 }: Props): JSX.Element {
-	const handleToggleSelect = () => {
-		eventToggleSelect(!isSelected);
-	};
-
 	const wrapperClasses = [style.mediaWrapper];
 	if (isLoggedIn) {
 		wrapperClasses.push(style.mediaWrapperHover);
@@ -44,7 +40,7 @@ export function MediaWrapper({
 			<div className={selectIconWrapperClasses.join(' ')}>
 				<button
 					className={selectIconClasses.join(' ')}
-					onClick={handleToggleSelect}
+					onClick={eventSelectMedia}
 				>
 					<CheckIcon />
 				</button>
