@@ -14,7 +14,7 @@ export function FavoriteCard({
 	isLoggedIn,
 	eventRemoveFavorite,
 }: Props): JSX.Element {
-	const to = '';
+	const to = `/gallery/media/${media?.id}`;
 
 	const handleRemoveFavorite = () => {
 		if (media) eventRemoveFavorite(media.id);
