@@ -5,7 +5,6 @@ import { LoveNoteService } from '../services/love-note.service';
 import { LoveNoteMapper } from '@/core/mappers/love-note.mapper';
 import { ToastService } from '@/core/service/toast.service';
 import { useChangeLoveNoteStateEvent } from './events/use-change-love-note-state-event';
-import { LoveNoteResponse } from '@/core/types/dto/response/love-note.response';
 
 type Return = {
 	loveNotes: LoveNote[] | null;
@@ -16,7 +15,7 @@ export function useSentLoveNotes(): Return {
 	const [loveNotes, setLoveNotes] = useState<LoveNote[] | null>(null);
 
 	const listenChangeState = useCallback(
-		(loveNote: LoveNoteResponse) => {
+		(loveNote: LoveNote) => {
 			setLoveNotes(prev => {
 				if (prev === null) return prev;
 				const index = prev.findIndex(loveNote => loveNote.id === loveNote.id);
