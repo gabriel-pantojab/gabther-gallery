@@ -5,7 +5,8 @@ import { LoveNote } from '@/core/types/domain/love-note';
 type Props = { loveNote: LoveNote | null };
 
 export function LoveNoteCardWrapper({ loveNote }: Props): JSX.Element {
-	const to = `/secure/love-notes/sends/${loveNote?.id}`;
+	// TODO: replace path
+	const to = `/secure/love-notes-old/sends/${loveNote?.id}`;
 	return (
 		<Navigable enabled to={to}>
 			<LoveNoteCard loveNote={loveNote} />

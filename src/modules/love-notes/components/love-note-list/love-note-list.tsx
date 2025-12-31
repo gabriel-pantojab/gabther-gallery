@@ -29,7 +29,7 @@ export function LoveNoteList({ loveNotes }: Props): JSX.Element {
 	return (
 		<section className={listClass}>
 			{loveNotes.map((loveNote: LoveNote) => {
-				return <LoveNoteCardWrapper loveNote={loveNote} />;
+				return <LoveNoteCardWrapper key={loveNote.id} loveNote={loveNote} />;
 			})}
 		</section>
 	);

@@ -1,4 +1,4 @@
-import { PhotoAlbumResponse } from '../types/dto/response/photo-album.response';
+import { PhotoAlbumResponse } from '../../types/dto/response/photo-album.response';
 import { DatabaseEventsService } from './database-events.service';
 
 export class MediaAlbumEventsService extends DatabaseEventsService<PhotoAlbumResponse> {

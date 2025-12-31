@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { AlbumResponse } from '@/core/types/dto/response/album.response';
-import { AlbumEventsService } from '@/core/service/album-events.service';
+import { AlbumEventsService } from '@/core/service/events/album-events.service';
 import { Album } from '@/core/types/domain/album.model';
 import { AlbumMapper } from '@/core/mappers/album.mapper';
 

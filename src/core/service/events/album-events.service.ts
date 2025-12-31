@@ -1,4 +1,4 @@
-import { AlbumResponse } from '../types/dto/response/album.response';
+import { AlbumResponse } from '../../types/dto/response/album.response';
 import { DatabaseEventsService } from './database-events.service';
 
 export class AlbumEventsService extends DatabaseEventsService<AlbumResponse> {
