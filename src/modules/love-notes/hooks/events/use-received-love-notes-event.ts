@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
-import { LoveNoteMapper } from '@/core/mappers/love-note.mapper';
 import { LoveNoteEventsService } from '@/core/service/events/love-note-events.service';
-import { LoveNote } from '@/core/types/domain/love-note';
 import { LoveNoteResponse } from '@/core/types/dto/response/love-note.response';
+import { LoveNoteMapper } from '@/core/mappers/love-note.mapper';
+import { LoveNote } from '@/core/types/domain/love-note';
 
-export function useChangeLoveNoteStateEvent(
-	handle: (payload: LoveNote) => void,
-) {
+export function useReceivedLoveNotesEvent(handle: (payload: LoveNote) => void) {
 	useEffect(() => {
 		const channel = LoveNoteEventsService.getInstance()
-			.onUpdate('UPDATE_STATE_LOVE_NOTE', (payload: LoveNoteResponse) =>
+			.onInsert('RECEIVED_LOVE_NOTE', (payload: LoveNoteResponse) =>
 				handle(LoveNoteMapper.single(payload)),
 			)
 			.subscribe();
@@ -17,5 +15,5 @@ export function useChangeLoveNoteStateEvent(
 		return () => {
 			channel.unsubscribe();
 		};
-	}, [handle]);
+	}, []);
 }

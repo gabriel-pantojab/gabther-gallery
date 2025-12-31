@@ -29,4 +29,20 @@ export class LoveNoteService {
 
 		return data;
 	}
+
+	public async findReceivedLoveNotes(
+		userId: string,
+	): Promise<LoveNoteResponse[]> {
+		const { data, error } = await supabase
+			.from('love_note')
+			.select('*')
+			.eq('recipient', userId)
+			.order('created_at', { ascending: false });
+
+		if (error !== null) {
+			throw new SupabaseError(error);
+		}
+
+		return data;
+	}
 }

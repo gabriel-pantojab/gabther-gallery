@@ -1,33 +1,26 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context/userContext';
 import { LoveNote } from '@/core/types/domain/love-note';
-import { LoveNoteService } from '../services/love-note.service';
 import { LoveNoteMapper } from '@/core/mappers/love-note.mapper';
 import { ToastService } from '@/core/service/toast.service';
-import { useChangeLoveNoteStateEvent } from './events/use-change-love-note-state-event';
+import { LoveNoteService } from '../services/love-note.service';
+import { useReceivedLoveNotesEvent } from './events/use-received-love-notes-event';
 
 type Return = {
 	loveNotes: LoveNote[] | null;
 };
 
-export function useSentLoveNotes(): Return {
+export function useReceivedLoveNotes(): Return {
 	const { currentUser } = useContext(UserContext);
 	const [loveNotes, setLoveNotes] = useState<LoveNote[] | null>(null);
-
-	const listenChangeState = useCallback(
-		(loveNote: LoveNote) => {
+	useReceivedLoveNotesEvent((loveNote: LoveNote) => {
+		if (loveNote.author !== currentUser?.id) {
 			setLoveNotes(prev => {
 				if (prev === null) return prev;
-				const index = prev.findIndex(loveNote => loveNote.id === loveNote.id);
-				const temp = [...prev];
-				temp[index].state = loveNote.state;
-				return temp;
+				return [loveNote, ...prev];
 			});
-		},
-		[setLoveNotes],
-	);
-
-	useChangeLoveNoteStateEvent(listenChangeState);
+		}
+	});
 
 	useEffect(() => {
 		if (currentUser === null) return;
@@ -37,9 +30,10 @@ export function useSentLoveNotes(): Return {
 	const getLoveNotes = async () => {
 		try {
 			if (currentUser?.id === undefined) return;
-			const loveNotes = await LoveNoteService.getInstance().findSentLoveNotes(
-				currentUser?.id,
-			);
+			const loveNotes =
+				await LoveNoteService.getInstance().findReceivedLoveNotes(
+					currentUser?.id,
+				);
 			setLoveNotes(LoveNoteMapper.many(loveNotes));
 		} catch (error: any) {
 			ToastService.getInstance().error(error.message);
