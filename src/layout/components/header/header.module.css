@@ -1,0 +1,25 @@
+.header {
+	display: flex;
+	width: 100%;
+	gap: 1rem;
+	border-bottom: 2px solid #f3f4f6;
+	padding: 1rem;
+}
+
+.openSidebar:hover {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #f3f4f6;
+}
+
+.title {
+	font-size: x-large;
+	font-weight: bold;
+}
+
+@media (min-width: 991px) {
+	.openSidebar {
+		display: none;
+	}
+}

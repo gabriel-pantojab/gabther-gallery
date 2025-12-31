@@ -3,6 +3,8 @@ import supabase from '../supabase/supabase-client';
 export class StorageService {
 	static #instance: StorageService;
 
+	private constructor() {}
+
 	public static getInstance(): StorageService {
 		if (!StorageService.#instance) {
 			StorageService.#instance = new StorageService();
