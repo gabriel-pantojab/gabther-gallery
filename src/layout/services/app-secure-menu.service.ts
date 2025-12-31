@@ -20,11 +20,11 @@ export class AppSecureMenuService {
 				items: [
 					{
 						label: 'Enviadas',
-						path: '/secure/love-notes/sends',
+						path: '/secure/love-notes/sents',
 					},
 					{
 						label: 'Recibidas',
-						path: '/secure/love-notes/received',
+						path: '/secure/love-notes-old/received',
 					},
 					{
 						label: 'Special Notes',

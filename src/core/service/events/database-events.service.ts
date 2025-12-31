@@ -2,7 +2,7 @@ import {
 	RealtimeChannel,
 	RealtimePostgresChangesPayload,
 } from '@supabase/supabase-js';
-import supabase from '../supabase/supabase-client';
+import supabase from '../../supabase/supabase-client';
 
 export class DatabaseEventsService<T extends Record<string, any>> {
 	protected table: string;

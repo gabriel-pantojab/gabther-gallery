@@ -8,6 +8,7 @@ import useAuthGuard from '../guards/auth.guard';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { SpecialNotes } from '../pages/special-notes';
 import { SPECIAL_NOTES } from '../shared/constants/special-notes';
+import { sentLoveNotesRoutes } from '@/modules/love-notes/routes';
 
 const SendLoveNotes = lazy(() => import('../pages/SendLoveNotes'));
 const SendLoveNote = lazy(() => import('../components/SendLoveNote'));
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
 				children: [
 					{
 						path: 'love-notes',
+						children: [sentLoveNotesRoutes],
+					},
+					{
+						path: 'love-notes-old',
 						children: [
 							{
 								path: '',

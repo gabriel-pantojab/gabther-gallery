@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Photo } from '@/core/types/domain/photo.model';
-import { MediaAlbumEventsService } from '@/core/service/media-album-events.service';
+import { MediaAlbumEventsService } from '@/core/service/events/media-album-events.service';
 import { PhotoResponse } from '@/core/types/dto/response/photo.response';
 import { PhotoMapper } from '@/core/mappers/photo.mapper';
 import { PhotoAlbumResponse } from '@/core/types/dto/response/photo-album.response';
