@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 
 const GalleryPage = lazy(() => import('./pages/gallery-page'));
 const MediaViewerPage = lazy(() => import('./pages/media-viewer-page'));
+const FavoriteGalleryPage = lazy(() => import('./pages/favorite-gallery-page'));
 
 export const mediaRoutes: RouteObject = {
 	element: (
@@ -18,6 +19,10 @@ export const mediaRoutes: RouteObject = {
 		{
 			path: 'media/:photoId',
 			element: <MediaViewerPage />,
+		},
+		{
+			path: 'favorites',
+			element: <FavoriteGalleryPage />,
 		},
 	],
 };

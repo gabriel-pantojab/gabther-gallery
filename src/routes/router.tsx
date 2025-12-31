@@ -1,15 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Outlet, createBrowserRouter } from 'react-router-dom';
 
-import AlbumPage from '../pages/AlbumPage';
-import ProtectedRoute from '../components/ProtectedRoute';
+import { AppLayout } from '@/layout/app-layout';
+import { mediaRoutes } from '@/modules/media/routes';
+import { albumRoutes } from '@/modules/albums/routes';
 import useAuthGuard from '../guards/auth.guard';
-import FavoriteListPage from '../pages/FavoriteListPage';
+import ProtectedRoute from '../components/ProtectedRoute';
 import { SpecialNotes } from '../pages/special-notes';
 import { SPECIAL_NOTES } from '../shared/constants/special-notes';
-import { mediaRoutes } from '@/modules/media/routes';
-import { lazy, Suspense } from 'react';
-import { albumRoutes } from '@/modules/albums/routes';
-import { AppLayout } from '@/layout/app-layout';
 
 const SendLoveNotes = lazy(() => import('../pages/SendLoveNotes'));
 const SendLoveNote = lazy(() => import('../components/SendLoveNote'));
@@ -27,8 +25,8 @@ export const router = createBrowserRouter([
 				children: [mediaRoutes],
 			},
 			{ path: '/albums', children: [albumRoutes] },
-			{ path: '/favorites', element: <FavoriteListPage /> },
-			{ path: '/album/:album', element: <AlbumPage /> },
+			// { path: '/favorites', element: <FavoriteListPage /> },
+			// { path: '/album/:album', element: <AlbumPage /> },
 			{
 				path: 'secure',
 				element: (

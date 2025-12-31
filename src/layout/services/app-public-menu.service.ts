@@ -27,7 +27,7 @@ export class AppPublicMenuService {
 			{
 				label: 'Favorites',
 				icon: 'favorite',
-				path: '/favorites',
+				path: '/gallery/favorites',
 			},
 		];
 	}
