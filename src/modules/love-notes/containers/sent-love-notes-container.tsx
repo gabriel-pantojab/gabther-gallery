@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { LoveNoteList } from '../components/love-note-list/love-note-list';
 import { useSentLoveNotes } from '../hooks/use-sent-love-notes';
+import { SentLoveNoteCard } from '../components/sent-love-note-card/sent-love-note-card';
+import { LoveNote } from '@/core/types/domain/love-note';
 
 export function SentLoveNotesContainer(): JSX.Element {
 	const { loveNotes } = useSentLoveNotes();
@@ -18,7 +20,12 @@ export function SentLoveNotesContainer(): JSX.Element {
 				</Link>
 			</header>
 
-			<LoveNoteList loveNotes={loveNotes} />
+			<LoveNoteList
+				loveNotes={loveNotes}
+				render={(loveNote: LoveNote | null) => (
+					<SentLoveNoteCard loveNote={loveNote} />
+				)}
+			/>
 		</>
 	);
 }

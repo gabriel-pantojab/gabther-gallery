@@ -1,10 +1,13 @@
 import Skeleton from 'react-loading-skeleton';
 import { LoveNote } from '@/core/types/domain/love-note';
-import { LoveNoteCardWrapper } from '../love-note-card-wrapper/love-note-card-wrapper';
+import { Fragment } from 'react/jsx-runtime';
 
-type Props = { loveNotes: LoveNote[] | null };
+type Props = {
+	loveNotes: LoveNote[] | null;
+	render: (loveNote: LoveNote | null) => React.ReactNode;
+};
 
-export function LoveNoteList({ loveNotes }: Props): JSX.Element {
+export function LoveNoteList({ loveNotes, render }: Props): JSX.Element {
 	const listClass =
 		'm-auto flex h-full w-full max-w-[700px] flex-col items-center justify-center gap-4 px-8 pb-8';
 
@@ -28,9 +31,9 @@ export function LoveNoteList({ loveNotes }: Props): JSX.Element {
 
 	return (
 		<section className={listClass}>
-			{loveNotes.map((loveNote: LoveNote) => {
-				return <LoveNoteCardWrapper key={loveNote.id} loveNote={loveNote} />;
-			})}
+			{loveNotes.map((loveNote: LoveNote) => (
+				<Fragment key={loveNote.id}>{render(loveNote)}</Fragment>
+			))}
 		</section>
 	);
 }
