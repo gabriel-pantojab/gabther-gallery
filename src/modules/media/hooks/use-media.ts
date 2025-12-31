@@ -3,8 +3,8 @@ import type { Photo } from '@/core/types/domain/photo.model';
 import { PhotoMapper } from '@/core/mappers/photo.mapper';
 import type { PhotoResponse } from '@/core/types/dto/response/photo.response';
 import { MediaService } from '../services/media.service';
-import { useAddMediaEvent } from './use-add-media-event';
-import { useDeleteMediaEvent } from './use-delete-media-event';
+import { useAddMediaEvent } from './events/use-add-media-event';
+import { useDeleteMediaEvent } from './events/use-delete-media-event';
 
 interface Return {
 	photos: Photo[];
