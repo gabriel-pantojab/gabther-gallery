@@ -1,23 +1,23 @@
 import { useRef } from 'react';
 import { Photo } from '@/core/types/domain/photo.model';
 import { MediaCard } from '@/shared/components/media-card/media-card';
-import { MediaSelector } from '@/shared/constants/media-selector/media-selector';
+import { MediaSelector } from '@/shared/components/media-selector/media-selector';
 import { useFindExternalMedia } from '../hooks/use-find-external-media';
 import { useAddMediaBulk } from '../hooks/use-add-media-bulk';
 
 type Props = { albumId?: number; close: () => void };
 
 export function MediaSelectorContainer({ albumId, close }: Props): JSX.Element {
-	const selectedIds = useRef<number[]>([]);
+	const selectedMedia = useRef<Photo[]>([]);
 	const { media } = useFindExternalMedia(albumId ?? -1);
 	const { addMediaBulk } = useAddMediaBulk({ albumId: albumId ?? -1 });
 
-	const handleSelectedIds = (ids: number[]): void => {
-		selectedIds.current = ids;
+	const handleSelectedIds = (media: Photo[]): void => {
+		selectedMedia.current = media;
 	};
 
 	const handleAddToAlbum = (): void => {
-		addMediaBulk(selectedIds.current);
+		addMediaBulk(selectedMedia.current.map(m => m.id));
 		close();
 	};
 
@@ -25,7 +25,7 @@ export function MediaSelectorContainer({ albumId, close }: Props): JSX.Element {
 		<MediaSelector
 			media={media}
 			render={(media: Photo) => <MediaCard media={media} />}
-			eventSelectedIds={handleSelectedIds}
+			eventSelectedMedia={handleSelectedIds}
 			close={close}
 		>
 			<button

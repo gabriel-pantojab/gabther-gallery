@@ -1,6 +1,5 @@
 import { Navigate, Outlet, createBrowserRouter } from 'react-router-dom';
 
-import App from '../App';
 import AlbumPage from '../pages/AlbumPage';
 import ProtectedRoute from '../components/ProtectedRoute';
 import useAuthGuard from '../guards/auth.guard';
@@ -10,6 +9,7 @@ import { SPECIAL_NOTES } from '../shared/constants/special-notes';
 import { mediaRoutes } from '@/modules/media/routes';
 import { lazy, Suspense } from 'react';
 import { albumRoutes } from '@/modules/albums/routes';
+import { AppLayout } from '@/layout/app-layout';
 
 const SendLoveNotes = lazy(() => import('../pages/SendLoveNotes'));
 const SendLoveNote = lazy(() => import('../components/SendLoveNote'));
@@ -19,7 +19,7 @@ const LoveNote = lazy(() => import('../pages/LoveNote'));
 export const router = createBrowserRouter([
 	{
 		path: '/',
-		element: <App />,
+		element: <AppLayout />,
 		children: [
 			{ path: '/', element: <Navigate to='/gallery' replace /> },
 			{

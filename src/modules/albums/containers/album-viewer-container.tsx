@@ -20,7 +20,7 @@ export function AlbumViewerContainer(): JSX.Element {
 	const { media, subAlbums } = useMediaAlbum(albumId);
 
 	return (
-		<>
+		<section className='relative'>
 			<AlbumViewer
 				isLoggedIn={!!currentUser}
 				albumName={album?.name ?? ''}
@@ -43,6 +43,6 @@ export function AlbumViewerContainer(): JSX.Element {
 					close={() => setOpenMediaSelector(false)}
 				/>
 			)}
-		</>
+		</section>
 	);
 }

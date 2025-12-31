@@ -1,0 +1,20 @@
+.userCard {
+	margin-bottom: 1rem;
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.avatarContainer {
+	display: inline-flex;
+	height: 90px;
+	width: 90px;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.avatar {
+	object-fit: contain;
+}

@@ -11,7 +11,7 @@ export class AlbumEventsService extends DatabaseEventsService<AlbumResponse> {
 		return AlbumEventsService.#instance;
 	}
 
-	constructor() {
+	private constructor() {
 		super('public', 'album');
 	}
 }
